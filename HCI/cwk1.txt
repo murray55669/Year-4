@@ -1,0 +1,15 @@
+Human-Computer Interaction - Coursework 1 - Year 15/16
+Murray Crichton - s1232200 
+
+Total - 5,000 words (~10 pages)
+-Introducion        1,000 words (~2 pages)
+    "describe your understanding of the ideas of Internet of Things and Interaction Design"
+-Design             1,500 words (~3 pages)
+    "describe the concept of a hypothetical IoT product, its interaction with the user, and the issues addressed during the interaction design process"
+-Implementation     1,500 words (~3 pages)
+-Conclusions        1,000 words (~2 pages)
+
+With the continued growth of cheap computing power and connectivity in our everyday lives, and our ongoing obsession with being connected around the clock, it is no surprise that an increasing number of devices and objects, in homes, workplaces, or otherwise, are being integrated into the so-called "Internet of Things." The term Internet of Things (IoT) was supposedly the invention of  a British pioneer of technology, Kevin Ashton, titling a presentation in 1999 on the usage of electronic tagging, with internet integration, in a manufacturing context.[0] In the decade-and-a-half since, the core concept of the IoT has remained roughly the same - devices deployed in the real world provide information to services linked to a network - but as with any area of technological growth, new ideas, applications, and resulting products have rushed to fill a new commercial void, and the term now has far more meaning than anyone reading the titilating title of Ashton's presentation could have predicted. The IoT, as defined by the International Telecommunication Union, is "A global infrastructure for the information society, enabling advanced services by interconnecting (physical and virtual) things based on existing and evolving interoperable information and communication technologies."[1] In a more general sense, the IoT describes network-connected "things" containing sensors or other electornics, enabling data collection and transmission. By utilizing this data, designers and engineers can create new products or services to, among other uses, ease everyday tasks, or enable remote monitoring. 
+
+[0] http://www.rfidjournal.com/articles/view?4986
+[1] http://www.itu.int/ITU-T/recommendations/rec.aspx?rec=y.2060 - section 3.2.2
