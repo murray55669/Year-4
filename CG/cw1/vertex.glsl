@@ -55,8 +55,10 @@ void main() {
 	normOut = normalize(normTrans * vec4(normal, 1.0));
 	/*calculate vector from transformed vertex to light source (store in lightVec)*/
 	lightVec = normalize(lightPos  - transformed);
+	lightVec.w = 1.0;
 	/*calculate vector from transformed vertex to eye (store in eyeVec)*/
 	eyeVec = normalize(eyePos - transformed);
+	eyeVec.w = 1.0;
 	/*output position of vertex on screen */
 	gl_Position = screen;
 }
