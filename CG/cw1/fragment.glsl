@@ -33,21 +33,29 @@ out vec4 outColour;
 void main() {	
 	//Modify this code to calculate Phong illumination based on the inputs
 	//General
-	float lightIntensity = 0.6; //Ip
+	float lightIntensity = 0.5; //Ip
 	
 	//Diffuse
-	float diffuseReflectivity = 0.8; //kd
+	float diffuseReflectivity = 0.5; //kd
 	float cosTheta = max(0.0, dot(lightVec, normOut)); //cos(theta)
 	float diff = lightIntensity * diffuseReflectivity * cosTheta; //Idiff
 	//diff = 0.0;
 	
 	//Specular
 	float specularReflectivity = 0.8; //ks
-	float specularIntensity = 50; //n - range from e.g. 1 to 100
+	float specularIntensity = 100; //n - range from e.g. 1 to 100
  	float cosAlpha = max(0.0, dot((2 * normOut * (dot(lightVec, normOut)) - lightVec), eyeVec)); //cos(alpha)
 	float spec = lightIntensity * specularReflectivity * pow(cosAlpha, specularIntensity); //Ispec
 	//spec = 0.0;
 	
-	float ambient = 0.0;
-	outColour = vec4(spec+ambient, spec+diff+ambient, spec+ambient, 1.0);
+        //Ambient
+	float ambient = 0.2;
+	
+	//Texture
+	/* Use x and y coordinates of reflection of eye vector around normal vector to index into the texture */
+        //randomVector = vec2(0.0, 0.0);
+	//vec4 textureVector = texture(tex, randomVector);
+	
+	//Output
+	outColour = /* textureVector * */ vec4(spec+ambient, spec+diff+ambient, spec+ambient, 1.0);
 }
