@@ -42,7 +42,7 @@ void main() {
 	
 	//Specular
 	float specularReflectivity = 1.0; //ks
-	float specularIntensity = 5; //n - range from e.g. 1 to 100
+	float specularIntensity = 10; //n - range from e.g. 1 to 100
  	float cosAlpha = max(0.0, dot((2 * normOut * (dot(lightVec, normOut)) - lightVec), eyeVec)); //cos(alpha)
 	float spec = lightIntensity * specularReflectivity * pow(cosAlpha, specularIntensity); //Ispec
 	
@@ -51,9 +51,9 @@ void main() {
 	
 	//Texture
 	/* Use x and y coordinates of reflection of eye vector around normal vector to index into the texture */
-        vec4 eyeReflec = 2 * normOut * dot(normOut, eyeVec) - eyeVec;
+        vec4 eyeReflec = normalize(2 * normOut * dot(normOut, eyeVec) - eyeVec);
 	vec4 textureVector = texture(tex, vec2(eyeReflec.x, eyeReflec.y));
 	
-	//Output
-	outColour = (0.2 * textureVector) + (0.8 * vec4(spec+ambient, spec+diff+ambient, spec+ambient, 1.0));
+	//Output - use a ratio of texture/phong for final colouring
+	outColour = (0.5 * textureVector) + (0.5 * vec4(spec+ambient, spec+diff+ambient, spec+ambient, 1.0));
 }
