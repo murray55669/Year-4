@@ -52,17 +52,11 @@ void main() {
 	mat4 MVP = proj * view * model;
 	vec4 screen = MVP * v;
 	/*calculate transformed normal vector from input vector normal (store in normOut)*/
-	normOut = normalize(normTrans * vec4(normal, 1.0));
+	normOut = normalize(normTrans * vec4(normal, 0.0));
 	/*calculate vector from transformed vertex to light source (store in lightVec)*/
-	lightVec = (lightPos - transformed);
-	lightVec.w = 0.0;
-	lightVec = normalize(lightVec);
-	lightVec.w = 1.0;
+	lightVec = normalize(lightPos - transformed);
 	/*calculate vector from transformed vertex to eye (store in eyeVec)*/
-	eyeVec = (eyePos - transformed);
-        eyeVec.w = 0.0;
-        eyeVec = normalize(eyeVec);
-        eyeVec.w = 1.0;
+	eyeVec = normalize(eyePos - transformed);
 	/*output position of vertex on screen */
 	gl_Position = screen;
 }
