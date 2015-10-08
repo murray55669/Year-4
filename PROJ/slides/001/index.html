@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: #ff00ff;
+}
+.controls {
+    width: 100%;
+    height: 120px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    background: #ff0000;
+}
+.button {
+    width: 25%;
+    height: 120px;
+    box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.75);
+    text-align: center;
+    line-height: 118px;
+    float: left;
+    font-size: 200%;
+}
+.slide_list {
+	position: absolute;
+	top: 120px;
+	left: 30px;
+	bottom: 30px;
+	right: 30px;
+}
+.slide_list_entry {
+	float: left;
+	width: 100%;
+	height: 38px;
+	line-height: 38px;
+	text-align: center;
+	border: 1px solid #ffff00;
+	background: #00ff00;
+	
+}
+.noselect {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.layer {
+    position: absolute;
+    top: 120px;
+    left: 0px;
+}
+.textbox_wrapper {
+    position: absolute;
+    top: 120px;
+    left: 0px;
+    width: 720px;
+    height: 840px;
+}
+.textbox {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    left: 30px;
+    bottom: 30px;
+    background: #0000ff;
+}
+.textbox_title {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 660px;
+    height: 60px;
+    background: #ff0000;
+}
+.textbox_controls {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+	font-size: 200%;
+    background: #00ffff;
+}
+.textbox_content {
+	position: absolute;
+	top: 60px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	color: #ffffff;
+}
+</style>
+
+<script>
+var currentSlide = 1;
+var slides = ["image_0", "image_1", "image_2"];
+var texts = ["Slide text 1.", "Slide text 2.", "Slide text 3."];
+
+function nextSlide(value) {
+	for (var i = 1; i < slides.length; i++) {
+		if (i < currentSlide + value) {
+			document.getElementById(slides[i]).style.display = '';
+		} else {
+			document.getElementById(slides[i]).style.display = 'none';
+		}
+	}
+	currentSlide += value;
+	if (currentSlide <= 1) {
+		currentSlide = 1;
+	} else if (currentSlide > slides.length) {
+		currentSlide = slides.length;
+	}
+}
+function toggleSlidesList() {
+	if (document.getElementById('list').style.display == '') {
+		document.getElementById('list').style.display = 'none'
+	} else {
+		document.getElementById('list').style.display = ''
+	}
+}
+function toggleText() {
+    if (document.getElementById('text_wrap').style.display == '') {
+		document.getElementById('text_wrap').style.display = 'none'
+	} else {
+		document.getElementById('text_wrap').style.display = ''
+		document.getElementById('text').innerHTML = texts[currentSlide-1];
+	}
+}
+function pageInit() {
+    document.getElementById('text_wrap').style.display = 'none';
+    for (var i = 1; i < slides.length; i++) {
+        document.getElementById(slides[i]).style.display = 'none';
+    }
+	toggleSlidesList();
+}
+</script>
+<meta name="viewport" content="width=720">
+</head>
+<body onload="pageInit()">
+<div class="container">
+    <div class="controls">
+        <div class="button noselect" onclick="nextSlide(-1)">&lt;</div>
+        <div class="button noselect" onclick="toggleSlidesList()">=</div>
+        <div class="button noselect" onclick="nextSlide(1)">&gt;</div>
+        <div class="button noselect" onclick="toggleText()">T</div>
+    </div>
+	
+    <img class="layer" id="image_0" src="cat0.png">
+    <img class="layer" id="image_1" src="cat1.png">
+    <img class="layer" id="image_2" src="cat2.png">
+	
+	<div class="slide_list" id="list">
+		<div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(0); toggleSlidesList()">1</div>
+		<div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(1); toggleSlidesList()">2</div>
+		<div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(2); toggleSlidesList()">3</div>
+	</div>
+
+    <div class="textbox_wrapper" id="text_wrap">
+        <div class="textbox">
+            <div class="textbox_title"></div>
+            <div class="textbox_controls" onclick="toggleText()">X</div>
+            <div class="textbox_content" id="text"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
