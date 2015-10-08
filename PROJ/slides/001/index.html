@@ -51,16 +51,38 @@ table {
 	border-spacing: 0;
 }
 
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    cursor: default;
+}
+.bold {
+    font-weight: bold;
+}
+.clear {
+    clear: both;
+}
+
 .container {
-    width: 100vw;
-    height: 100vh;
     position: relative;
+    width: 100vw;
+    top: 15vh;
+    min-height: 85vh;
     background: #ff00ff;
+}
+.images_wrapper {
+    position: relative;
+    width: 100vw;
 }
 .controls {
     width: 100%;
-    height: 120px;
-    position: absolute;
+    height: 15vh;
+    position: fixed;
     top: 0px;
     left: 0px;
     right: 0px;
@@ -68,49 +90,45 @@ table {
 }
 .button {
     width: 25%;
-    height: 120px;
+    height: 15vh;
     box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.75);
     text-align: center;
-    line-height: 118px;
+    line-height: 15vh;
     float: left;
     font-size: 200%;
 }
 .slide_list {
-	position: absolute;
-	top: 120px;
-	left: 30px;
-	bottom: 30px;
-	right: 30px;
+    position: fixed;
+    top: 15vh;
+    left: 25vw;
+    right: 50vw;
 }
 .slide_list_entry {
-	float: left;
-	width: 100%;
-	height: 38px;
-	line-height: 38px;
-	text-align: center;
-	border: 1px solid #ffff00;
-	background: #00ff00;
-	
+    float: left;
+    width: 100%;
+    font-size: 160%;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    border: 1px solid #ffff00;
+    background: #00ff00;
 }
-.noselect {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+.base_layer {
+    float: left;
+    width: 100vw;
 }
 .layer {
     position: absolute;
-    top: 120px;
-    left: 0px;
+    top: 0;
+    left: 0;
+    width: 100vw;
 }
 .textbox_wrapper {
-    position: absolute;
-    top: 120px;
+    position: fixed;
+    top: 15vh;
     left: 0px;
-    width: 720px;
-    height: 840px;
+    width: 100vw;
+    height: 85vh;
 }
 .textbox {
     position: absolute;
@@ -124,35 +142,71 @@ table {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 660px;
-    height: 60px;
+    width: calc(100% - 30px);
+    height: 80px;
+    line-height: 80px;
     background: #ff0000;
+    font-size: 200%;
+    padding: 0 15px;
 }
 .textbox_controls {
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
     text-align: center;
-	font-size: 200%;
+    font-size: 200%;
     background: #00ffff;
 }
 .textbox_content {
-	position: absolute;
-	top: 60px;
-	left: 0px;
-	bottom: 0px;
-	right: 0px;
-	color: #ffffff;
+    position: absolute;
+    top: 80px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    color: #ffffff;
+    padding: 15px;
+    font-size: 160%;
+}
+.label {
+    position: absolute;
+    max-width: 35%;
+}
+.label_marker {
+    width: 100%;
+    height: 0.5vh;
+    margin: 1vh 0;
+    float: left;
+}
+.label_dot {
+    border-radius: 50%;
+    width: 1vh;
+    height: 1vh;
+    background: #ffffff; 
+    float: left;
+}
+.label_line {
+    width: calc(100% - 2.5vh);
+    height: 0.5vh;
+    margin: 0.25vh 0;
+    margin-left: 0.5vh;
+    float: left;
+    background: #ffffff; 
+}
+.label_text {
+    float: left;
+    font-size: 4vw;
+    color: #ffffff;
 }
 </style>
 
 <script>
 var currentSlide = 1;
 var slides = ["image_0", "image_1", "image_2"];
-var texts = ["Slide text 1.", "Slide text 2.", "Slide text 3."];
+var titles = ["Title 1", "Title 2", "Title 3"]
+var texts = ["Slide text 1.", "", "Slide text 3."];
 
 function nextSlide(value) {
 	for (var i = 1; i < slides.length; i++) {
@@ -177,12 +231,45 @@ function toggleSlidesList() {
 	}
 }
 function toggleText() {
-    if (document.getElementById('text_wrap').style.display == '') {
+    //Toggles text box overlay on slide on and off.
+    if (texts[currentSlide-1] != "") {
+        if (document.getElementById('text_wrap').style.display == '') {
 		document.getElementById('text_wrap').style.display = 'none'
 	} else {
 		document.getElementById('text_wrap').style.display = ''
+                document.getElementById('title').innerHTML = titles[currentSlide-1];
 		document.getElementById('text').innerHTML = texts[currentSlide-1];
 	}
+    }
+}
+function addLabel(xPos, yPos, text) {
+    //xPos, yPos should be precentages
+    if (xPos >= 65) {
+        xPos = 65;
+    } else if (xPos < 0) {
+        xPos = 0;
+    }
+    
+    var label = document.createElement("div");
+    label.className = "label";
+    label.style = "top:"+yPos+"%; left:"+xPos+"%;";
+    
+    var label_marker = document.createElement("div");
+    label_marker.className = "label_marker";
+    var label_dot = document.createElement("div");
+    label_dot.className = "label_dot";
+    var label_line = document.createElement("div");
+    label_line.className = "label_line";
+    label_marker.appendChild(label_dot);
+    label_marker.appendChild(label_line);
+    
+    var label_text = document.createElement("div");
+    label_text.className = "label_text";
+    label_text.innerHTML = text;
+    
+    label.appendChild(label_marker);
+    label.appendChild(label_text);
+    document.getElementById("images_wrapper").appendChild(label);
 }
 function pageInit() {
     document.getElementById('text_wrap').style.display = 'none';
@@ -196,30 +283,35 @@ function pageInit() {
 </head>
 <body onload="pageInit()">
 <div class="container">
-    <div class="controls">
-        <div class="button noselect" onclick="nextSlide(-1)">&lt;</div>
-        <div class="button noselect" onclick="toggleSlidesList()">=</div>
-        <div class="button noselect" onclick="nextSlide(1)">&gt;</div>
-        <div class="button noselect" onclick="toggleText()">T</div>
+    <div class="images_wrapper" id="images_wrapper">
+        <img class="base_layer" id="image_0" src="cat0.png">
+        <img class="layer" id="image_1" src="cat1.png">
+        <img class="layer" id="image_2" src="cat2.png">
+        
+        <div class="label" onclick="addLabel(90, 25, 'This is some text')">test</div>
+        <div class="clear"></div>
     </div>
-	
-    <img class="layer" id="image_0" src="cat0.png">
-    <img class="layer" id="image_1" src="cat1.png">
-    <img class="layer" id="image_2" src="cat2.png">
-	
-	<div class="slide_list" id="list">
-		<div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(0); toggleSlidesList()">1</div>
-		<div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(1); toggleSlidesList()">2</div>
-		<div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(2); toggleSlidesList()">3</div>
-	</div>
+		
+    <div class="controls">
+        <div class="button noselect bold" onclick="nextSlide(-1)">&lt;</div>
+        <div class="button noselect bold" onclick="toggleSlidesList()">=</div>
+        <div class="button noselect bold" onclick="nextSlide(1)">&gt;</div>
+        <div class="button noselect bold" onclick="toggleText()">T</div>
+    </div>
+    <div class="slide_list" id="list">
+            <div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(0); toggleSlidesList()">1</div>
+            <div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(1); toggleSlidesList()">2</div>
+            <div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(2); toggleSlidesList()">3</div>
+    </div>
 
     <div class="textbox_wrapper" id="text_wrap">
         <div class="textbox">
-            <div class="textbox_title"></div>
-            <div class="textbox_controls" onclick="toggleText()">X</div>
+            <div class="textbox_title bold" id="title"></div>
+            <div class="textbox_controls noselect" onclick="toggleText()">X</div>
             <div class="textbox_content" id="text"></div>
         </div>
     </div>
+    
 </div>
 </body>
 </html>
