@@ -172,12 +172,12 @@ table {
 }
 .label {
     position: absolute;
-    max-width: 35%;
+    max-width: 25%;
 }
 .label_marker {
     width: 100%;
     height: 0.5vh;
-    margin: 1vh 0;
+    margin-bottom: 1vh;
     float: left;
 }
 .label_dot {
@@ -244,8 +244,8 @@ function toggleText() {
 }
 function addLabel(xPos, yPos, text) {
     //xPos, yPos should be precentages
-    if (xPos >= 65) {
-        xPos = 65;
+    if (xPos >= 75) {
+        xPos = 75;
     } else if (xPos < 0) {
         xPos = 0;
     }
@@ -271,6 +271,16 @@ function addLabel(xPos, yPos, text) {
     label.appendChild(label_text);
     document.getElementById("images_wrapper").appendChild(label);
 }
+function addLabelClick(clickEvent, text) {
+    var xPos = clickEvent.clientX;
+    var yPos = clickEvent.clientY;
+    var height = document.getElementById('images_wrapper').clientHeight;
+    var width = document.getElementById('images_wrapper').clientWidth;
+    
+    var yOffset = document.getElementById('controls').clientHeight;
+    
+    addLabel((xPos/width)*100, ((yPos-yOffset)/height)*100, text); 
+}
 function pageInit() {
     document.getElementById('text_wrap').style.display = 'none';
     for (var i = 1; i < slides.length; i++) {
@@ -284,15 +294,14 @@ function pageInit() {
 <body onload="pageInit()">
 <div class="container">
     <div class="images_wrapper" id="images_wrapper">
-        <img class="base_layer" id="image_0" src="cat0.png">
+        <img class="base_layer" id="image_0" src="cat0.png" onclick="addLabelClick(event, 'test text test text')">
         <img class="layer" id="image_1" src="cat1.png">
         <img class="layer" id="image_2" src="cat2.png">
         
-        <div class="label" onclick="addLabel(90, 25, 'This is some text')">test</div>
         <div class="clear"></div>
     </div>
 		
-    <div class="controls">
+    <div class="controls" id="controls">
         <div class="button noselect bold" onclick="nextSlide(-1)">&lt;</div>
         <div class="button noselect bold" onclick="toggleSlidesList()">=</div>
         <div class="button noselect bold" onclick="nextSlide(1)">&gt;</div>
