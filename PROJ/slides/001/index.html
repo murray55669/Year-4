@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <style>
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
@@ -91,7 +92,7 @@ table {
 .button {
     width: 25%;
     height: 15vh;
-    box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
     text-align: center;
     line-height: 15vh;
     float: left;
@@ -110,8 +111,8 @@ table {
     height: 38px;
     line-height: 38px;
     text-align: center;
-    border: 1px solid #ffff00;
     background: #00ff00;
+    box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
 }
 .base_layer {
     float: left;
@@ -172,12 +173,17 @@ table {
 }
 .label {
     position: absolute;
-    max-width: 25%;
+    overflow: hidden;
 }
 .label_marker {
     width: 100%;
     height: 0.5vh;
     margin-bottom: 1vh;
+}
+.llabel_marker {
+    float: left;
+}
+.rlabel_marker {
     float: left;
 }
 .label_dot {
@@ -185,20 +191,37 @@ table {
     width: 1vh;
     height: 1vh;
     background: #ffffff; 
+}
+.llabel_dot {
     float: left;
+}
+.rlabel_dot {
+    float: right;
 }
 .label_line {
-    width: calc(100% - 2.5vh);
+    width: calc(100% - 3vh);
     height: 0.5vh;
     margin: 0.25vh 0;
-    margin-left: 0.5vh;
-    float: left;
     background: #ffffff; 
 }
-.label_text {
+.llabel_line {
+    margin-left: 0.5vh;
     float: left;
+}
+.rlabel_line {
+    margin-right: 0.5vh;
+    float: right;
+}
+.label_text {
     font-size: 4vw;
     color: #ffffff;
+}
+.llabel_text {
+    float: left;
+}
+.rlabel_text {
+    float: right;
+    text-align: right;
 }
 </style>
 
@@ -207,6 +230,11 @@ var currentSlide = 1;
 var slides = ["image_0", "image_1", "image_2"];
 var titles = ["Title 1", "Title 2", "Title 3"]
 var texts = ["Slide text 1.", "", "Slide text 3."];
+var labels = [
+        [[10, 10, "L1S1"], [10, 20, 'L2S1']],
+        [[10, 10, "L1S2"], [10, 20, 'L2S2']],
+        [[10, 10, "L1S3"], [10, 20, 'L2S3']],
+    ];
 
 function nextSlide(value) {
 	for (var i = 1; i < slides.length; i++) {
@@ -222,6 +250,21 @@ function nextSlide(value) {
 	} else if (currentSlide > slides.length) {
 		currentSlide = slides.length;
 	}
+}
+function gotToSlide(value) {
+    if (value < 1) {
+        value = 1;
+    } else if (value > slides.length) {
+        value = slides.length;
+    }
+    currentSlide = value;
+    for (var i = 1; i < slides.length; i++) {
+            if (i < currentSlide) {
+                document.getElementById(slides[i]).style.display = '';
+            } else {
+                document.getElementById(slides[i]).style.display = 'none';
+            }
+    }
 }
 function toggleSlidesList() {
 	if (document.getElementById('list').style.display == '') {
@@ -244,33 +287,50 @@ function toggleText() {
 }
 function addLabel(xPos, yPos, text) {
     //xPos, yPos should be precentages
-    if (xPos >= 75) {
-        xPos = 75;
-    } else if (xPos < 0) {
-        xPos = 0;
+    if (xPos < 50) {
+        var label = document.createElement("div");
+        label.className = "label";
+        label.style = "top:"+yPos+"%; left:"+xPos+"%; max-width: "+(100-xPos)+"%;";
+        
+        var label_marker = document.createElement("div");
+        label_marker.className = "label_marker llabel_marker";
+        var label_dot = document.createElement("div");
+        label_dot.className = "label_dot llabel_dot";
+        var label_line = document.createElement("div");
+        label_line.className = "label_line llabel_line";
+        label_marker.appendChild(label_dot);
+        label_marker.appendChild(label_line);
+        
+        var label_text = document.createElement("div");
+        label_text.className = "label_text llabel_text";
+        label_text.innerHTML = text;
+        
+        label.appendChild(label_marker);
+        label.appendChild(label_text);
+    } else {
+        var label = document.createElement("div");
+        label.className = "label";
+        label.style = "top:"+yPos+"%; right:"+(100-xPos)+"%; max-width: "+xPos+"%;";
+        
+        var label_marker = document.createElement("div");
+        label_marker.className = "label_marker rlabel_marker";
+        var label_dot = document.createElement("div");
+        label_dot.className = "label_dot rlabel_dot";
+        var label_line = document.createElement("div");
+        label_line.className = "label_line rlabel_line";
+        label_marker.appendChild(label_dot);
+        label_marker.appendChild(label_line);
+        
+        var label_text = document.createElement("div");
+        label_text.className = "label_text rlabel_text";
+        label_text.innerHTML = text;
+        
+        label.appendChild(label_marker);
+        label.appendChild(label_text);
     }
     
-    var label = document.createElement("div");
-    label.className = "label";
-    label.style = "top:"+yPos+"%; left:"+xPos+"%;";
-    
-    var label_marker = document.createElement("div");
-    label_marker.className = "label_marker";
-    var label_dot = document.createElement("div");
-    label_dot.className = "label_dot";
-    var label_line = document.createElement("div");
-    label_line.className = "label_line";
-    label_marker.appendChild(label_dot);
-    label_marker.appendChild(label_line);
-    
-    var label_text = document.createElement("div");
-    label_text.className = "label_text";
-    label_text.innerHTML = text;
-    
-    label.appendChild(label_marker);
-    label.appendChild(label_text);
     document.getElementById("images_wrapper").appendChild(label);
-}
+}  
 function addLabelClick(clickEvent, text) {
     var xPos = clickEvent.clientX;
     var yPos = clickEvent.clientY;
@@ -280,6 +340,12 @@ function addLabelClick(clickEvent, text) {
     var yOffset = document.getElementById('controls').clientHeight;
     
     addLabel((xPos/width)*100, ((yPos-yOffset)/height)*100, text); 
+}
+function removeLabels() {
+    var activeLabels = document.getElementsByClassName('label');
+    for (var i = activeLabels.length-1; i >= 0; i--) {
+        activeLabels[i].parentNode.removeChild(activeLabels[i]);
+    }
 }
 function pageInit() {
     document.getElementById('text_wrap').style.display = 'none';
@@ -294,7 +360,7 @@ function pageInit() {
 <body onload="pageInit()">
 <div class="container">
     <div class="images_wrapper" id="images_wrapper">
-        <img class="base_layer" id="image_0" src="cat0.png" onclick="addLabelClick(event, 'test text test text')">
+        <img class="base_layer" id="image_0" src="cat0.png" onclick="addLabelClick(event, 'This is a label')">
         <img class="layer" id="image_1" src="cat1.png">
         <img class="layer" id="image_2" src="cat2.png">
         
@@ -302,15 +368,15 @@ function pageInit() {
     </div>
 		
     <div class="controls" id="controls">
-        <div class="button noselect bold" onclick="nextSlide(-1)">&lt;</div>
+        <div class="button noselect bold" onclick="removeLabels();nextSlide(-1)">&lt;</div>
         <div class="button noselect bold" onclick="toggleSlidesList()">=</div>
-        <div class="button noselect bold" onclick="nextSlide(1)">&gt;</div>
+        <div class="button noselect bold" onclick="removeLabels();nextSlide(1)">&gt;</div>
         <div class="button noselect bold" onclick="toggleText()">T</div>
     </div>
     <div class="slide_list" id="list">
-            <div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(0); toggleSlidesList()">1</div>
-            <div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(1); toggleSlidesList()">2</div>
-            <div class="slide_list_entry" onclick="currentSlide = 1; nextSlide(2); toggleSlidesList()">3</div>
+            <div class="slide_list_entry noselect" onclick="removeLabels();gotToSlide(1);toggleSlidesList()">1</div>
+            <div class="slide_list_entry noselect" onclick="removeLabels();gotToSlide(2);toggleSlidesList()">2</div>
+            <div class="slide_list_entry noselect" onclick="removeLabels();gotToSlide(3);toggleSlidesList()">3</div>
     </div>
 
     <div class="textbox_wrapper" id="text_wrap">
