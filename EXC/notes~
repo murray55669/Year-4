@@ -5,14 +5,16 @@ hadoop jar /opt/hadoop/hadoop-2.7.1/share/hadoop/tools/lib/hadoop-streaming-2.7.
  -file random-mapper.py
 
 
-x-rn -input /user/$USER/data/input-1/small.txt -output /user/$USER/data/output-1 -mapper 1-mapper.py -file 1-mapper.py 
+x-rn -input /data/assignments/ex1/webLarge.txt -output /user/$USER/data/output-1 -mapper 1-mapper.py -file 1-mapper.py 
 x-rn -input /user/$USER/data/output-1/part-00000 -output /user/$USER/data/output-2 -mapper 2-mapper.py -reducer 2-reducer.py -file 2-mapper.py -file 2-reducer.py
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-3 -mapper 3-mapper.py -reducer 3-reducer.py -file 3-mapper.py -file 3-reducer.py
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-4 -mapper 4-mapper.py -reducer 4-reducer.py -file 4-mapper.py -file 4-reducer.py -jobconf stream.num.map.output.key.fields=2
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-5 -mapper 5-mapper.py -reducer 5-reducer.py -file 5-mapper.py -file 5-reducer.py
 x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-nr -input /user/$USER/data/output-4/part-00000 -output /user/$USER/data/output-6 -mapper 6-mapper.py -reducer 6-reducer.py -file 6-mapper.py -file 6-reducer.py 
 
-x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-n -input /data/assignments/ex1/matrixSmall.txt -output /user/$USER/data/output-7 -mapper 7-mapper.py -reducer 7-reducer.py -file 7-mapper.py -file 7-reducer.py -jobconf stream.num.map.output.key.fields=2
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options='-k1n -k2n' -input /data/assignments/ex1/matrixLarge.txt -output /user/$USER/data/output-7 -mapper 7-mapper.py -reducer 7-reducer.py -file 7-mapper.py -file 7-reducer.py -jobconf stream.num.map.output.key.fields=2
+
+x-rn -input /data/assignments/ex1/uniSmall.txt -output /user/$USER/data/output-8 -mapper 8-mapper.py -reducer 8-reducer.py -file 8-mapper.py -file 8-reducer.py
 
 x-fs -copyToLocal /user/$USER/data/output/ ~/Year-4/EXC/
 
