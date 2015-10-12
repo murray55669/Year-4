@@ -1,0 +1,48 @@
+hadoop jar /opt/hadoop/hadoop-2.7.1/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
+ -input /user/$USER/data/input \
+ -output /user/$USER/data/output \
+ -mapper random-mapper.py \
+ -file random-mapper.py
+
+
+x-rn -input /user/$USER/data/input-1/small.txt -output /user/$USER/data/output-1 -mapper 1-mapper.py -file 1-mapper.py 
+x-rn -input /user/$USER/data/output-1/part-00000 -output /user/$USER/data/output-2 -mapper 2-mapper.py -reducer 2-reducer.py -file 2-mapper.py -file 2-reducer.py
+x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-3 -mapper 3-mapper.py -reducer 3-reducer.py -file 3-mapper.py -file 3-reducer.py
+x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-4 -mapper 4-mapper.py -reducer 4-reducer.py -file 4-mapper.py -file 4-reducer.py -jobconf stream.num.map.output.key.fields=2
+x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-5 -mapper 5-mapper.py -reducer 5-reducer.py -file 5-mapper.py -file 5-reducer.py
+x-rn -input /user/$USER/data/output-4/part-00000 -output /user/$USER/data/output-6 -mapper 6-mapper.py -file 6-mapper.py 
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-nr -input /user/$USER/data/output-4/part-00000 -output /user/$USER/data/output-6 -mapper 6-mapper.py -reducer 6-reducer.py -file 6-mapper.py -file 6-reducer.py 
+
+x-fs -copyToLocal /user/$USER/data/output/ ~/Year-4/EXC/
+
+x-fs -cat /user/$USER/data/output-6/part-00000 | head -20
+
+x-fs -cat /data/assignments/samples/
+x-fs -cat /data/assignments/samples/task_X.out/part-00000 | head -20
+
+x-fs -ls /data/assignments/samples/
+
+http://strathisla.inf.ed.ac.uk:8088
+
+test = ["a test line a test line", "some other thing"]
+
+test = ["0 to\t1",
+"0 i\t1",
+"0 to\t1",
+"0 but\t1",
+"0 0\t1",
+"0 to\t1",
+"0 if\t1",
+"0 you\t1",
+"0 for\t1",
+"0 dim\t1",
+"0 then\t1",
+"0 exe\t1",
+"0 r\t1",
+"0 and\t1",
+"0 j\t1",
+"0 0\t1",
+"0 where\t1",
+"0 0px\t1",
+"0 through\t1",
+"0 each\t1"]

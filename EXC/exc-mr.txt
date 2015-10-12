@@ -1,0 +1,140 @@
+alias x-rn="hadoop jar /opt/hadoop/hadoop-2.7.1/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar"
+
+Task 1 code begin
+#MAPPER#1-mapper.py
+#!/usr/bin/python
+
+import sys
+
+for line in sys.stdin:                  # input from standard input
+    line = line.strip()                 # remove whitespaces
+
+    print(line.lower())
+#REDUCER#
+#<none>
+#TO RUN#
+x-rn -input /user/$USER/data/input-1/large.txt -output /user/$USER/data/output-1 -mapper 1-mapper.py -file 1-mapper.py 
+Task 1 code end
+Task 1 results begin
+Task 1 results end
+
+Task 2 code begin
+#MAPPER#2-mapper.py
+#!/usr/bin/python
+
+import sys
+
+for line in sys.stdin:                  # input from standard input
+    line = line.strip()                 # remove whitespaces
+
+    print(line)
+#REDUCER#2-reducer.py
+#!/usr/bin/python
+
+import sys
+
+prev_line = ""
+line = ""
+first_line = 1;
+
+for line in sys.stdin:          # For ever line in the input from stdin
+    line = line.strip()         # Remove trailing characters
+
+    if first_line:              # If first line, print no matter what
+        print line
+        prev_line = line
+        first_line = 0
+    else:                       # If not the first line, check if we've seen this line before
+        if line == prev_line:
+            pass
+        else:
+            print line
+            prev_line = line
+#TO RUN#
+x-rn -input /user/$USER/data/output-1/part-00000 -output /user/$USER/data/output-2 -mapper 2-mapper.py -reducer 2-reducer.py -file 2-mapper.py -file 2-reducer.py
+Task 2 code end
+Task 2 results begin
+Task 2 results end
+
+Task 3 code begin
+#MAPPER#3-mapper.py
+#!/usr/bin/python
+
+import sys
+
+for line in sys.stdin:                  # input from standard input
+    line = line.strip()                 # remove whitespaces
+
+    print(line)
+#REDUCER#3-reducer.py
+#!/usr/bin/python
+
+import sys
+
+word_count = 0
+line_count = 0
+
+for line in sys.stdin:          # For ever line in the input from stdin
+    line = line.strip()         # Remove trailing characters
+
+    no_spaces = line.split()
+    for word in no_spaces:
+        word_count += 1
+    
+    line_count += 1
+    
+print str(line_count)+" "+str(word_count)
+#TO RUN#
+x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-3 -mapper 3-mapper.py -reducer 3-reducer.py -file 3-mapper.py -file 3-reducer.py
+Task 3 code end
+Task 3 results begin
+Task 3 results end
+
+Task 4 code begin
+#MAPPER#4-mapper.py
+#REDUCER#4-reducer.py
+#TO RUN#
+Task 4 code end
+Task 4 results begin
+Task 4 results end
+
+Task 5 code begin
+#MAPPER#5-mapper.py
+#REDUCER#5-reducer.py
+#TO RUN#
+Task 5 code end
+Task 5 results begin
+Task 5 results end
+
+Task 6 code begin
+#MAPPER#6-mapper.py
+#REDUCER#6-reducer.py
+#TO RUN#
+Task 6 code end
+Task 6 results begin
+Task 6 results end
+
+Task 7 code begin
+#MAPPER#7-mapper.py
+#REDUCER#7-reducer.py
+#TO RUN#
+Task 7 code end
+Task 7 results begin
+Task 7 results end
+
+Task 8 code begin
+#MAPPER#8-mapper.py
+#REDUCER#8-reducer.py
+#TO RUN#
+Task 8 code end
+Task 8 results begin
+Task 8 results end
+
+Task 9 code begin
+#MAPPER#9-mapper.py
+#REDUCER#9-reducer.py
+#TO RUN#
+Task 9 code end
+Task 9 results begin
+Task 9 results end
+
