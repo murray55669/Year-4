@@ -12,12 +12,18 @@ x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-5 -mapper 5-mapper.py -reducer 5-reducer.py -file 5-mapper.py -file 5-reducer.py
 x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-nr -input /user/$USER/data/output-4/part-00000 -output /user/$USER/data/output-6 -mapper 6-mapper.py -reducer 6-reducer.py -file 6-mapper.py -file 6-reducer.py 
 
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-n -input /data/assignments/ex1/matrixSmall.txt -output /user/$USER/data/output-7 -mapper 7-mapper.py -reducer 7-reducer.py -file 7-mapper.py -file 7-reducer.py -jobconf stream.num.map.output.key.fields=2
+
 x-fs -copyToLocal /user/$USER/data/output/ ~/Year-4/EXC/
 
-x-fs -cat /user/$USER/data/output-6/part-00000 | head -20
+x-fs -rm -r /user/$USER/data/output-7/
+
+x-fs -cat /user/$USER/data/output-7/part-00000 | head -20
 
 x-fs -cat /data/assignments/samples/
 x-fs -cat /data/assignments/samples/task_X.out/part-00000 | head -20
+
+x-fs -cat /data/assignments/ex1/matrixSmall.txt
 
 x-fs -ls /data/assignments/samples/
 
