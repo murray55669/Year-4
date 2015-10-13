@@ -223,24 +223,153 @@ Task 6 results end
 
 Task 7 code begin
 #MAPPER#7-mapper.py
+#!/usr/bin/python
+
+import sys
+
+for line in sys.stdin:
+    line = line.strip()
+    tokens = line.split("\t")
+    row = tokens[0]
+    values = tokens[1].split()
+    
+    for i in range(0, len(values)):
+        print("{0}\t{1}\t{2}".format(i, row, values[i]))
 #REDUCER#7-reducer.py
+#!/usr/bin/python
+
+import sys
+
+current_row = 0
+row = []
+
+def print_row(row_index, array):
+    line = str(row_index)+"\t"
+    for element in array:
+        line = line+element+" "
+    print(line)
+
+for line in sys.stdin:   
+    line = line.strip()
+    
+    row_index, col_index, val = line.split("\t")
+    row_index = int(row_index)
+    
+    if row_index == current_row:
+        row.append(val)
+    else:
+        print_row(row_index-1, row)
+        row = []
+        current_row = row_index
+        row.append(val)
+        
+#handle final row
+if row_index == current_row:
+    print_row(row_index, row)
 #TO RUN#
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D mapred.text.key.comparator.options='-k1n -k2n' -input /data/assignments/ex1/matrixLarge.txt -output /user/$USER/data/output-7 -mapper 7-mapper.py -reducer 7-reducer.py -file 7-mapper.py -file 7-reducer.py -jobconf stream.num.map.output.key.fields=2
 Task 7 code end
 Task 7 results begin
 Task 7 results end
 
 Task 8 code begin
 #MAPPER#8-mapper.py
+#!/usr/bin/python
+
+import sys
+
+#mark -> couseID, studentID, grade
+#student -> studentID, name
+
+for line in sys.stdin:
+    line = line.strip()
+    tokens = line.split()
+    tag = tokens[0]
+
+    if tag == "student":
+        #print (studentID, name)
+        print("{0}\t{1}".format(tokens[1], tokens[2]))
+    else:
+        #print(studentID, courseID, grade)
+        print("{0}\t{1}\t{2}".format(tokens[2], tokens[1], tokens[3]))
 #REDUCER#8-reducer.py
+#!/usr/bin/python
+
+import sys
+
+current_student = 0
+name = ""
+grades = []
+
+def print_data(name, grades):
+    line = name+" --> "
+    for grade in grades:
+        line = line+"("+grade[0]+","+grade[1]+") "
+    print line
+
+for line in sys.stdin:
+    line = line.strip()
+    
+    tokens = line.split("\t")
+    student_id = int(tokens[0])
+    
+    if current_student != student_id:
+        print_data(name, grades)
+        grades = []
+        current_student = student_id
+            
+    #student record
+    if len(tokens) == 2:
+        name = tokens[1]
+    #course record
+    else:
+        grades.append((tokens[1], tokens[2]))
+                
+
+print_data(name, grades)
 #TO RUN#
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D mapred.text.key.comparator.options='-k1n -k2' -input /data/assignments/ex1/uniLarge.txt -output /user/$USER/data/output-8 -mapper 8-mapper.py -reducer 8-reducer.py -file 8-mapper.py -file 8-reducer.py -jobconf stream.num.map.output.key.fields=2
 Task 8 code end
 Task 8 results begin
 Task 8 results end
 
 Task 9 code begin
 #MAPPER#9-mapper.py
+#!/usr/bin/python
+
+import sys
+
+#Name --> (courseID,grade) (courseID,grade) ...
+
+for line in sys.stdin:
+    line = line.strip()
+    tokens = line.split()
+    name = tokens[0]
+    marks = tokens[2:]
+    subjects = len(marks)
+    total = 0.0
+
+    if subjects >= 4:
+        for tuple in marks:
+            mark = int(tuple.split(",")[1][:-1])
+            total += mark
+        print(str(total/subjects)+" "+name)
 #REDUCER#9-reducer.py
+#!/usr/bin/env python
+
+import sys
+
+lowest = 1
+
+for line in sys.stdin:
+    line = line.strip()
+    mark, name = line.split()
+    
+    if lowest:
+        print(name+" with "+mark)
+        lowest = 0
 #TO RUN#
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D mapred.text.key.comparator.options=-n -input /user/$USER/data/output-8/part-00000 -output /user/$USER/data/output-9 -mapper 9-mapper.py -reducer 9-reducer.py -file 9-mapper.py -file 9-reducer.py
 Task 9 code end
 Task 9 results begin
 Task 9 results end
