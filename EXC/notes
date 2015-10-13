@@ -12,9 +12,11 @@ x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-5 -mapper 5-mapper.py -reducer 5-reducer.py -file 5-mapper.py -file 5-reducer.py
 x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-nr -input /user/$USER/data/output-4/part-00000 -output /user/$USER/data/output-6 -mapper 6-mapper.py -reducer 6-reducer.py -file 6-mapper.py -file 6-reducer.py 
 
-x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options='-k1n -k2n' -input /data/assignments/ex1/matrixLarge.txt -output /user/$USER/data/output-7 -mapper 7-mapper.py -reducer 7-reducer.py -file 7-mapper.py -file 7-reducer.py -jobconf stream.num.map.output.key.fields=2
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D mapred.text.key.comparator.options='-k1n -k2n' -input /data/assignments/ex1/matrixLarge.txt -output /user/$USER/data/output-7 -mapper 7-mapper.py -reducer 7-reducer.py -file 7-mapper.py -file 7-reducer.py -jobconf stream.num.map.output.key.fields=2
 
-x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-n -input /data/assignments/ex1/uniSmall.txt -output /user/$USER/data/output-8 -mapper 8-mapper.py -reducer 8-reducer.py -file 8-mapper.py -file 8-reducer.py -jobconf stream.num.map.output.key.fields=2
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D mapred.text.key.comparator.options='-k1n -k2' -input /data/assignments/ex1/uniLarge.txt -output /user/$USER/data/output-8 -mapper 8-mapper.py -reducer 8-reducer.py -file 8-mapper.py -file 8-reducer.py -jobconf stream.num.map.output.key.fields=2
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D mapred.text.key.comparator.options=-n -input /user/$USER/data/output-8/part-00000 -output /user/$USER/data/output-9 -mapper 9-mapper.py -reducer 9-reducer.py -file 9-mapper.py -file 9-reducer.py
+
 
 x-fs -copyToLocal /user/$USER/data/output/ ~/Year-4/EXC/
 
@@ -24,6 +26,7 @@ x-fs -cat /user/$USER/data/output-7/part-00000 | head -20
 
 x-fs -cat /data/assignments/samples/
 x-fs -cat /data/assignments/samples/task_X.out/part-00000 | head -20
+x-fs -cat /user/$USER/data/output-X/part-00000 | head -20
 
 x-fs -cat /data/assignments/ex1/matrixSmall.txt
 
@@ -31,25 +34,4 @@ x-fs -ls /data/assignments/samples/
 
 http://strathisla.inf.ed.ac.uk:8088
 
-test = ["a test line a test line", "some other thing"]
-
-test = ["0 to\t1",
-"0 i\t1",
-"0 to\t1",
-"0 but\t1",
-"0 0\t1",
-"0 to\t1",
-"0 if\t1",
-"0 you\t1",
-"0 for\t1",
-"0 dim\t1",
-"0 then\t1",
-"0 exe\t1",
-"0 r\t1",
-"0 and\t1",
-"0 j\t1",
-"0 0\t1",
-"0 where\t1",
-"0 0px\t1",
-"0 through\t1",
-"0 each\t1"]
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D mapred.text.key.comparator.options='-k1n -k2' -input /data/assignments/ex1/uniSmall.txt -output /user/$USER/data/output-8 -mapper 8-mapper.py -reducer id-rd.py -file 8-mapper.py -file id-rd.p

@@ -6,14 +6,14 @@ Task 1 code begin
 
 import sys
 
-for line in sys.stdin:                  # input from standard input
-    line = line.strip()                 # remove whitespaces
+for line in sys.stdin:
+    line = line.strip()
 
     print(line.lower())
 #REDUCER#
 #<none>
 #TO RUN#
-x-rn -input /user/$USER/data/input-1/large.txt -output /user/$USER/data/output-1 -mapper 1-mapper.py -file 1-mapper.py 
+x-rn -input /data/assignments/ex1/webLarge.txt -output /user/$USER/data/output-1 -mapper 1-mapper.py -file 1-mapper.py 
 Task 1 code end
 Task 1 results begin
 Task 1 results end
@@ -24,8 +24,8 @@ Task 2 code begin
 
 import sys
 
-for line in sys.stdin:                  # input from standard input
-    line = line.strip()                 # remove whitespaces
+for line in sys.stdin:
+    line = line.strip()
 
     print(line)
 #REDUCER#2-reducer.py
@@ -37,14 +37,14 @@ prev_line = ""
 line = ""
 first_line = 1;
 
-for line in sys.stdin:          # For ever line in the input from stdin
-    line = line.strip()         # Remove trailing characters
+for line in sys.stdin:
+    line = line.strip()
 
-    if first_line:              # If first line, print no matter what
+    if first_line:
         print line
         prev_line = line
         first_line = 0
-    else:                       # If not the first line, check if we've seen this line before
+    else:
         if line == prev_line:
             pass
         else:
@@ -74,8 +74,8 @@ import sys
 word_count = 0
 line_count = 0
 
-for line in sys.stdin:          # For ever line in the input from stdin
-    line = line.strip()         # Remove trailing characters
+for line in sys.stdin:
+    line = line.strip()
 
     no_spaces = line.split()
     for word in no_spaces:
@@ -92,24 +92,131 @@ Task 3 results end
 
 Task 4 code begin
 #MAPPER#4-mapper.py
+#!/usr/bin/python
+
+import sys
+
+for line in sys.stdin:
+    line = line.strip()
+    tokens = line.split()
+
+    for i in range(0, len(tokens)-1):
+        print("{0}\t{1}\t{2}".format(tokens[i], tokens[i+1], 1))
 #REDUCER#4-reducer.py
+#!/usr/bin/python
+
+import sys
+
+prev_word_1 = ""
+prev_word_2 = ""
+value_total = 0
+word_1 = ""
+word_2 = ""
+
+for line in sys.stdin:
+    line = line.strip()
+    word_1, word_2, value = line.split("\t", 2)
+    value = int(value)
+    if prev_word_1 == word_1 and prev_word_2 == word_2:
+        value_total += value
+    else:
+        if prev_word_1 and prev_word_2:
+            print("{0}\t{1}\t{2}".format(prev_word_1, prev_word_2, value_total))
+            
+        value_total = value
+        prev_word_1 = word_1
+        prev_word_2 = word_2
+
+if prev_word_1 == word_1 and prev_word_2 == word_2:
+    print("{0}\t{1}\t{2}".format(prev_word_1, prev_word_2, value_total))
 #TO RUN#
+x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-4 -mapper 4-mapper.py -reducer 4-reducer.py -file 4-mapper.py -file 4-reducer.py -jobconf stream.num.map.output.key.fields=2
 Task 4 code end
 Task 4 results begin
 Task 4 results end
 
 Task 5 code begin
 #MAPPER#5-mapper.py
+#!/usr/bin/python
+
+import sys
+
+counts = {}
+
+for line in sys.stdin:
+    line = line.strip()
+    tokens = line.split()
+
+    for i in range(0, len(tokens)-1):
+        tuple = (tokens[i], tokens[i+1])
+        if not counts:
+            counts[tuple] = 1
+        else:
+            if tuple in counts:
+                counts[tuple] += 1
+            else:
+                counts[tuple] = 1
+                
+    for (key_1, key_2) in counts:
+        value = counts.get((key_1, key_2))
+        print("{0}\t{1}\t{2}".format(key_1, key_2, value))
+    counts.clear()
 #REDUCER#5-reducer.py
+#!/usr/bin/python
+
+import sys
+
+prev_word_1 = ""
+prev_word_2 = ""
+value_total = 0
+word_1 = ""
+word_2 = ""
+
+for line in sys.stdin:
+    line = line.strip()
+    word_1, word_2, value = line.split("\t", 2)
+    value = int(value)
+    if prev_word_1 == word_1 and prev_word_2 == word_2:
+        value_total += value
+    else:
+        if prev_word_1 and prev_word_2:
+            print("{0}\t{1}\t{2}".format(prev_word_1, prev_word_2, value_total))
+            
+        value_total = value
+        prev_word_1 = word_1
+        prev_word_2 = word_2
+
+if prev_word_1 == word_1 and prev_word_2 == word_2:
+    print("{0}\t{1}\t{2}".format(prev_word_1, prev_word_2, value_total))
 #TO RUN#
+x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-5 -mapper 5-mapper.py -reducer 5-reducer.py -file 5-mapper.py -file 5-reducer.py
 Task 5 code end
 Task 5 results begin
 Task 5 results end
 
 Task 6 code begin
 #MAPPER#6-mapper.py
+#!/usr/bin/env python
+
+import sys
+
+for line in sys.stdin:
+    line = line.strip()
+    
+    word_1, word_2, value = line.split("\t", 2)
+    
+    print("{0}\t{1}\t{2}".format(value, word_1, word_2))
 #REDUCER#6-reducer.py
+#!/usr/bin/env python
+
+import sys
+
+for line in sys.stdin:
+    line = line.strip()
+    
+    print(line)
 #TO RUN#
+x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-nr -input /user/$USER/data/output-4/part-00000 -output /user/$USER/data/output-6 -mapper 6-mapper.py -reducer 6-reducer.py -file 6-mapper.py -file 6-reducer.py 
 Task 6 code end
 Task 6 results begin
 Task 6 results end

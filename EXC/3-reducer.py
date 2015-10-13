@@ -5,8 +5,8 @@ import sys
 word_count = 0
 line_count = 0
 
-for line in sys.stdin:          # For ever line in the input from stdin
-    line = line.strip()         # Remove trailing characters
+for line in sys.stdin:
+    line = line.strip()
 
     no_spaces = line.split()
     for word in no_spaces:

@@ -2,8 +2,8 @@
 
 import sys
 
-for line in sys.stdin:                  # input from standard input
-    line = line.strip()                 # remove whitespaces
+for line in sys.stdin:
+    line = line.strip()
     tokens = line.split()
 
     for i in range(0, len(tokens)-1):
