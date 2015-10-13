@@ -8,12 +8,20 @@ package patientview;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import javax.swing.Timer;
 
 /**
  *
  * @author s1232200
  */
 public class WardJFrame extends javax.swing.JFrame {
+    
+    private Timer timer;
+    private int timerSeconds;
 
     /**
      * Creates new form WardJFrame
@@ -34,6 +42,30 @@ public class WardJFrame extends javax.swing.JFrame {
         
         //Set background colour
         this.getContentPane().setBackground(new Color(240,240,240));
+        
+        //set focus on exit button
+        jButton_changeView.requestFocus();
+        
+        wardNumField.setText("W001");
+        
+        timerSeconds = 0;
+        if (timer == null) {
+            timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // do it every 1 second
+                    Calendar cal = Calendar.getInstance();
+                    cal.getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+                    jLabel_systemTime.setText(sdf.format(cal.getTime()));
+                    timerSeconds++;
+                }
+            });
+        }
+
+        if (timer.isRunning() == false) {
+            timer.start();
+        }
     }
 
     /**
@@ -45,21 +77,62 @@ public class WardJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        wardNumField = new javax.swing.JLabel();
+        jButton_changeView = new javax.swing.JButton();
+        jLabel_systemTime = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        wardNumField.setText("jLabel");
+
+        jButton_changeView.setText("Exit");
+        jButton_changeView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_exitActionPerformed(evt);
+            }
+        });
+
+        jLabel_systemTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel_systemTime.setText("TIME");
+
+        jLabel2.setText("Ward");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 640, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton_changeView)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(wardNumField)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 348, Short.MAX_VALUE)
+                .addComponent(jLabel_systemTime, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_systemTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addComponent(jButton_changeView)
+                    .addComponent(wardNumField))
+                .addGap(360, 360, 360))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_exitActionPerformed
+
+         // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jButton_exitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -97,5 +170,9 @@ public class WardJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_changeView;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel_systemTime;
+    private javax.swing.JLabel wardNumField;
     // End of variables declaration//GEN-END:variables
 }
