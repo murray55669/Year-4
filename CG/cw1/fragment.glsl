@@ -54,6 +54,6 @@ void main() {
         vec4 eyeReflec = normalize(2 * normOut * dot(normOut, eyeVec) - eyeVec);
 	vec4 textureVector = texture(tex, vec2(eyeReflec.x, eyeReflec.y));
 	
-	//Output - use a ratio of texture/phong for final colouring
-	outColour = (0.5 * textureVector) + (0.5 * vec4(spec+ambient, spec+diff+ambient, spec+ambient, 1.0));
+	//Output - use the texture data as diffuse supplement
+	outColour = vec4(spec+(0.5*textureVector.x)+ambient, spec+(0.5*diff + 0.5*textureVector.y)+ambient, spec+(0.5*textureVector.y)+ambient, 1.0);
 }
