@@ -16,6 +16,27 @@ for line in sys.stdin:
 x-rn -input /data/assignments/ex1/webLarge.txt -output /user/$USER/data/output-1 -mapper 1-mapper.py -file 1-mapper.py 
 Task 1 code end
 Task 1 results begin
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 Task 1 results end
 
 Task 2 code begin
@@ -54,6 +75,26 @@ for line in sys.stdin:
 x-rn -input /user/$USER/data/output-1/part-00000 -output /user/$USER/data/output-2 -mapper 2-mapper.py -reducer 2-reducer.py -file 2-mapper.py -file 2-reducer.py
 Task 2 code end
 Task 2 results begin
+	
+0	
+0 0	
+0 0 0 0 0 0 your	
+0 0 0 7 5	
+0 0 5px li li a 1px solid li li is how it looks in firefox and internet it looks perfect in firefox but in ie it is messing can i fix this you type problem in internet	
+0 0 can do it this way if you want to evaluate the first condition before the you can also use another if out manual page for operator	
+0 0 l 0 20 l 10 20 20 l 10 20 l0	
+0 0 may need to specify padding or alternate	
+0 0 pattern found in languages like	
+0 0 property of jquery returns the number of elements which were is a selector for jquery to select elements which have no child or no of empty textarea is and of empty input with the class title is enable	
+0 0 return	
+0 0 solid	
+0 0 top that close	
+0 1	
+0 1 0	
+0 1 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 this is an untested first you looking for basic info on how to get google is your for try googling for loop and get a lot of good to learn basic things in any a google search for hello is very	
+0 1 1 1 0 0 1 1 0 1 0	
+0 1 2 3 echo	
+0 1 is 2 is 4 always 7 activesync features default 0 msexchomaadminwirelessenable select
 Task 2 results end
 
 Task 3 code begin
@@ -88,6 +129,7 @@ print str(line_count)+" "+str(word_count)
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-3 -mapper 3-mapper.py -reducer 3-reducer.py -file 3-mapper.py -file 3-reducer.py
 Task 3 code end
 Task 3 results begin
+1865581 123513449
 Task 3 results end
 
 Task 4 code begin
@@ -133,6 +175,26 @@ if prev_word_1 == word_1 and prev_word_2 == word_2:
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-4 -mapper 4-mapper.py -reducer 4-reducer.py -file 4-mapper.py -file 4-reducer.py -jobconf stream.num.map.output.key.fields=2
 Task 4 code end
 Task 4 results begin
+0	0	8961
+0	00	15
+0	000	3
+0	0000	1
+0	00000	1
+0	00000000	82
+0	0000000019dc3290	1
+0	0000000019dc5b40	1
+0	0000000019dc7850	1
+0	0000000019dc89c0	1
+0	0000000019dc8f90	1
+0	00000001	3
+0	00000010	4
+0	00000013	1
+0	00000020	4
+0	00000030	3
+0	00000040	2
+0	00000050	2
+0	00000060	2
+0	00000070	1
 Task 4 results end
 
 Task 5 code begin
@@ -192,6 +254,30 @@ if prev_word_1 == word_1 and prev_word_2 == word_2:
 x-rn -input /user/$USER/data/output-2/part-00000 -output /user/$USER/data/output-5 -mapper 5-mapper.py -reducer 5-reducer.py -file 5-mapper.py -file 5-reducer.py
 Task 5 code end
 Task 5 results begin
+0	to	1
+0	1	1
+0	to	1
+0	in	2
+0	test	2
+0	wallclock	1
+0	as	1
+0	95	1
+0	1	4
+0	1836	1
+0	public	1
+0	err	1
+0	in	1
+0	0	17
+0	level	1
+0	the	3
+0	opoint	1
+0	or	1
+0	0	5
+0	and	1
+#------------------#
+Task 4 CPU time spent (ms)=1654130
+Task 5 CPU time spent (ms)=3127200
+Slower with combiner.
 Task 5 results end
 
 Task 6 code begin
@@ -219,6 +305,26 @@ for line in sys.stdin:
 x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-nr -input /user/$USER/data/output-4/part-00000 -output /user/$USER/data/output-6 -mapper 6-mapper.py -reducer 6-reducer.py -file 6-mapper.py -file 6-reducer.py 
 Task 6 code end
 Task 6 results begin
+596093	of	the
+546463	in	the
+412116	to	the
+336382	you	can
+287796	on	the
+279256	want	to
+260671	to	be
+258828	need	to
+251729	if	you
+247512	is	a
+213652	to	do
+212891	in	a
+208764	have	a
+204930	is	the
+200810	for	the
+187689	it	is
+184438	with	the
+184399	to	use
+183069	the	same
+171873	i	have
 Task 6 results end
 
 Task 7 code begin
