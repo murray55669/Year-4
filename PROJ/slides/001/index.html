@@ -51,7 +51,14 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
+/****************************************/
+html {
+	height: 100%;
+	width: 100%;
+}
+body {
+	height: 100%;
+}
 .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -71,38 +78,38 @@ table {
 
 .container {
     position: relative;
-    width: 100vw;
-    top: 15vh;
-    min-height: 85vh;
-    background: #ff00ff;
+    width: 100%;
+    top: 0;
+	min-height:100%;
+    background: #f0f0f0;
 }
 .images_wrapper {
     position: relative;
-    width: 100vw;
+    width: 100%;
 }
 .controls {
     width: 100%;
-    height: 15vh;
+    height: 120px;
     position: fixed;
-    top: 0px;
+    bottom: 0px;
     left: 0px;
     right: 0px;
-    background: #ff0000;
+    background: #e0e0e0;
 }
 .button {
     width: 25%;
-    height: 15vh;
+    height: 120px;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
     text-align: center;
-    line-height: 15vh;
+    line-height: 120px;
     float: left;
     font-size: 200%;
 }
 .slide_list {
     position: fixed;
-    top: 15vh;
-    left: 25vw;
-    right: 50vw;
+    bottom: 120px;
+    left: 25%;
+    right: 50%;
 }
 .slide_list_entry {
     float: left;
@@ -111,24 +118,24 @@ table {
     height: 38px;
     line-height: 38px;
     text-align: center;
-    background: #00ff00;
+    background: #d0d0d0;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
 }
 .base_layer {
     float: left;
-    width: 100vw;
+    width: 100%;
 }
 .layer {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
 }
 .textbox_wrapper {
     position: fixed;
-    top: 15vh;
+    top: 120px;
     left: 0px;
-    width: 100vw;
+    width: 100%;
     height: 85vh;
 }
 .textbox {
@@ -190,7 +197,7 @@ table {
     border-radius: 50%;
     width: 1vh;
     height: 1vh;
-    background: #ffffff; 
+    background: #000000; 
 }
 .llabel_dot {
     float: left;
@@ -202,7 +209,7 @@ table {
     width: calc(100% - 3vh);
     height: 0.5vh;
     margin: 0.25vh 0;
-    background: #ffffff; 
+    background: #000000; 
 }
 .llabel_line {
     margin-left: 0.5vh;
@@ -214,7 +221,7 @@ table {
 }
 .label_text {
     font-size: 4vw;
-    color: #ffffff;
+    color: #000000;
 }
 .llabel_text {
     float: left;
@@ -224,7 +231,7 @@ table {
     text-align: right;
 }
 </style>
-
+<script src="jquery-2.1.4.js"></script> 
 <script>
 var currentSlide = 1;
 var slides = ["image_0", "image_1", "image_2"];
@@ -337,9 +344,7 @@ function addLabelClick(clickEvent, text) {
     var height = document.getElementById('images_wrapper').clientHeight;
     var width = document.getElementById('images_wrapper').clientWidth;
     
-    var yOffset = document.getElementById('controls').clientHeight;
-    
-    addLabel((xPos/width)*100, ((yPos-yOffset)/height)*100, text); 
+    addLabel((xPos/width)*100, ((yPos)/height)*100, text); 
 }
 function removeLabels() {
     var activeLabels = document.getElementsByClassName('label');
@@ -388,5 +393,6 @@ function pageInit() {
     </div>
     
 </div>
+<div class="clear"></div>
 </body>
 </html>
