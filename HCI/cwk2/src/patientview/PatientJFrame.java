@@ -17,6 +17,12 @@ import java.util.logging.Logger;
 import javax.swing.Timer;
 
 import java.awt.Color;
+import javax.swing.ImageIcon;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  *
@@ -31,6 +37,11 @@ public class PatientJFrame extends javax.swing.JFrame {
     public static final int SYSTOLIC = 2;
     public static final int HEART_RATE = 3;
     public static final float TEMPERATURE = 0f;
+    
+    private int step;
+    private ArrayList<LiveData> liveData;
+    
+    public String gender = "F";
 
     /**
      * Creates new form PatientJFrame
@@ -54,7 +65,13 @@ public class PatientJFrame extends javax.swing.JFrame {
         wardNumField.setText("W001");
         bedNumField.setText("1001");
         dobField.setText("1958-10-12");
-        genderField.setText("F");
+        ImageIcon maleIcon = new ImageIcon("images/male.png");
+        ImageIcon femaleIcon = new ImageIcon("images/female.png");
+        if (gender == "F") {
+            genderIcon.setIcon(femaleIcon);
+        } else {
+            genderIcon.setIcon(maleIcon);
+        }
         
         //Set background colour
         this.getContentPane().setBackground(new Color(240,240,240));
@@ -64,11 +81,23 @@ public class PatientJFrame extends javax.swing.JFrame {
         tIndicator.setOpaque(true);
         sbpIndicator.setOpaque(true);
         hrIndicator.setOpaque(true);
+        sPEWSIndicator.setOpaque(true);
         
         //set focus on back button
         jButton_changeView.requestFocus();
+        
+        //Get an ArrayList of the data to be presented
+        try {
+            liveData = arrayFromCSV("data/Alice_Bailey_20141011091022.csv");
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+            System.exit(0);
+        }
+                        
+                        
         //set timer
         timerSeconds = 0;
+        step = 0;
         if (timer == null) {
             timer = new Timer(1000, new ActionListener() {
                 @Override
@@ -80,19 +109,28 @@ public class PatientJFrame extends javax.swing.JFrame {
                     jLabel_systemTime.setText(sdf.format(cal.getTime()));
                     // do it every 5 seconds
                     if (timerSeconds % 5 == 0) {
-                        //generate random value
+                        
+                        LiveData timedData = liveData.get(step);
+                        step++;
+                        if (step >= liveData.size()) {
+                            System.out.println("Out of data! Looping..");
+                            step = 0;
+                        }
+                        
+                        /*                        //generate random value
                         int br = generateReading(RESPIRATORY_RATE);
                         int spo2 = generateReading(SPO2);
                         float temp = generateReading(TEMPERATURE);
                         int systolic = generateReading(SYSTOLIC);
                         int hr = generateReading(HEART_RATE);
+                        */
                         
-                        /*
-                         * 
-                         * ---WRITE YOUR OWN FUNCTION TO DISPLAY DATA.---
-                         *
-                         * 
-                         */
+                        int br = timedData.rr;
+                        int spo2 = timedData.os;
+                        float temp = timedData.t;
+                        int systolic = timedData.sbp;
+                        int hr = timedData.hr;
+                        
                         displayData(br,spo2,temp,systolic,hr);
                     }
                     timerSeconds++;
@@ -120,12 +158,15 @@ public class PatientJFrame extends javax.swing.JFrame {
         
         hrLabel.setText(Integer.toString(hr)+" beats/min");
         hrIndicator.setBackground(genRedColour(hr, 4));
+        
+        Color pSPEWSColour = genpSPEWColour(rr, os, t, sbp, hr);
+        sPEWSIndicator.setBackground(pSPEWSColour);
     }
     
-    Color zero = new Color(255,255,255);
-    Color one = new Color(255,170,170);
-    Color two = new Color(255,85,85);
-    Color three = new Color(255,0,0);
+    Color zeroRed = new Color(230,255,255);
+    Color oneRed = new Color(255,170,170);
+    Color twoRed = new Color(255,85,85);
+    Color threeRed = new Color(255,0,0);
     Color nan = new Color(255,0,255);
     private Color genRedColour(int value, int mode) {
         /*
@@ -136,68 +177,157 @@ public class PatientJFrame extends javax.swing.JFrame {
         3:systolic blood pressure
         4:heart rate
         */
+        int result;
         switch(mode) {
             case 0:
-                if (value >= 9 && value <= 20) {
-                    return zero;
-                } else if (value >= 21 && value <= 30) {
-                    return one;
-                } else if (value >= 31 && value <= 35) {
-                    return two;
-                } else if (value >= 36 || value <= 8) {
-                    return three;
-                }
+                result = getRRScore(value);
                 break;
             case 1:
-                if (value < 85) {
-                    return three;
-                } else if (value >= 85 && value <= 89) {
-                    return two;
-                } else if (value >= 90 && value <= 92) {
-                    return one;
-                } else if (value >= 93) {
-                    return zero;
-                }
+                result = getOSScore(value);
                 break;
             case 3:
-                if (value <= 69) {
-                    return three;
-                } else if ((value >= 70 && value <= 79) || value >= 200) {
-                    return two;
-                } else if (value >= 80 && value <= 99) {
-                    return one;
-                } else if (value >= 100 && value <= 199) {
-                    return zero;
-                }
+                result = getSBPScore(value);
                 break;
             case 4:
-                if (value >= 50 && value <= 99) {
-                    return zero;
-                } else if ((value >= 100 && value <= 109) || (value >= 40 && value <= 49)) {
-                    return one;
-                } else if ((value >= 110 && value <= 129) || (value >= 30 && value <= 39)) {
-                    return two;
-                } else if (value >= 130 || value <= 29) {
-                    return three;
-                }
+                result = getHRScore(value);
                 break;
             default:
                 return nan;
         }
-        return nan;
+        return getRedColour(result);
     }
     private Color genRedColour(float value, int mode) {
         //Java, yo
-        if (value >= 36 && value < 38) {
-            return zero;
-        } else if ((value >= 38 && value < 38.5) || (value >= 35 && value < 36)) {
-            return one;
-        } else if ((value >= 38.5) || (value >= 34 && value < 35)) {
-            return two;
-        } else if (value < 34) {
-            return three;
+        int result = getTScore(value);
+        return getRedColour(result);
+    }
+    private Color getRedColour(int result) {
+        switch(result) {
+            case 0:
+                return zeroRed;
+            case 1:
+                return oneRed;
+            case 2:
+                return twoRed;
+            case 3:
+                return threeRed;
+            default:
+                return nan;
         }
+    }
+    
+    Color sPEWSGreen = new Color(0,255,0);
+    Color sPEWSAmber = new Color(255,191,0);
+    Color sPEWSRed = new Color(255,0,0);
+    
+    public Color genpSPEWColour (int rr, int os, float t, int sbp, int hr) {
+        int rrScore = getRRScore(rr);
+        int osScore = getOSScore(os);
+        int tScore = getTScore(t);
+        int sbpScore = getSBPScore(sbp);
+        int hrScore = getHRScore(hr);
+        
+        int total = rrScore + osScore + tScore + sbpScore + hrScore;
+        
+        if (total >= 0 && total < 2) {
+            return sPEWSGreen;
+        } else if (total >= 2 && total < 4) {
+            return sPEWSAmber;
+        } else if (total >= 4) {
+            return sPEWSRed;            
+        }
+        
         return nan;
+    }
+
+    private int getRRScore (int value) {
+        if (value >= 9 && value <= 20) {
+            return 0;
+        } else if (value >= 21 && value <= 30) {
+            return 1;
+        } else if (value >= 31 && value <= 35) {
+            return 2;
+        } else if (value >= 36 || value <= 8) {
+            return 3;
+        }
+        return -1;
+    }
+    private int getOSScore (int value) {
+        if (value < 85) {
+            return 3;
+        } else if (value >= 85 && value <= 89) {
+            return 2;
+        } else if (value >= 90 && value <= 92) {
+            return 1;
+        } else if (value >= 93) {
+            return 0;
+        }
+        return -1;
+    }
+    private int getTScore (float value) {
+        if (value >= 36 && value < 38) {
+            return 0;
+        } else if ((value >= 38 && value < 38.5) || (value >= 35 && value < 36)) {
+            return 1;
+        } else if ((value >= 38.5) || (value >= 34 && value < 35)) {
+            return 2;
+        } else if (value < 34) {
+            return 3;
+        }
+        return -1;
+    }
+    private int getSBPScore (int value) {
+        if (value <= 69) {
+            return 3;
+        } else if ((value >= 70 && value <= 79) || value >= 200) {
+            return 2;
+        } else if (value >= 80 && value <= 99) {
+            return 1;
+        } else if (value >= 100 && value <= 199) {
+            return 0;
+        }
+        return -1;
+    }
+    private int getHRScore (int value) {
+        if (value >= 50 && value <= 99) {
+            return 0;
+        } else if ((value >= 100 && value <= 109) || (value >= 40 && value <= 49)) {
+            return 1;
+        } else if ((value >= 110 && value <= 129) || (value >= 30 && value <= 39)) {
+            return 2;
+        } else if (value >= 130 || value <= 29) {
+            return 3;
+        }
+        return -1;
+    }
+    
+    public ArrayList<LiveData> arrayFromCSV (String filename) throws FileNotFoundException{
+        ArrayList<LiveData> liveData = new ArrayList<LiveData>();
+        
+        Scanner scanner = new Scanner(new File(filename));
+        scanner.useDelimiter("[,\n]");
+        
+        //Skip first line
+        scanner.nextLine();
+         
+        //Get all tokens and store them in some data structure
+        //I am just printing them
+        while (scanner.hasNext())
+        {
+            int ts = Integer.parseInt(scanner.next());
+            int rr = Integer.parseInt(scanner.next());
+            int os = Integer.parseInt(scanner.next());
+            float t = Float.parseFloat(scanner.next());
+            int sbp = Integer.parseInt(scanner.next());
+            int hr = Integer.parseInt(scanner.next());
+            
+            liveData.add(new LiveData(ts, rr, os, t, sbp, hr));
+        }
+         
+        //Do not forget to close the scanner 
+        scanner.close();
+        
+        return liveData;
     }
 
     /**
@@ -215,43 +345,32 @@ public class PatientJFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         bedNumField = new javax.swing.JLabel();
         jPanel_readings = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
         rrIndicator = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
         rrLabel = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        osLabel = new javax.swing.JLabel();
-        osIndicator = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
-        jSeparator5 = new javax.swing.JSeparator();
-        jPanel3 = new javax.swing.JPanel();
-        tLabel = new javax.swing.JLabel();
-        tIndicator = new javax.swing.JLabel();
+        osIndicator = new javax.swing.JLabel();
+        osLabel = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jSeparator6 = new javax.swing.JSeparator();
-        jSeparator7 = new javax.swing.JSeparator();
-        jPanel4 = new javax.swing.JPanel();
-        sbpIndicator = new javax.swing.JLabel();
+        tIndicator = new javax.swing.JLabel();
+        tLabel = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        sbpIndicator = new javax.swing.JLabel();
         sbpLabel = new javax.swing.JLabel();
-        jSeparator8 = new javax.swing.JSeparator();
-        jSeparator9 = new javax.swing.JSeparator();
-        jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         hrIndicator = new javax.swing.JLabel();
         hrLabel = new javax.swing.JLabel();
-        jSeparator10 = new javax.swing.JSeparator();
-        jSeparator11 = new javax.swing.JSeparator();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
         jPanel_title = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         patientNameField = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         dobField = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        genderField = new javax.swing.JLabel();
+        sPEWSIndicator = new javax.swing.JLabel();
+        genderIcon = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         wardNumField = new javax.swing.JLabel();
 
@@ -276,238 +395,59 @@ public class PatientJFrame extends javax.swing.JFrame {
 
         jPanel_readings.setBackground(new java.awt.Color(254, 254, 254));
 
-        jPanel1.setBackground(new java.awt.Color(224, 224, 224));
-
         jLabel6.setText("Respiratory rate");
 
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
         rrIndicator.setBackground(new java.awt.Color(254, 254, 254));
+        rrIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         rrIndicator.setMaximumSize(new java.awt.Dimension(16, 16));
         rrIndicator.setMinimumSize(new java.awt.Dimension(16, 16));
         rrIndicator.setPreferredSize(new java.awt.Dimension(16, 16));
 
-        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
         rrLabel.setBackground(new java.awt.Color(224, 224, 224));
         rrLabel.setText("36 breaths/min");
 
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(rrIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(rrLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jSeparator2)
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                        .add(rrLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, rrIndicator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(jLabel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(jSeparator3)))
-                .addContainerGap())
-        );
-
-        jPanel2.setBackground(new java.awt.Color(240, 240, 240));
-
-        osLabel.setText("93%");
+        jLabel7.setText("Oxygen saturation");
 
         osIndicator.setBackground(new java.awt.Color(254, 254, 254));
+        osIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         osIndicator.setMaximumSize(new java.awt.Dimension(16, 16));
         osIndicator.setMinimumSize(new java.awt.Dimension(16, 16));
         osIndicator.setPreferredSize(new java.awt.Dimension(24, 24));
 
-        jLabel7.setText("Oxygen saturation");
-
-        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jSeparator5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(osIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(osLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator5)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator4)
-                    .add(osLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(osIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        jPanel3.setBackground(new java.awt.Color(224, 224, 224));
-
-        tLabel.setBackground(new java.awt.Color(224, 224, 224));
-        tLabel.setText("37.9 °C");
-
-        tIndicator.setBackground(new java.awt.Color(254, 254, 254));
-        tIndicator.setMaximumSize(new java.awt.Dimension(16, 16));
-        tIndicator.setMinimumSize(new java.awt.Dimension(16, 16));
-        tIndicator.setPreferredSize(new java.awt.Dimension(24, 24));
+        osLabel.setText("93%");
 
         jLabel8.setText("Temperature");
         jLabel8.setPreferredSize(new java.awt.Dimension(159, 16));
 
-        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        tIndicator.setBackground(new java.awt.Color(254, 254, 254));
+        tIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        tIndicator.setMaximumSize(new java.awt.Dimension(16, 16));
+        tIndicator.setMinimumSize(new java.awt.Dimension(16, 16));
+        tIndicator.setPreferredSize(new java.awt.Dimension(24, 24));
 
-        jSeparator7.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        tLabel.setBackground(new java.awt.Color(224, 224, 224));
+        tLabel.setText("37.9 °C");
 
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(18, 18, 18)
-                .add(tLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jSeparator7)
-                    .add(jSeparator6)
-                    .add(tLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(tIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        jPanel4.setBackground(new java.awt.Color(240, 240, 240));
+        jLabel10.setText("Systolic blood pressure");
 
         sbpIndicator.setBackground(new java.awt.Color(254, 254, 254));
+        sbpIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         sbpIndicator.setMaximumSize(new java.awt.Dimension(16, 16));
         sbpIndicator.setMinimumSize(new java.awt.Dimension(16, 16));
         sbpIndicator.setPreferredSize(new java.awt.Dimension(24, 24));
 
-        jLabel10.setText("Systolic blood pressure");
-
         sbpLabel.setText("199 mmHg");
-
-        jSeparator8.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        jSeparator9.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jSeparator9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(sbpIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(sbpLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator9)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator8)
-                    .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(sbpIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, sbpLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-
-        jPanel5.setBackground(new java.awt.Color(224, 224, 224));
 
         jLabel11.setText("Heart rate");
         jLabel11.setPreferredSize(new java.awt.Dimension(159, 16));
 
         hrIndicator.setBackground(new java.awt.Color(254, 254, 254));
+        hrIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         hrIndicator.setMaximumSize(new java.awt.Dimension(16, 16));
         hrIndicator.setMinimumSize(new java.awt.Dimension(16, 16));
         hrIndicator.setPreferredSize(new java.awt.Dimension(24, 24));
 
         hrLabel.setText("130 beats/min");
-
-        jSeparator10.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        jSeparator11.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jSeparator11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(hrIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(hrLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator11)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator10)
-                    .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jLabel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(hrIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, hrLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
 
         org.jdesktop.layout.GroupLayout jPanel_readingsLayout = new org.jdesktop.layout.GroupLayout(jPanel_readings);
         jPanel_readings.setLayout(jPanel_readingsLayout);
@@ -516,27 +456,80 @@ public class PatientJFrame extends javax.swing.JFrame {
             .add(jPanel_readingsLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jSeparator4)
+                    .add(jSeparator3)
+                    .add(jSeparator2)
+                    .add(jSeparator1)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel_readingsLayout.createSequentialGroup()
+                        .add(jLabel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(rrIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(rrLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
+                    .add(jPanel_readingsLayout.createSequentialGroup()
+                        .add(jLabel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(osIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(osLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jPanel_readingsLayout.createSequentialGroup()
+                        .add(jLabel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(tIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(33, 33, 33)
+                        .add(tLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jPanel_readingsLayout.createSequentialGroup()
+                        .add(jLabel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(sbpIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(sbpLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel_readingsLayout.createSequentialGroup()
+                        .add(jLabel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 159, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(hrIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(27, 27, 27)
+                        .add(hrLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel_readingsLayout.setVerticalGroup(
             jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel_readingsLayout.createSequentialGroup()
+            .add(jPanel_readingsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(rrLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, rrIndicator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jLabel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(osLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(osIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jSeparator2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .add(jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(tLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(tIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jSeparator3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(jLabel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(sbpIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, sbpLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jSeparator4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(hrIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, hrLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel_title.setBackground(new java.awt.Color(254, 254, 254));
@@ -549,45 +542,47 @@ public class PatientJFrame extends javax.swing.JFrame {
 
         dobField.setText("jLabel");
 
-        jLabel5.setText("GENDER:");
-
-        genderField.setText("jLabel");
+        sPEWSIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         org.jdesktop.layout.GroupLayout jPanel_titleLayout = new org.jdesktop.layout.GroupLayout(jPanel_title);
         jPanel_title.setLayout(jPanel_titleLayout);
         jPanel_titleLayout.setHorizontalGroup(
             jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel_titleLayout.createSequentialGroup()
+            .add(jPanel_titleLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel4)
-                    .add(jLabel5))
+                    .add(jLabel4))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel_titleLayout.createSequentialGroup()
-                        .add(patientNameField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(43, 43, 43))
-                    .add(dobField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(genderField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .add(patientNameField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                    .add(dobField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(genderIcon, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 55, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(109, 109, 109)
+                .add(sPEWSIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 39, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(184, 184, 184))
         );
         jPanel_titleLayout.setVerticalGroup(
             jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel_titleLayout.createSequentialGroup()
-                .add(34, 34, 34)
-                .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel1)
-                    .add(patientNameField))
-                .add(50, 50, 50)
-                .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(dobField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel4))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel5)
-                    .add(genderField))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel_titleLayout.createSequentialGroup()
+                        .add(genderIcon, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 55, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 56, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel_titleLayout.createSequentialGroup()
+                        .add(sPEWSIndicator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel_titleLayout.createSequentialGroup()
+                        .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel1)
+                            .add(patientNameField))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel4)
+                            .add(dobField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jLabel2.setText("Ward");
@@ -737,7 +732,7 @@ public class PatientJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bedNumField;
     private javax.swing.JLabel dobField;
-    private javax.swing.JLabel genderField;
+    private javax.swing.JLabel genderIcon;
     private javax.swing.JLabel hrIndicator;
     private javax.swing.JLabel hrLabel;
     private javax.swing.JButton jButton_changeView;
@@ -747,34 +742,23 @@ public class PatientJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel_systemTime;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel_readings;
     private javax.swing.JPanel jPanel_title;
-    private javax.swing.JSeparator jSeparator10;
-    private javax.swing.JSeparator jSeparator11;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
-    private javax.swing.JSeparator jSeparator9;
     private javax.swing.JLabel osIndicator;
     private javax.swing.JLabel osLabel;
     private javax.swing.JLabel patientNameField;
     private javax.swing.JLabel rrIndicator;
     private javax.swing.JLabel rrLabel;
+    private javax.swing.JLabel sPEWSIndicator;
     private javax.swing.JLabel sbpIndicator;
     private javax.swing.JLabel sbpLabel;
     private javax.swing.JLabel tIndicator;
