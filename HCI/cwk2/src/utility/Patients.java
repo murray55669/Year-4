@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Patients {
     
     public ArrayList<Patient> patientList = new ArrayList<Patient>();
+    private String wardNum = "W001";
     
     public Patients () {
         patientList.add(new Patient(1001, "Alice", "Bailey", "F", "1958-10-12", "Alice_Bailey_20141011091022.csv"));
@@ -32,5 +33,12 @@ public class Patients {
         }
         System.out.println("Patient "+String.valueOf(bedNum)+" not found!");
         return null;
+    }
+    
+    public String getWardNum () {
+        return this.wardNum;
+    }
+    public int getStep (int time) {
+        return time / 5;
     }
 }

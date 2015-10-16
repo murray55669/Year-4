@@ -33,10 +33,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel_title" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jPanel_title" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jPanel_readings" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="jButton_changeView" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -47,10 +48,9 @@
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="bedNumField" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="58" max="32767" attributes="0"/>
                       <Component id="jLabel_systemTime" min="-2" pref="140" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jPanel_readings" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -59,20 +59,20 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bedNumField" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                  <Component id="jLabel_systemTime" alignment="3" max="32767" attributes="0"/>
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton_changeView" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="wardNumField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel_systemTime" alignment="3" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="jPanel_title" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel_readings" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -124,7 +124,7 @@
                           <EmptySpace min="27" pref="27" max="-2" attributes="0"/>
                           <Component id="rrIndicator" min="-2" pref="24" max="-2" attributes="0"/>
                           <EmptySpace min="27" pref="27" max="-2" attributes="0"/>
-                          <Component id="rrLabel" pref="368" max="32767" attributes="0"/>
+                          <Component id="rrLabel" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel7" min="-2" pref="159" max="-2" attributes="0"/>
@@ -137,7 +137,7 @@
                           <Component id="jLabel8" min="-2" pref="159" max="-2" attributes="0"/>
                           <EmptySpace min="27" pref="27" max="-2" attributes="0"/>
                           <Component id="tIndicator" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="33" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Component id="tLabel" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -239,7 +239,7 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="e0" green="e0" red="e0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="36 breaths/min"/>
+            <Property name="text" type="java.lang.String" value="Loading..."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
@@ -270,7 +270,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="osLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="93%"/>
+            <Property name="text" type="java.lang.String" value="Loading..."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
@@ -307,7 +307,7 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="e0" green="e0" red="e0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="37.9 &#xb0;C"/>
+            <Property name="text" type="java.lang.String" value="Loading..."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
@@ -338,7 +338,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="sbpLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="199 mmHg"/>
+            <Property name="text" type="java.lang.String" value="Loading..."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel11">
@@ -372,7 +372,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="hrLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="130 beats/min"/>
+            <Property name="text" type="java.lang.String" value="Loading..."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
@@ -398,19 +398,24 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel1" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="patientNameField" pref="108" max="32767" attributes="0"/>
-                      <Component id="dobField" max="32767" attributes="0"/>
+                      <Component id="patientNameField" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="dobField" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="genderIcon" min="-2" pref="55" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
-                  <Component id="sPEWSIndicator" min="-2" pref="39" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
+                  <Component id="genderIcon" min="-2" pref="40" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jLabel5" max="32767" attributes="0"/>
+                      <Component id="pSEWSLabel" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="pSEWSIndicator" min="-2" pref="40" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -420,14 +425,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="genderIcon" min="-2" pref="55" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="56" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="sPEWSIndicator" max="32767" attributes="0"/>
+                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
+                          <Component id="pSEWSLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
+                      <Component id="genderIcon" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="patientNameField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -437,9 +440,11 @@
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="dobField" alignment="3" min="-2" pref="16" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
+                      <Component id="pSEWSIndicator" alignment="0" max="32767" attributes="0"/>
                   </Group>
+                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -465,7 +470,7 @@
             <Property name="text" type="java.lang.String" value="jLabel"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="sPEWSIndicator">
+        <Component class="javax.swing.JLabel" name="pSEWSIndicator">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
@@ -475,6 +480,17 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="genderIcon">
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel5">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="pSEWS"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="pSEWSLabel">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="text" type="java.lang.String" value="Load..."/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

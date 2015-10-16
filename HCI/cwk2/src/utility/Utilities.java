@@ -5,6 +5,7 @@
  */
 package utility;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -42,5 +43,95 @@ public class Utilities {
         scanner.close();
         
         return liveData;
+    }
+    
+    public int genpSEWSScore (int rr, int os, float t, int sbp, int hr) {
+        int rrScore = getRRScore(rr);
+        int osScore = getOSScore(os);
+        int tScore = getTScore(t);
+        int sbpScore = getSBPScore(sbp);
+        int hrScore = getHRScore(hr);
+        
+        int total = rrScore + osScore + tScore + sbpScore + hrScore;
+        
+        return total;
+    }
+    
+    Color pSEWSGreen = new Color(0,255,0);
+    Color pSEWSAmber = new Color(255,191,0);
+    Color pSEWSRed = new Color(255,0,0);
+    Color nan = new Color(255,0,255);
+    
+    public Color genpSEWSColour (int total) {
+        if (total >= 0 && total < 2) {
+            return pSEWSGreen;
+        } else if (total >= 2 && total < 4) {
+            return pSEWSAmber;
+        } else if (total >= 4) {
+            return pSEWSRed;            
+        }
+        
+        return nan;
+    }
+
+    public int getRRScore (int value) {
+        if (value >= 9 && value <= 20) {
+            return 0;
+        } else if (value >= 21 && value <= 30) {
+            return 1;
+        } else if (value >= 31 && value <= 35) {
+            return 2;
+        } else if (value >= 36 || value <= 8) {
+            return 3;
+        }
+        return -1;
+    }
+    public int getOSScore (int value) {
+        if (value < 85) {
+            return 3;
+        } else if (value >= 85 && value <= 89) {
+            return 2;
+        } else if (value >= 90 && value <= 92) {
+            return 1;
+        } else if (value >= 93) {
+            return 0;
+        }
+        return -1;
+    }
+    public int getTScore (float value) {
+        if (value >= 36 && value < 38) {
+            return 0;
+        } else if ((value >= 38 && value < 38.5) || (value >= 35 && value < 36)) {
+            return 1;
+        } else if ((value >= 38.5) || (value >= 34 && value < 35)) {
+            return 2;
+        } else if (value < 34) {
+            return 3;
+        }
+        return -1;
+    }
+    public int getSBPScore (int value) {
+        if (value <= 69) {
+            return 3;
+        } else if ((value >= 70 && value <= 79) || value >= 200) {
+            return 2;
+        } else if (value >= 80 && value <= 99) {
+            return 1;
+        } else if (value >= 100 && value <= 199) {
+            return 0;
+        }
+        return -1;
+    }
+    public int getHRScore (int value) {
+        if (value >= 50 && value <= 99) {
+            return 0;
+        } else if ((value >= 100 && value <= 109) || (value >= 40 && value <= 49)) {
+            return 1;
+        } else if ((value >= 110 && value <= 129) || (value >= 30 && value <= 39)) {
+            return 2;
+        } else if (value >= 130 || value <= 29) {
+            return 3;
+        }
+        return -1;
     }
 }

@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.Timer;
+import utility.Patients;
 
 /**
  *
@@ -22,11 +23,13 @@ public class WardJFrame extends javax.swing.JFrame {
     
     private Timer timer;
     private int timerSeconds;
+    
+    public Patients patients = new Patients();
 
     /**
      * Creates new form WardJFrame
      */
-    public WardJFrame() {
+    public WardJFrame(int time) {
         initComponents();
         
         //set window in the center of the screen
@@ -46,9 +49,9 @@ public class WardJFrame extends javax.swing.JFrame {
         //set focus on exit button
         jButton_changeView.requestFocus();
         
-        wardNumField.setText("W001");
+        wardNumField.setText(patients.getWardNum());
         
-        timerSeconds = 0;
+        timerSeconds = time;
         if (timer == null) {
             timer = new Timer(1000, new ActionListener() {
                 @Override
@@ -58,7 +61,8 @@ public class WardJFrame extends javax.swing.JFrame {
                     cal.getTime();
                     SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
                     jLabel_systemTime.setText(sdf.format(cal.getTime()));
-                    timerSeconds++;
+                    
+                    timerSeconds++; 
                 }
             });
         }
@@ -81,6 +85,12 @@ public class WardJFrame extends javax.swing.JFrame {
         jButton_changeView = new javax.swing.JButton();
         jLabel_systemTime = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        bed1 = new javax.swing.JButton();
+        bed2 = new javax.swing.JButton();
+        bed3 = new javax.swing.JButton();
+        bed4 = new javax.swing.JButton();
+        bed5 = new javax.swing.JButton();
+        bed6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,20 +108,77 @@ public class WardJFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Ward");
 
+        bed1.setText("jButton1");
+        bed1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bedClicked(evt);
+            }
+        });
+
+        bed2.setText("jButton2");
+        bed2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bedClicked(evt);
+            }
+        });
+
+        bed3.setText("jButton3");
+        bed3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bedClicked(evt);
+            }
+        });
+
+        bed4.setText("jButton4");
+        bed4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bedClicked(evt);
+            }
+        });
+
+        bed5.setText("jButton5");
+        bed5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bedClicked(evt);
+            }
+        });
+
+        bed6.setText("jButton6");
+        bed6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bedClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton_changeView)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(wardNumField)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 348, Short.MAX_VALUE)
-                .addComponent(jLabel_systemTime, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(bed3)
+                    .addComponent(bed1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton_changeView)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2))
+                    .addComponent(bed5))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(wardNumField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 342, Short.MAX_VALUE)
+                        .addComponent(jLabel_systemTime, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bed6)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(bed4)
+                                .addComponent(bed2)))
+                        .addGap(174, 174, 174))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,7 +189,19 @@ public class WardJFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jButton_changeView)
                     .addComponent(wardNumField))
-                .addGap(360, 360, 360))
+                .addGap(45, 45, 45)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bed1)
+                    .addComponent(bed2))
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bed3)
+                    .addComponent(bed4))
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bed5)
+                    .addComponent(bed6))
+                .addGap(147, 147, 147))
         );
 
         pack();
@@ -133,6 +212,27 @@ public class WardJFrame extends javax.swing.JFrame {
          // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jButton_exitActionPerformed
+
+    private void bedClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bedClicked
+        // TODO add your handling code here:
+        int bedNum = 0;
+        if (evt.getSource() == bed1){
+            bedNum = 1001;
+        } else if (evt.getSource() == bed2){
+            bedNum = 1002;
+        } else if (evt.getSource() == bed3){
+            bedNum = 1003;
+        } else if (evt.getSource() == bed4){
+            bedNum = 1004;
+        } else if (evt.getSource() == bed5){
+            bedNum = 1005;
+        } else if (evt.getSource() == bed6){
+            bedNum = 1006;
+        }
+        this.dispose();
+        PatientJFrame patientFrame = new PatientJFrame(bedNum, timerSeconds);
+        patientFrame.setVisible(true);
+    }//GEN-LAST:event_bedClicked
 
     /**
      * @param args the command line arguments
@@ -164,12 +264,18 @@ public class WardJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new WardJFrame().setVisible(true);
+                new WardJFrame(0).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bed1;
+    private javax.swing.JButton bed2;
+    private javax.swing.JButton bed3;
+    private javax.swing.JButton bed4;
+    private javax.swing.JButton bed5;
+    private javax.swing.JButton bed6;
     private javax.swing.JButton jButton_changeView;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_systemTime;
