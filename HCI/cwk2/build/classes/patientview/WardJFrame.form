@@ -23,38 +23,60 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="bed3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bed1" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="jButton_changeView" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="bed5" alignment="1" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="wardNumField" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="342" max="32767" attributes="0"/>
-                      <Component id="jLabel_systemTime" min="-2" pref="140" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jLabel_systemTime" min="-2" pref="140" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bed6" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="bed4" min="-2" max="-2" attributes="0"/>
-                              <Component id="bed2" min="-2" max="-2" attributes="0"/>
+                          <Component id="bed3" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="bed5" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="bed1" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="SEWSIndicator5" alignment="1" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator1" alignment="1" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator3" min="-2" pref="20" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="bed5State" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Component id="bed3State" min="-2" max="-2" attributes="0"/>
+                              <Component id="bed1State" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed2State" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="bed4State" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="bed6State" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="SEWSIndicator2" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator6" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator4" min="-2" pref="20" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed6" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="bed2" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="bed4" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -68,22 +90,60 @@
                   <Component id="jButton_changeView" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="wardNumField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bed1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bed2" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed1" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator1" min="-2" pref="46" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="SEWSIndicator3" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="bed3" min="-2" pref="46" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed5" alignment="1" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator5" alignment="1" min="-2" pref="46" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="bed1State" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed2" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator2" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="SEWSIndicator4" min="-2" pref="46" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="SEWSIndicator6" min="-2" pref="46" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="bed4" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
+                                  <Component id="bed3State" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                      <Component id="bed5State" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bed6State" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="bed6" min="-2" pref="46" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Component id="bed2State" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="52" pref="52" max="-2" attributes="0"/>
+                      <Component id="bed4State" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bed3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bed4" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bed5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bed6" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="147" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="372" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -114,52 +174,160 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="bed1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bedClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bed2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton2"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bedClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bed3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton3"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bedClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bed4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton4"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bedClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bed5">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton5"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bedClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bed6">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton6"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bedClicked"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="bed1State">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Alert"/>
+            <StringItem index="1" value="Verbal"/>
+            <StringItem index="2" value="Pain"/>
+            <StringItem index="3" value="Unresponsive"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="bed2State">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Alert"/>
+            <StringItem index="1" value="Verbal"/>
+            <StringItem index="2" value="Pain"/>
+            <StringItem index="3" value="Unresponsive"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="bed3State">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Alert"/>
+            <StringItem index="1" value="Verbal"/>
+            <StringItem index="2" value="Pain"/>
+            <StringItem index="3" value="Unresponsive"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="bed4State">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Alert"/>
+            <StringItem index="1" value="Verbal"/>
+            <StringItem index="2" value="Pain"/>
+            <StringItem index="3" value="Unresponsive"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="bed5State">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Alert"/>
+            <StringItem index="1" value="Verbal"/>
+            <StringItem index="2" value="Pain"/>
+            <StringItem index="3" value="Unresponsive"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="bed6State">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Alert"/>
+            <StringItem index="1" value="Verbal"/>
+            <StringItem index="2" value="Pain"/>
+            <StringItem index="3" value="Unresponsive"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SEWSIndicator1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SEWSIndicator5">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SEWSIndicator3">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SEWSIndicator2">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SEWSIndicator6">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SEWSIndicator4">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

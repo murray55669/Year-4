@@ -30,8 +30,8 @@ public class PatientJFrame extends javax.swing.JFrame {
     private Timer timer;
     private int timerSeconds;
     
-    public Patients patients = new Patients();
-    public int bedNum;
+    private Patients patients = new Patients();
+    private int bedNum;
     private Patient thisPatient;
     
     private Utilities utils = new Utilities();
@@ -80,12 +80,15 @@ public class PatientJFrame extends javax.swing.JFrame {
         sbpIndicator.setOpaque(true);
         hrIndicator.setOpaque(true);
         pSEWSIndicator.setOpaque(true);
-        
+                
         //set focus on back button
         jButton_changeView.requestFocus();
            
         //set timer
         timerSeconds = time;
+        
+        LiveData initialData = thisPatient.getLiveData(timerSeconds);
+        displayData(initialData.rr,initialData.os,initialData.t,initialData.sbp,initialData.hr);
         if (timer == null) {
             timer = new Timer(1000, new ActionListener() {
                 @Override
@@ -97,8 +100,7 @@ public class PatientJFrame extends javax.swing.JFrame {
                     jLabel_systemTime.setText(sdf.format(cal.getTime()));
                     // do it every 5 seconds
                     if (timerSeconds % 5 == 0) {
-                        
-                        LiveData timedData = thisPatient.liveData.get(patients.getStep(timerSeconds));
+                        LiveData timedData = thisPatient.getLiveData(timerSeconds);
                         
                         int br = timedData.rr;
                         int spo2 = timedData.os;
@@ -137,7 +139,7 @@ public class PatientJFrame extends javax.swing.JFrame {
         int score = utils.genpSEWSScore(rr, os, t, sbp, hr);
         pSEWSLabel.setText(String.valueOf(score));
         
-        Color pSEWSColour = utils.genpSEWSColour(score);
+        Color pSEWSColour = utils.genSEWSColour(score);
         pSEWSIndicator.setBackground(pSEWSColour);
     }
     

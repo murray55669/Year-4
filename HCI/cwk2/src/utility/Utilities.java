@@ -62,7 +62,7 @@ public class Utilities {
     Color pSEWSRed = new Color(255,0,0);
     Color nan = new Color(255,0,255);
     
-    public Color genpSEWSColour (int total) {
+    public Color genSEWSColour (int total) {
         if (total >= 0 && total < 2) {
             return pSEWSGreen;
         } else if (total >= 2 && total < 4) {

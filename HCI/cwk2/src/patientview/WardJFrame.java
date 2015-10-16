@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javax.swing.ImageIcon;
 import javax.swing.Timer;
 import utility.Patients;
 
@@ -24,7 +25,7 @@ public class WardJFrame extends javax.swing.JFrame {
     private Timer timer;
     private int timerSeconds;
     
-    public Patients patients = new Patients();
+    private Patients patients = new Patients();
 
     /**
      * Creates new form WardJFrame
@@ -45,6 +46,20 @@ public class WardJFrame extends javax.swing.JFrame {
         
         //Set background colour
         this.getContentPane().setBackground(new Color(240,240,240));
+        ImageIcon lBed = new ImageIcon("images/bedl.png");
+        ImageIcon rBed = new ImageIcon("images/bedr.png");
+        bed1.setIcon(lBed);
+        bed2.setIcon(rBed);
+        bed3.setIcon(lBed);
+        bed4.setIcon(rBed);
+        bed5.setIcon(lBed);
+        bed6.setIcon(rBed);
+        SEWSIndicator1.setOpaque(true);
+        SEWSIndicator2.setOpaque(true);
+        SEWSIndicator3.setOpaque(true);
+        SEWSIndicator4.setOpaque(true);
+        SEWSIndicator5.setOpaque(true);
+        SEWSIndicator6.setOpaque(true);
         
         //set focus on exit button
         jButton_changeView.requestFocus();
@@ -52,6 +67,8 @@ public class WardJFrame extends javax.swing.JFrame {
         wardNumField.setText(patients.getWardNum());
         
         timerSeconds = time;
+        
+        displayData();
         if (timer == null) {
             timer = new Timer(1000, new ActionListener() {
                 @Override
@@ -62,6 +79,8 @@ public class WardJFrame extends javax.swing.JFrame {
                     SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
                     jLabel_systemTime.setText(sdf.format(cal.getTime()));
                     
+                    displayData();
+                    
                     timerSeconds++; 
                 }
             });
@@ -70,6 +89,15 @@ public class WardJFrame extends javax.swing.JFrame {
         if (timer.isRunning() == false) {
             timer.start();
         }
+    }
+    
+    private void displayData () {
+        SEWSIndicator1.setBackground(patients.getPatient(1001).getColour(timerSeconds));
+        SEWSIndicator2.setBackground(patients.getPatient(1002).getColour(timerSeconds));
+        SEWSIndicator3.setBackground(patients.getPatient(1003).getColour(timerSeconds));
+        SEWSIndicator4.setBackground(patients.getPatient(1004).getColour(timerSeconds));
+        SEWSIndicator5.setBackground(patients.getPatient(1005).getColour(timerSeconds));
+        SEWSIndicator6.setBackground(patients.getPatient(1006).getColour(timerSeconds));
     }
 
     /**
@@ -91,6 +119,18 @@ public class WardJFrame extends javax.swing.JFrame {
         bed4 = new javax.swing.JButton();
         bed5 = new javax.swing.JButton();
         bed6 = new javax.swing.JButton();
+        bed1State = new javax.swing.JComboBox();
+        bed2State = new javax.swing.JComboBox();
+        bed3State = new javax.swing.JComboBox();
+        bed4State = new javax.swing.JComboBox();
+        bed5State = new javax.swing.JComboBox();
+        bed6State = new javax.swing.JComboBox();
+        SEWSIndicator1 = new javax.swing.JLabel();
+        SEWSIndicator5 = new javax.swing.JLabel();
+        SEWSIndicator3 = new javax.swing.JLabel();
+        SEWSIndicator2 = new javax.swing.JLabel();
+        SEWSIndicator6 = new javax.swing.JLabel();
+        SEWSIndicator4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,47 +148,65 @@ public class WardJFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Ward");
 
-        bed1.setText("jButton1");
         bed1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bedClicked(evt);
             }
         });
 
-        bed2.setText("jButton2");
         bed2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bedClicked(evt);
             }
         });
 
-        bed3.setText("jButton3");
         bed3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bedClicked(evt);
             }
         });
 
-        bed4.setText("jButton4");
         bed4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bedClicked(evt);
             }
         });
 
-        bed5.setText("jButton5");
         bed5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bedClicked(evt);
             }
         });
 
-        bed6.setText("jButton6");
         bed6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bedClicked(evt);
             }
         });
+
+        bed1State.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alert", "Verbal", "Pain", "Unresponsive" }));
+
+        bed2State.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alert", "Verbal", "Pain", "Unresponsive" }));
+
+        bed3State.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alert", "Verbal", "Pain", "Unresponsive" }));
+
+        bed4State.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alert", "Verbal", "Pain", "Unresponsive" }));
+
+        bed5State.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alert", "Verbal", "Pain", "Unresponsive" }));
+
+        bed6State.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alert", "Verbal", "Pain", "Unresponsive" }));
+
+        SEWSIndicator1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        SEWSIndicator5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        SEWSIndicator3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        SEWSIndicator2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        SEWSIndicator6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        SEWSIndicator4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,29 +214,48 @@ public class WardJFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bed3)
-                    .addComponent(bed1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton_changeView)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2))
-                    .addComponent(bed5))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(wardNumField)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 342, Short.MAX_VALUE)
-                        .addComponent(jLabel_systemTime, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel_systemTime, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bed6)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(bed4)
-                                .addComponent(bed2)))
-                        .addGap(174, 174, 174))))
+                            .addComponent(bed3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bed5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bed1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(SEWSIndicator5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SEWSIndicator1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SEWSIndicator3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(bed5State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(bed3State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bed1State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bed2State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bed4State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bed6State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(SEWSIndicator2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SEWSIndicator6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SEWSIndicator4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bed6, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bed2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bed4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,19 +266,46 @@ public class WardJFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jButton_changeView)
                     .addComponent(wardNumField))
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bed1)
-                    .addComponent(bed2))
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bed3)
-                    .addComponent(bed4))
-                .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bed5)
-                    .addComponent(bed6))
-                .addGap(147, 147, 147))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bed1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SEWSIndicator1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(SEWSIndicator3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bed3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bed5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SEWSIndicator5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(bed1State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bed2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SEWSIndicator2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(SEWSIndicator4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SEWSIndicator6, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(bed4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bed3State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(bed5State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bed6State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(bed6, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(bed2State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(bed4State, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(372, 372, 372))
         );
 
         pack();
@@ -270,12 +374,24 @@ public class WardJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel SEWSIndicator1;
+    private javax.swing.JLabel SEWSIndicator2;
+    private javax.swing.JLabel SEWSIndicator3;
+    private javax.swing.JLabel SEWSIndicator4;
+    private javax.swing.JLabel SEWSIndicator5;
+    private javax.swing.JLabel SEWSIndicator6;
     private javax.swing.JButton bed1;
+    private javax.swing.JComboBox bed1State;
     private javax.swing.JButton bed2;
+    private javax.swing.JComboBox bed2State;
     private javax.swing.JButton bed3;
+    private javax.swing.JComboBox bed3State;
     private javax.swing.JButton bed4;
+    private javax.swing.JComboBox bed4State;
     private javax.swing.JButton bed5;
+    private javax.swing.JComboBox bed5State;
     private javax.swing.JButton bed6;
+    private javax.swing.JComboBox bed6State;
     private javax.swing.JButton jButton_changeView;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_systemTime;

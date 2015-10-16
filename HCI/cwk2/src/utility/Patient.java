@@ -4,10 +4,10 @@
  */
 package utility;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 /**
  *
  * @author Qi Zhou
@@ -18,27 +18,21 @@ public class Patient {
     private String lname;
     private String gender;
     private String dob;
-    private int lastBR;
-    private int lastHR;
-    private int lastBPUpper;
-    private int lastBPLower;
     
-    public ArrayList<LiveData> liveData;
+    private int state = 0;
     
-    public Patient(int bn, String fnm, String lnm, String g, String d, String fileName/*, int lbr, int lhr, int lbpu, 
-            int lbpl*/) {
+    private ArrayList<LiveData> liveData;
+    
+    private Utilities utils;
+    
+    public Patient(int bn, String fnm, String lnm, String g, String d, String fileName) {
         this.bedNum = bn;
         this.fname = fnm;
         this.lname = lnm;
         this.gender = g;
         this.dob = d;
-        /*
-        this.lastBR = lbr;
-        this.lastHR = lhr;
-        this.lastBPUpper = lbpu;
-        this.lastBPLower = lbpl;
-        */
-        Utilities utils = new Utilities();
+        
+        utils = new Utilities();
         try {
             this.liveData = utils.arrayFromCSV(fileName);
         } catch (FileNotFoundException ex) {
@@ -65,22 +59,21 @@ public class Patient {
     public String getDOB() {
         return dob;
     }
-
     
-    
-    public int getLastBR() {
-        return lastBR;
+    public void setState (int state) {
+        this.state = state;
+    }
+    public int getState () {
+        return this.state;
     }
     
-    public int getLastHR() {
-        return lastHR;
+    public LiveData getLiveData (int time) {
+        return liveData.get(time/5);
     }
-
-    public int getLastBPUpper() {
-        return lastBPUpper;
-    }
-    
-    public int getLastBPLower() {
-        return lastBPLower;
+    public Color getColour (int time) {
+        LiveData data = this.getLiveData(time);
+        int pSEWS = utils.genpSEWSScore(data.rr, data.os, data.t, data.sbp, data.hr);
+        int SEWS = pSEWS + this.state;
+        return utils.genSEWSColour(SEWS);
     }
 }
