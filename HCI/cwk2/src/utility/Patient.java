@@ -19,7 +19,9 @@ public class Patient {
     private String gender;
     private String dob;
     
-    private int state = 0;
+    private int state = -1;
+    private boolean flagged = false;
+    private boolean checked = false;
     
     private ArrayList<LiveData> liveData;
     
@@ -52,6 +54,10 @@ public class Patient {
         return lname;
     }
     
+    public String getFullName () {
+        return fname + " " + lname;
+    }
+    
     public String getGender() {
         return gender;
     }
@@ -67,13 +73,35 @@ public class Patient {
         return this.state;
     }
     
+    public void setChecked () {
+        this.checked = true;
+    }
+    public void clearChecked () {
+        this.checked = false;
+    }
+    
     public LiveData getLiveData (int time) {
-        return liveData.get(time/5);
+        return liveData.get(time/500);
     }
     public Color getColour (int time) {
         LiveData data = this.getLiveData(time);
         int pSEWS = utils.genpSEWSScore(data.rr, data.os, data.t, data.sbp, data.hr);
-        int SEWS = pSEWS + this.state;
+        int SEWS = pSEWS;
+        if (this.state >= 0) {
+            SEWS = pSEWS + this.state;
+        }
         return utils.genSEWSColour(SEWS);
+    }
+    
+    public boolean checkAndFlag (int time) {
+        LiveData data = this.getLiveData(time);
+        int pSEWS = utils.genpSEWSScore(data.rr, data.os, data.t, data.sbp, data.hr);
+        if (pSEWS >= 2) {
+            this.flagged = true;
+        }
+        return this.flagged;
+    }
+    public void clearFlagged () {
+        this.flagged = false;
     }
 }

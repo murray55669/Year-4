@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Patients {
     
-    public ArrayList<Patient> patientList = new ArrayList<Patient>();
+    private ArrayList<Patient> patientList = new ArrayList<Patient>();
     private String wardNum = "W001";
     
     public Patients () {
@@ -40,5 +40,9 @@ public class Patients {
     }
     public int getStep (int time) {
         return time / 5;
+    }
+    
+    public int getPatientCount () {
+        return patientList.size();
     }
 }

@@ -27,6 +27,83 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed5Name" pref="164" max="32767" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="okButton3" alignment="0" max="32767" attributes="0"/>
+                              <Component id="bed3State" max="32767" attributes="0"/>
+                              <Component id="actionLabel3" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="bed3" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="SEWSIndicator3" min="-2" pref="20" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="okButton5" alignment="0" max="32767" attributes="0"/>
+                              <Component id="bed5State" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="bed5" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="SEWSIndicator5" min="-2" pref="20" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="actionLabel5" alignment="0" min="-2" pref="132" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="bed1" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="SEWSIndicator1" min="-2" pref="20" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="actionLabel1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="bed1State" alignment="0" max="32767" attributes="0"/>
+                              <Component id="bed1Name" max="32767" attributes="0"/>
+                              <Component id="okButton1" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="bed3Name" alignment="0" min="-2" pref="132" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="139" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed2Name" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="okButton6" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="bed6State" alignment="0" pref="132" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="bed6Name" alignment="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="SEWSIndicator6" min="-2" pref="20" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="bed6" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="actionLabel2" alignment="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="SEWSIndicator2" min="-2" pref="20" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="bed2" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="bed4Name" alignment="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="SEWSIndicator4" min="-2" pref="20" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="bed4" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="actionLabel4" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="bed4State" alignment="0" pref="132" max="32767" attributes="0"/>
+                                          <Component id="okButton4" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="bed2State" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="okButton2" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <Component id="actionLabel6" alignment="0" min="-2" pref="124" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="31" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="jButton_changeView" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -34,116 +111,111 @@
                       <Component id="wardNumField" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabel_systemTime" min="-2" pref="140" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bed3" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="bed5" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="bed1" min="-2" pref="100" max="-2" attributes="0"/>
-                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="SEWSIndicator5" alignment="1" min="-2" pref="20" max="-2" attributes="0"/>
-                          <Component id="SEWSIndicator1" alignment="1" min="-2" pref="20" max="-2" attributes="0"/>
-                          <Component id="SEWSIndicator3" min="-2" pref="20" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="bed5State" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Component id="bed3State" min="-2" max="-2" attributes="0"/>
-                              <Component id="bed1State" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bed2State" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="bed4State" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="bed6State" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="SEWSIndicator2" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
-                          <Component id="SEWSIndicator6" min="-2" pref="20" max="-2" attributes="0"/>
-                          <Component id="SEWSIndicator4" min="-2" pref="20" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bed6" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="bed2" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="bed4" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel_systemTime" alignment="3" max="32767" attributes="0"/>
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton_changeView" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="wardNumField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <Component id="bed1Name" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="bed1" min="-2" pref="46" max="-2" attributes="0"/>
                           <Component id="SEWSIndicator1" min="-2" pref="46" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="actionLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bed1State" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="okButton1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                      <Component id="bed3Name" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="SEWSIndicator3" min="-2" pref="46" max="-2" attributes="0"/>
                           <Component id="bed3" min="-2" pref="46" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="actionLabel3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bed3State" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="okButton3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="bed2Name" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bed2" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="SEWSIndicator2" min="-2" pref="46" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="actionLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bed2State" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="okButton2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                      <Component id="bed4Name" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="SEWSIndicator4" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="bed4" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="actionLabel4" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bed4State" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="okButton4" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace pref="37" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="bed5Name" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="bed5" alignment="1" min="-2" pref="46" max="-2" attributes="0"/>
                           <Component id="SEWSIndicator5" alignment="1" min="-2" pref="46" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="actionLabel5" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bed5State" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="okButton5" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="bed1State" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bed2" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
-                          <Component id="SEWSIndicator2" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="bed6Name" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="SEWSIndicator4" min="-2" pref="46" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="SEWSIndicator6" min="-2" pref="46" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="bed4" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
-                                  <Component id="bed3State" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                      <Component id="bed5State" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="bed6State" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="bed6" min="-2" pref="46" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
+                          <Component id="SEWSIndicator6" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="bed6" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
                       </Group>
-                  </Group>
-                  <Component id="bed2State" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="52" pref="52" max="-2" attributes="0"/>
-                      <Component id="bed4State" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="actionLabel6" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bed6State" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="okButton6" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="372" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -327,6 +399,105 @@
             <EtchetBorder/>
           </Border>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="actionLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="No action needed."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="okButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="OK"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okButton1ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="bed1Name">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="bed2Name">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="bed3Name">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel3"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="actionLabel3">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="No action needed."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="okButton3">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="OK"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okButton3ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="bed4Name">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel4"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="actionLabel4">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="No action needed,"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="okButton4">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="OK"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="actionLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="No action needed,"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="okButton2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="OK"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="bed5Name">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel7"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="actionLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="No action needed,"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="okButton5">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="OK"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okButton5ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="bed6Name">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel9"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="actionLabel6">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="No action needed,"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="okButton6">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
     </Component>
   </SubComponents>

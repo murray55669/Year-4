@@ -28,7 +28,7 @@ import utility.Utilities;
 public class PatientJFrame extends javax.swing.JFrame {
 
     private Timer timer;
-    private int timerSeconds;
+    private int timerCSeconds;
     
     private Patients patients = new Patients();
     private int bedNum;
@@ -58,7 +58,7 @@ public class PatientJFrame extends javax.swing.JFrame {
         thisPatient = patients.getPatient(bedNum);
         
         //fill titles
-        patientNameField.setText(thisPatient.getFistName() + " " + thisPatient.getLastName());
+        patientNameField.setText(thisPatient.getFullName());
         wardNumField.setText("W001");
         bedNumField.setText(String.valueOf(bedNum));
         dobField.setText(thisPatient.getDOB());
@@ -85,22 +85,22 @@ public class PatientJFrame extends javax.swing.JFrame {
         jButton_changeView.requestFocus();
            
         //set timer
-        timerSeconds = time;
+        timerCSeconds = time;
         
-        LiveData initialData = thisPatient.getLiveData(timerSeconds);
+        LiveData initialData = thisPatient.getLiveData(timerCSeconds);
         displayData(initialData.rr,initialData.os,initialData.t,initialData.sbp,initialData.hr);
         if (timer == null) {
-            timer = new Timer(1000, new ActionListener() {
+            timer = new Timer(10, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // do it every 1 second
+                    // do it every 10 msecond
                     Calendar cal = Calendar.getInstance();
                     cal.getTime();
                     SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
                     jLabel_systemTime.setText(sdf.format(cal.getTime()));
                     // do it every 5 seconds
-                    if (timerSeconds % 5 == 0) {
-                        LiveData timedData = thisPatient.getLiveData(timerSeconds);
+                    if (timerCSeconds % 500 == 0) {
+                        LiveData timedData = thisPatient.getLiveData(timerCSeconds);
                         
                         int br = timedData.rr;
                         int spo2 = timedData.os;
@@ -110,7 +110,7 @@ public class PatientJFrame extends javax.swing.JFrame {
                         
                         displayData(br,spo2,temp,systolic,hr);
                     }
-                    timerSeconds++;
+                    timerCSeconds++;
                 }
             });
         }
@@ -517,7 +517,7 @@ public class PatientJFrame extends javax.swing.JFrame {
         //dispose current window
         this.dispose();
         //open the Ward-View
-        WardJFrame wardframe = new WardJFrame(timerSeconds);
+        WardJFrame wardframe = new WardJFrame(timerCSeconds);
         wardframe.setVisible(true);
     }//GEN-LAST:event_jButton_changeViewActionPerformed
 
