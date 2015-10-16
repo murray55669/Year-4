@@ -24,6 +24,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+import utility.LiveData;
+import utility.Patient;
+import utility.Patients;
+import utility.Utilities;
+
 /**
  *
  * @author Qi Zhou
@@ -32,16 +37,12 @@ public class PatientJFrame extends javax.swing.JFrame {
 
     private Timer timer;
     private int timerSeconds;
-    public static final int RESPIRATORY_RATE = 0;
-    public static final int SPO2 = 1;
-    public static final int SYSTOLIC = 2;
-    public static final int HEART_RATE = 3;
-    public static final float TEMPERATURE = 0f;
     
     private int step;
-    private ArrayList<LiveData> liveData;
     
-    public String gender = "F";
+    public Patients patients = new Patients();
+    public int bedNum = 1001;
+    private Patient thisPatient;
 
     /**
      * Creates new form PatientJFrame
@@ -60,14 +61,18 @@ public class PatientJFrame extends javax.swing.JFrame {
         //Move the window
         this.setLocation(x, y);
         
+        //Get patient
+        thisPatient = patients.getPatient(bedNum);
+        
         //fill titles
-        patientNameField.setText("Alice Bailey");
+        patientNameField.setText(thisPatient.getFistName() + " " + thisPatient.getLastName());
         wardNumField.setText("W001");
-        bedNumField.setText("1001");
-        dobField.setText("1958-10-12");
+        bedNumField.setText(String.valueOf(bedNum));
+        dobField.setText(thisPatient.getDOB());
+        
         ImageIcon maleIcon = new ImageIcon("images/male.png");
         ImageIcon femaleIcon = new ImageIcon("images/female.png");
-        if (gender == "F") {
+        if ("F".equals(thisPatient.getGender())) {
             genderIcon.setIcon(femaleIcon);
         } else {
             genderIcon.setIcon(maleIcon);
@@ -85,16 +90,7 @@ public class PatientJFrame extends javax.swing.JFrame {
         
         //set focus on back button
         jButton_changeView.requestFocus();
-        
-        //Get an ArrayList of the data to be presented
-        try {
-            liveData = arrayFromCSV("data/Alice_Bailey_20141011091022.csv");
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex.toString());
-            System.exit(0);
-        }
-                        
-                        
+           
         //set timer
         timerSeconds = 0;
         step = 0;
@@ -110,20 +106,12 @@ public class PatientJFrame extends javax.swing.JFrame {
                     // do it every 5 seconds
                     if (timerSeconds % 5 == 0) {
                         
-                        LiveData timedData = liveData.get(step);
+                        LiveData timedData = thisPatient.liveData.get(step);
                         step++;
-                        if (step >= liveData.size()) {
+                        if (step >= thisPatient.liveData.size()) {
                             System.out.println("Out of data! Looping..");
                             step = 0;
                         }
-                        
-                        /*                        //generate random value
-                        int br = generateReading(RESPIRATORY_RATE);
-                        int spo2 = generateReading(SPO2);
-                        float temp = generateReading(TEMPERATURE);
-                        int systolic = generateReading(SYSTOLIC);
-                        int hr = generateReading(HEART_RATE);
-                        */
                         
                         int br = timedData.rr;
                         int spo2 = timedData.os;
@@ -301,34 +289,7 @@ public class PatientJFrame extends javax.swing.JFrame {
         return -1;
     }
     
-    public ArrayList<LiveData> arrayFromCSV (String filename) throws FileNotFoundException{
-        ArrayList<LiveData> liveData = new ArrayList<LiveData>();
-        
-        Scanner scanner = new Scanner(new File(filename));
-        scanner.useDelimiter("[,\n]");
-        
-        //Skip first line
-        scanner.nextLine();
-         
-        //Get all tokens and store them in some data structure
-        //I am just printing them
-        while (scanner.hasNext())
-        {
-            int ts = Integer.parseInt(scanner.next());
-            int rr = Integer.parseInt(scanner.next());
-            int os = Integer.parseInt(scanner.next());
-            float t = Float.parseFloat(scanner.next());
-            int sbp = Integer.parseInt(scanner.next());
-            int hr = Integer.parseInt(scanner.next());
-            
-            liveData.add(new LiveData(ts, rr, os, t, sbp, hr));
-        }
-         
-        //Do not forget to close the scanner 
-        scanner.close();
-        
-        return liveData;
-    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

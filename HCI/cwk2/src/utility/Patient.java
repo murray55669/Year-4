@@ -4,6 +4,10 @@
  */
 package utility;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Qi Zhou
@@ -19,17 +23,27 @@ public class Patient {
     private int lastBPUpper;
     private int lastBPLower;
     
-    public Patient(int bn, String fnm, String lnm, String g, String d, int lbr, int lhr, int lbpu, 
-            int lbpl) {
+    public ArrayList<LiveData> liveData;
+    
+    public Patient(int bn, String fnm, String lnm, String g, String d, String fileName/*, int lbr, int lhr, int lbpu, 
+            int lbpl*/) {
         this.bedNum = bn;
         this.fname = fnm;
         this.lname = lnm;
         this.gender = g;
         this.dob = d;
+        /*
         this.lastBR = lbr;
         this.lastHR = lhr;
         this.lastBPUpper = lbpu;
         this.lastBPLower = lbpl;
+        */
+        Utilities utils = new Utilities();
+        try {
+            this.liveData = utils.arrayFromCSV(fileName);
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+        }
     }
 
     public int getBedNumber() {
@@ -52,6 +66,8 @@ public class Patient {
         return dob;
     }
 
+    
+    
     public int getLastBR() {
         return lastBR;
     }

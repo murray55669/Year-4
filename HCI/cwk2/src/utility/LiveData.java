@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package patientview;
+package utility;
 
 /**
  *
@@ -18,7 +18,7 @@ public class LiveData {
     public int sbp;
     public int hr;
 
-    LiveData(int ts, int rr, int os, float t, int sbp, int hr) {
+    public LiveData(int ts, int rr, int os, float t, int sbp, int hr) {
         this.ts = ts;
         this.rr = rr;
         this.os = os;
