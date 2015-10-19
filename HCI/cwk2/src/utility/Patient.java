@@ -86,6 +86,24 @@ public class Patient {
     public LiveData getLiveData (int time) {
         return liveData.get(time/500);
     }
+    public ArrayList<LiveData> getAllLiveData () {
+        return this.liveData;
+    }
+    public ArrayList<LiveData> getLiveDatahistory (int time) {
+        //limit to an hour
+        ArrayList<LiveData> choppedData = new ArrayList<LiveData>();
+        
+        int minStep = (time/100) - 3600;
+        if (minStep < 0) {
+            minStep = 0;
+        }
+        int maxStep = time/500;
+        for (int i = minStep; i < maxStep; i++) {
+            choppedData.add(liveData.get(i));
+        }
+        
+        return choppedData;
+    }
     public Color getColour (int time) {
         return utils.genSEWSColour(getSEWS(time));
     }
