@@ -10,9 +10,13 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.Timer;
@@ -50,6 +54,8 @@ public class HistoryJFrame extends javax.swing.JFrame {
     
     ArrayList<JCheckBox> checkBoxes;
     
+    Clip click;
+    
     /**
      * Creates new form HistoryJFrame
      */
@@ -66,6 +72,15 @@ public class HistoryJFrame extends javax.swing.JFrame {
         int y = (dim.height - h) / 2;
         //Move the window
         this.setLocation(x, y);
+        
+        //Load click sound
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/click.wav").getAbsoluteFile());
+            click = AudioSystem.getClip();
+            click.open(audioInputStream);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        } 
         
         //Get patient
         this.patients = patients;
@@ -422,6 +437,7 @@ public class HistoryJFrame extends javax.swing.JFrame {
 
     private void jButton_changeViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_changeViewActionPerformed
         // TODO add your handling code here:
+        click.start();
         //dispose current window
         this.dispose();
         //open the Patient-View
@@ -435,6 +451,7 @@ public class HistoryJFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        click.start();
         //get checkbox value, update graph
         genGraph(getGraphCode());
     }//GEN-LAST:event_jButton1ActionPerformed
