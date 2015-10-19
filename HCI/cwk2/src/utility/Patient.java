@@ -73,6 +73,9 @@ public class Patient {
         return this.state;
     }
     
+    public boolean getChecked () {
+        return this.checked;
+    }
     public void setChecked () {
         this.checked = true;
     }
@@ -84,16 +87,19 @@ public class Patient {
         return liveData.get(time/500);
     }
     public Color getColour (int time) {
+        return utils.genSEWSColour(getSEWS(time));
+    }
+    public int getSEWS (int time) {
         LiveData data = this.getLiveData(time);
         int pSEWS = utils.genpSEWSScore(data.rr, data.os, data.t, data.sbp, data.hr);
         int SEWS = pSEWS;
         if (this.state >= 0) {
             SEWS = pSEWS + this.state;
         }
-        return utils.genSEWSColour(SEWS);
+        return SEWS;
     }
     
-    public boolean checkAndFlag (int time) {
+    public boolean testAndFlag (int time) {
         LiveData data = this.getLiveData(time);
         int pSEWS = utils.genpSEWSScore(data.rr, data.os, data.t, data.sbp, data.hr);
         if (pSEWS >= 2) {
