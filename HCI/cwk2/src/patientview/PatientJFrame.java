@@ -14,6 +14,10 @@ import java.util.Random;
 import javax.swing.Timer;
 
 import java.awt.Color;
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 
 import utility.LiveData;
@@ -35,6 +39,8 @@ public class PatientJFrame extends javax.swing.JFrame {
     private Patient thisPatient;
     
     private Utilities utils = new Utilities();
+    
+    Clip click;
 
     /**
      * Creates new form PatientJFrame
@@ -52,6 +58,15 @@ public class PatientJFrame extends javax.swing.JFrame {
         int y = (dim.height - h) / 2;
         //Move the window
         this.setLocation(x, y);
+        
+        //Load click sound
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/click.wav").getAbsoluteFile());
+            click = AudioSystem.getClip();
+            click.open(audioInputStream);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        } 
         
         //Get patient
         this.patients = patients;
@@ -533,6 +548,7 @@ public class PatientJFrame extends javax.swing.JFrame {
 
     private void jButton_changeViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_changeViewActionPerformed
         // TODO add your handling code here:
+        click.start();
         //dispose current window
         this.dispose();
         //open the Ward-View
@@ -542,6 +558,7 @@ public class PatientJFrame extends javax.swing.JFrame {
 
     private void graphButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphButtonActionPerformed
         // TODO add your handling code here:
+        click.start();
         this.dispose();
         HistoryJFrame historyFrame = new HistoryJFrame(this.bedNum, timerCSeconds, this.patients);
         historyFrame.setVisible(true);

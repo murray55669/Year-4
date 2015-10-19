@@ -58,6 +58,8 @@ public class WardJFrame extends javax.swing.JFrame {
     private static final String OK_BUTTON = "OK";
     private static final String SUBMIT_BUTTON = "Submit";
     
+    Clip click;
+    
     /**
      * Creates new form WardJFrame
      */
@@ -75,18 +77,14 @@ public class WardJFrame extends javax.swing.JFrame {
         //Move the window
         this.setLocation(x, y);
         
+        //Load click sound
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/click.mp3").getAbsoluteFile());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (UnsupportedAudioFileException ex) {
-            Logger.getLogger(WardJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(WardJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (LineUnavailableException ex) {
-            Logger.getLogger(WardJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/click.wav").getAbsoluteFile());
+            click = AudioSystem.getClip();
+            click.open(audioInputStream);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        } 
         
         this.patients = patients;
         
@@ -261,6 +259,7 @@ public class WardJFrame extends javax.swing.JFrame {
     }
     
     private void submit (int bedIndex, String state) {
+        click.start();
         int bedNum = 1001 + bedIndex;
         
         /*boolean isChecked = patients.getPatient(bedNum).getChecked();
@@ -800,11 +799,13 @@ public class WardJFrame extends javax.swing.JFrame {
     private void jButton_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_exitActionPerformed
 
          // TODO add your handling code here:
+        click.start();
         System.exit(0);
     }//GEN-LAST:event_jButton_exitActionPerformed
 
     private void bedClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bedClicked
         // TODO add your handling code here:
+        click.start();
         int bedNum = 0;
         if (evt.getSource() == bed1){
             bedNum = 1001;
@@ -827,7 +828,6 @@ public class WardJFrame extends javax.swing.JFrame {
     private void okButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButton1ActionPerformed
         // TODO add your handling code here:
         submit(0, (String) bed1State.getSelectedItem());
-        //okButton1.setVisible(false);
     }//GEN-LAST:event_okButton1ActionPerformed
 
     private void okButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButton3ActionPerformed
