@@ -1,0 +1,101 @@
+import java.util.*;
+import java.io.*;
+
+/* Class to represent a node. Each node must run on its own thread.*/
+
+public class Node extends Thread {
+
+	private int id;
+	private boolean participant = false;
+	private boolean leader = false;
+	private Network network;
+	
+	// Neighbouring nodes
+	public List<Node> myNeighbours;
+	private List<Integer> n_ids;
+
+	// Queues for the incoming messages
+	public List<String> incomingMsg;
+	
+	private HashMap<Integer, Integer> elections;
+	
+	public Node(int id){
+	
+		this.id = id;
+		this.network = network;
+		
+		myNeighbours = new ArrayList<Node>();
+		incomingMsg = new ArrayList<String>();
+		
+		n_ids = new ArrayList<Integer>();
+		elections = new HashMap<Integer, Integer>();
+	}
+	
+	// Basic methods for the Node class
+	
+	public int getNodeId() {
+		/*
+		Method to get the Id of a node instance
+		*/
+		return this.id;
+	}
+			
+	public boolean isNodeLeader() {
+		/*
+		Method to return true if the node is currently a leader
+		*/
+		return leader;
+	}
+		
+	public List<Node> getNeighbors() {
+		/*
+		Method to get the neighbours of the node
+		*/
+		return myNeighbours;
+	}
+		
+	public void addNeighbour(Node n) {
+		/*
+		Method to add a neighbour to a node
+		*/
+		this.myNeighbours.add(n);
+	}
+	
+	public void add_n_id(int id) {
+		n_ids.add(id);
+	}
+	public List<Integer> dump_n_ids() {
+		List<Integer> temp = new ArrayList<Integer>(this.n_ids);
+		this.n_ids.clear();
+		return temp;
+	}
+				
+	//TODO
+	public void receiveMsg(String m) {
+		/*
+		Method that implements the reception of an incoming message by a node
+		*/
+		//Check if we're the intended recipient
+		//If not, check if our neighbour is the intended recipient
+		//If not, explode
+	}
+		
+	//TODO
+	public void sendMsg(String m) {
+		/*
+		Method that implements the sending of a message by a node. 
+		The message must be delivered to its recepients through the network.
+		This method need only implement the logic of the network receiving an outgoing message from a node.
+		The remainder of the logic will be implemented in the network class.
+		*/		
+	}
+	
+	//TODO
+	public void tick (int step) {
+		/*
+		 * Have the node carry out tasks at the appropriate time
+		 * Step dependent: election initiation; failure(?)
+		 * Step independent: messaging
+		 */
+	}
+}

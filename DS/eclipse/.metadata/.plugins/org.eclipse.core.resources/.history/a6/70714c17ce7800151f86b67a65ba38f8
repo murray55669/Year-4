@@ -1,0 +1,128 @@
+import java.util.*;
+import java.io.*;
+import java.nio.file.Paths;
+
+/* 
+Class to simulate the network. System design directions:
+
+- Synchronous communication: each round lasts for 20ms
+- At each round the network receives the messages that the nodes want to send and delivers them
+- The network should make sure that:
+	- A node can only send messages to its neighbours
+	- A node can only send one message per neighbour per round
+- When a node fails, the network must inform all the node's neighbours about the failure
+*/
+
+public class Network {
+
+	private List<Node> nodes;
+	private int round;
+	private int period = 20;
+	private Map<Integer, String> msgToDeliver; //Integer for the id of the sender and String for the message
+	
+	public Network() {
+		this.nodes = new ArrayList<Node>();
+	}
+	
+	//TODO: return?
+	public void NetSimulator() {
+        	msgToDeliver = new HashMap<Integer, String>();
+        	
+        	/*
+        	Code to call methods for parsing the input file, initiating the system and producing the log can be added here.
+        	*/
+   		}
+   		
+   	private ArrayList<String> parseFile(String fileName) throws IOException {
+   		/*
+   		Code to parse the file can be added here. Notice that the method's descriptor must be defined.
+   		*/
+   		//Read file into a list of strings
+   		Scanner s = new Scanner(new File(Paths.get(".").toAbsolutePath().normalize().toString()+"/"+fileName));
+   		s.useDelimiter(System.getProperty("line.separator")); 
+   		ArrayList<String> list = new ArrayList<String>();
+   		while (s.hasNext()){
+   		    list.add(s.next());
+   		}
+   		s.close();
+   		//Discard first line (Always "Node_id Neighbours")
+   		list.remove(0);
+   		//Clean the list
+   		for(String line : list) {
+   			String chunks[] = line.split(" ");
+   			if (chunks[0].equals("ELECT")) {
+   				
+   				//Debug
+   				String nodes = "";
+   				for (int i = 2; i < chunks.length-1; i++) {
+   					nodes += chunks[i] + ", ";
+   				}
+   				nodes += chunks[chunks.length-1];
+   				System.out.println("Election at time "+chunks[1]+" started by nodes "+nodes);
+   				
+   			} else if (chunks[0].equals("FAIL")) {
+   				
+   				//Debug
+   				System.out.println("Node "+chunks[1]+" fails!");
+   				
+   			} else {
+   				//Generate node
+   				Node node = new Node(Integer.parseInt(chunks[0]));
+   				//Remember the neighbours to link together later
+   				for (int i = 1; i< chunks.length; i++) {
+   					node.add_n_id(Integer.parseInt(chunks[i]));
+   				}
+   				this.nodes.add(node);
+   			}
+   			
+   		}
+   		
+   		//Link nodes together
+		for (Node node : this.nodes) {
+			List<Integer> temp = node.dump_n_ids();
+			for (int i : temp) {
+				System.out.println(i);
+			}
+		}
+		
+   		return list;
+   		}
+	
+	public synchronized void addMessage(int id, String m) {
+		/*
+		At each round, the network collects all the messages that the nodes want to send to their neighbours. 
+		Implement this logic here.
+		*/
+		}
+	
+	public synchronized void deliverMessages() {
+		/*
+		At each round, the network delivers all the messages that it has collected from the nodes.
+		Implement this logic here.
+		The network must ensure that a node can send only to its neighbours, one message per round per neighbour.
+		*/
+		}
+		
+	public synchronized void informNodeFailure(int id) {
+		/*
+		Method to inform the neighbours of a failed node about the event.
+		*/
+		}
+	
+		
+	
+	public static void main(String[] args) throws IOException, InterruptedException {
+		/*
+		Your main must get the input file as input.
+		*/
+		
+		if (args.length != 1) {
+			System.out.println("Usage: java Network <input_file.txt>");
+			System.exit(0);
+		}
+		Network net = new Network();
+		
+		net.parseFile(args[0]);
+		
+	}
+}

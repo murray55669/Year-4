@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import java.nio.file.Paths;
 
 /* 
 Class to simulate the network. System design directions:
@@ -19,7 +20,8 @@ public class Network {
 	private int period = 20;
 	private Map<Integer, String> msgToDeliver; //Integer for the id of the sender and String for the message
 	
-	public NetSimulator() {
+	//TODO: return?
+	public void NetSimulator() {
         	msgToDeliver = new HashMap<Integer, String>();
         	
         	/*
@@ -27,10 +29,39 @@ public class Network {
         	*/
    		}
    		
-   	private parseFile(String fileName) throws IOException {
+   	private ArrayList<String> parseFile(String fileName) throws IOException {
    		/*
    		Code to parse the file can be added here. Notice that the method's descriptor must be defined.
    		*/
+   		//Read file into a list of strings
+   		Scanner s = new Scanner(new File(Paths.get(".").toAbsolutePath().normalize().toString()+"/"+fileName));
+   		s.useDelimiter(System.getProperty("line.separator")); 
+   		ArrayList<String> list = new ArrayList<String>();
+   		while (s.hasNext()){
+   		    list.add(s.next());
+   		}
+   		s.close();
+   		//Discard first line (Always "Node_id Neighbours")
+   		list.remove(0);
+   		//Clean the list
+   		for(String line : list) {
+   			String chunks[] = line.split(" ");
+   			if (chunks[0].equals("ELECT")) {
+   				String nodes = "";
+   				for (int i = 2; i < chunks.length-1; i++) {
+   					nodes += chunks[i] + ", ";
+   				}
+   				nodes += chunks[chunks.length-1];
+   				System.out.println("Election at time: "+chunks[1]+" started by nodes: "+nodes);
+   			} else if (chunks[0] == "FAIL") {
+   				
+   			} else {
+   				//Generate a node
+   			}
+   		}
+   		//Get the first token in the line
+   		
+   		return list;
    		}
 	
 	public synchronized void addMessage(int id, String m) {
@@ -54,17 +85,23 @@ public class Network {
 		*/
 		}
 	
+		
 	
-	public static void main(String args[0]) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		/*
 		Your main must get the input file as input.
 		*/
+		
+		if (args.length != 1) {
+			System.out.println("Usage: java Network <input_file.txt>");
+			System.exit(0);
 		}
-	
-	
-	
-	
-	
-	
-	
+		Network net = new Network();
+		
+		ArrayList<String> input = net.parseFile(args[0]);
+		
+		for(String str : input) {
+			//System.out.println(str);
+		}
+		}
 }
