@@ -14,6 +14,10 @@ import java.util.Random;
 import javax.swing.Timer;
 
 import java.awt.Color;
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 
 import utility.LiveData;
@@ -30,16 +34,18 @@ public class PatientJFrame extends javax.swing.JFrame {
     private Timer timer;
     private int timerCSeconds;
     
-    private Patients patients = new Patients();
+    private Patients patients;
     private int bedNum;
     private Patient thisPatient;
     
     private Utilities utils = new Utilities();
+    
+    Clip click;
 
     /**
      * Creates new form PatientJFrame
      */
-    public PatientJFrame(int bedNum, int time) {
+    public PatientJFrame(int bedNum, int time, Patients patients) {
         initComponents();
         
         //set window in the center of the screen
@@ -53,7 +59,17 @@ public class PatientJFrame extends javax.swing.JFrame {
         //Move the window
         this.setLocation(x, y);
         
+        //Load click sound
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sounds/click.wav").getAbsoluteFile());
+            click = AudioSystem.getClip();
+            click.open(audioInputStream);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        } 
+        
         //Get patient
+        this.patients = patients;
         this.bedNum = bedNum;
         thisPatient = patients.getPatient(bedNum);
         
@@ -99,7 +115,7 @@ public class PatientJFrame extends javax.swing.JFrame {
                     SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
                     jLabel_systemTime.setText(sdf.format(cal.getTime()));
                     // do it every 5 seconds
-                    if (timerCSeconds % 500 == 0) {
+                    if (timerCSeconds % 500 == 0) {                        
                         LiveData timedData = thisPatient.getLiveData(timerCSeconds);
                         
                         int br = timedData.rr;
@@ -231,17 +247,19 @@ public class PatientJFrame extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        graphButton = new javax.swing.JButton();
         jPanel_title = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         patientNameField = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         dobField = new javax.swing.JLabel();
-        pSEWSIndicator = new javax.swing.JLabel();
         genderIcon = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        pSEWSLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         wardNumField = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        pSEWSIndicator = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        pSEWSLabel = new javax.swing.JLabel();
 
         jLabel9.setText("jLabel9");
 
@@ -318,6 +336,13 @@ public class PatientJFrame extends javax.swing.JFrame {
 
         hrLabel.setText("Loading...");
 
+        graphButton.setText("View History (Last Hour)");
+        graphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graphButtonActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel_readingsLayout = new org.jdesktop.layout.GroupLayout(jPanel_readings);
         jPanel_readings.setLayout(jPanel_readingsLayout);
         jPanel_readingsLayout.setHorizontalGroup(
@@ -325,6 +350,7 @@ public class PatientJFrame extends javax.swing.JFrame {
             .add(jPanel_readingsLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel_readingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(graphButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jSeparator4)
                     .add(jSeparator3)
                     .add(jSeparator2)
@@ -398,7 +424,9 @@ public class PatientJFrame extends javax.swing.JFrame {
                     .add(jLabel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(hrIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, hrLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(graphButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(8, 8, 8))
         );
 
         jPanel_title.setBackground(new java.awt.Color(254, 254, 254));
@@ -410,13 +438,6 @@ public class PatientJFrame extends javax.swing.JFrame {
         jLabel4.setText("DoB:");
 
         dobField.setText("jLabel");
-
-        pSEWSIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel5.setText("pSEWS");
-
-        pSEWSLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        pSEWSLabel.setText("Load...");
 
         org.jdesktop.layout.GroupLayout jPanel_titleLayout = new org.jdesktop.layout.GroupLayout(jPanel_title);
         jPanel_title.setLayout(jPanel_titleLayout);
@@ -431,14 +452,8 @@ public class PatientJFrame extends javax.swing.JFrame {
                 .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(patientNameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(dobField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 24, Short.MAX_VALUE)
                 .add(genderIcon, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 40, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(pSEWSLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(pSEWSIndicator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 40, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel_titleLayout.setVerticalGroup(
@@ -446,10 +461,6 @@ public class PatientJFrame extends javax.swing.JFrame {
             .add(jPanel_titleLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel_titleLayout.createSequentialGroup()
-                        .add(jLabel5)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(pSEWSLabel))
                     .add(genderIcon, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel_titleLayout.createSequentialGroup()
                         .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -459,8 +470,7 @@ public class PatientJFrame extends javax.swing.JFrame {
                         .add(jPanel_titleLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jLabel4)
                             .add(dobField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(0, 0, Short.MAX_VALUE))
-                    .add(pSEWSIndicator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(0, 0, Short.MAX_VALUE)))
                 .add(7, 7, 7))
         );
 
@@ -468,16 +478,50 @@ public class PatientJFrame extends javax.swing.JFrame {
 
         wardNumField.setText("jLabel");
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        pSEWSIndicator.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel5.setText("pSEWS:");
+
+        pSEWSLabel.setText("0");
+        pSEWSLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(pSEWSLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel5))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(pSEWSIndicator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(pSEWSIndicator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jLabel5)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(pSEWSLabel)))
+                .add(0, 9, Short.MAX_VALUE))
+        );
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel_title, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel_readings, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(jButton_changeView)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jLabel2)
@@ -487,8 +531,12 @@ public class PatientJFrame extends javax.swing.JFrame {
                         .add(jLabel3)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(bedNumField)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 58, Short.MAX_VALUE)
-                        .add(jLabel_systemTime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 140, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 84, Short.MAX_VALUE)
+                        .add(jLabel_systemTime, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 143, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createSequentialGroup()
+                        .add(jPanel_title, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -502,9 +550,11 @@ public class PatientJFrame extends javax.swing.JFrame {
                     .add(jButton_changeView)
                     .add(wardNumField)
                     .add(jLabel_systemTime, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel_title, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel_title, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(7, 7, 7)
                 .add(jPanel_readings, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -514,12 +564,21 @@ public class PatientJFrame extends javax.swing.JFrame {
 
     private void jButton_changeViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_changeViewActionPerformed
         // TODO add your handling code here:
+        click.start();
         //dispose current window
         this.dispose();
         //open the Ward-View
-        WardJFrame wardframe = new WardJFrame(timerCSeconds);
+        WardJFrame wardframe = new WardJFrame(timerCSeconds, this.patients);
         wardframe.setVisible(true);
     }//GEN-LAST:event_jButton_changeViewActionPerformed
+
+    private void graphButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphButtonActionPerformed
+        // TODO add your handling code here:
+        click.start();
+        this.dispose();
+        HistoryJFrame historyFrame = new HistoryJFrame(this.bedNum, timerCSeconds, this.patients);
+        historyFrame.setVisible(true);
+    }//GEN-LAST:event_graphButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -557,7 +616,7 @@ public class PatientJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PatientJFrame(0, 0).setVisible(true);
+                new PatientJFrame(0, 0, null).setVisible(true);
             }
         });
     }
@@ -607,6 +666,7 @@ public class PatientJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel bedNumField;
     private javax.swing.JLabel dobField;
     private javax.swing.JLabel genderIcon;
+    private javax.swing.JButton graphButton;
     private javax.swing.JLabel hrIndicator;
     private javax.swing.JLabel hrLabel;
     private javax.swing.JButton jButton_changeView;
@@ -622,6 +682,7 @@ public class PatientJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel_systemTime;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel_readings;
     private javax.swing.JPanel jPanel_title;
     private javax.swing.JSeparator jSeparator1;
