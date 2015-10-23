@@ -1,0 +1,7 @@
+
+public class GraphTest {
+	 public static void main(String[] args) {
+		
+		 DirectedGraph<Node> graph = new DirectedGraph<Node>();
+	}
+}

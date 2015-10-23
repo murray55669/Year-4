@@ -1,0 +1,58 @@
+import java.util.*;
+
+public class RingFinder {
+
+	private List<Node> nodes;
+	private int depth;
+	
+	private int requiredDepth;
+	
+	private List<Node> history;
+	
+	public RingFinder(List<Node> nodes) {
+		this.nodes = nodes;
+		this.history = new ArrayList<Node>();
+	}
+	
+	public void run () {
+		this.depth = 0;
+		this.requiredDepth = this.nodes.size()+1;
+		
+		Collections.sort(this.nodes, new NodeIdComparator());
+		
+		System.out.println(this.nodes);
+		
+		this.history.add(nodes.get(0));
+		
+		this.search();
+	}
+	
+	private void search() {
+		
+		//Check children of previous node
+		Node parent = history.get(history.size()-1);
+		System.out.println("Searching from parent: "+parent.getNodeId());
+		System.out.println("Current history: "+this.history);
+		
+		
+		//For each child..
+		for (Node child : parent.myNeighbours) {
+			//If the child is the initial node, and the depth has been reached
+			if ((child == this.history.get(0)) && (this.depth == this.requiredDepth)) {
+				//Cycle has been found
+				System.out.println("SUCCESS: Cycle found!");
+			} 
+			
+			//If the child has already been visited, skip over it
+			else if(history.contains(child)){
+				
+			} 
+			//If the child has never been visited, add it to the path, and continue the path
+			else {
+				history.add(child);
+				search();
+			}
+		}
+	}
+	
+}

@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class RingFinder {
+
+	private List<Node> nodes;
+	
+	private List<Node> history;
+	
+	public RingFinder(List<Node> nodes) {
+		this.nodes = nodes;
+	}
+	
+	public void run () {
+		this.start();
+	}
+	
+	private void start() {
+		this.history.add(nodes.get(0));
+		
+		Node parent = history.get(0);
+		for (Node child : parent.myNeighbours) {
+			if (child == parent) {
+				
+			}
+		}
+	}
+	
+}

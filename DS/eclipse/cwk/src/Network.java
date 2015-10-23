@@ -18,10 +18,11 @@ public class Network {
 
 	private List<Node> nodes;
 	private int round;
-	private int period = 20;
-	private Map<Integer, String> msgToDeliver; //Integer for the id of the sender and String for the message
+	private int period = 1000; //TODO: revert to 20
+	private Map<Integer, String> msgToDeliver; //Integer for the id of the receiver and String for the message
 	
 	private Map<Integer, List<Integer>> election_lists;
+	private Timer timer;
 	
 	public Network() {
 		this.nodes = new ArrayList<Node>();
@@ -37,18 +38,34 @@ public class Network {
 		round++;
 	}
 	
-	//TODO: return?
+
 	public void NetSimulator() {
         	msgToDeliver = new HashMap<Integer, String>();
         	
         	/*
         	Code to call methods for parsing the input file, initiating the system and producing the log can be added here.
         	*/
+        	for (Node node : this.nodes) {
+            	//Tell the nodes what network they belong to
+        		node.setNetwork(this);
+            	//Launch the node threads
+        		node.start();
+        	}
         	
-    		//TODO: run simulation
-    		/*
-    		 * timer - net.tick() every period
-    		 */
+        	//Tick nodes
+        	//TODO: logging
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    for (Node node : nodes) {
+                    	node.tick(round);
+                    }
+                    round++;
+                    System.out.println();
+                    //TODO: check if a leader has been elected
+                }
+            }, 0, period);
 	}
    		
    	private void parseFile(String fileName) throws IOException {
@@ -69,7 +86,7 @@ public class Network {
    		//Clean the list
    		for(String line : list) {
    			String chunks[] = line.split(" ");
-   			//TODO
+
    			if (chunks[0].equals("ELECT")) {
    				
    				ArrayList<Integer> elections = new ArrayList<Integer>();
@@ -80,7 +97,7 @@ public class Network {
    				this.election_lists.put(Integer.parseInt(chunks[1]), elections);
    				
    				
-			//TODO
+			//TODO: node failure
    			} else if (chunks[0].equals("FAIL")) {
    				
    				//Debug
@@ -128,19 +145,56 @@ public class Network {
 		}
    		System.out.println();
    		
-   		//TODO:
-   		/*
-   		 * Have nodes record when they will start an election, so they can act on ticks
-   		 */
+   		//TODO
+   		//Sort graph and print
+
+   		
    		System.out.println("Adding node election timings..\n");
    		for (Entry<Integer, List<Integer>> entry : this.election_lists.entrySet()) {
-   		    Integer key = entry.getKey();
-   		    List<Integer> value = entry.getValue();
-   		    //TODO
+   		    Integer timing = entry.getKey();
+   		    List<Integer> node_ids = entry.getValue();
+   		    
+   		    System.out.println("Adding elections at step "+timing+"..");
+   		    boolean added = false;
+   		    for (Node node : this.nodes) {
+   		    	for (Integer id : node_ids) {
+   		    		if (node.getNodeId() == id) {
+   		    			added = true;
+   		    			node.add_election(timing);
+   		    			System.out.println("Added election to node "+id);
+   		    		}
+   		    	}
+   		    }
+   		    if (!added) {
+    			System.out.println("Failed to add elections to any node!");
+    		}
+   		    System.out.println();
    		}
    	}
 	
-   	//TODO
+	private void getPath(List<Node> unsorted, Node root, ArrayList<Integer> visited) {
+		//DFS 
+		visited.add(root.getNodeId());
+		for (Node neighbour : root.myNeighbours) {
+			for (Node n : unsorted) {
+				if (n.getNodeId() == neighbour.getNodeId()) {
+					
+				}
+			}
+		}
+		/*
+		 * Start at a node
+		 * record the node
+		 * check if lowest branch ID has been seen before
+		 * if not, follow it
+		 * if it has, check if it is the origin (1st recorded) and we're on the n+1th step
+		 * 
+		 * follow lowest id branch
+		 * if this id has been seen before, return false
+		 */
+	}
+
+	//TODO
 	public synchronized void addMessage(int id, String m) {
 		/*
 		At each round, the network collects all the messages that the nodes want to send to their neighbours. 
@@ -148,13 +202,10 @@ public class Network {
 		*/
 		//Messages should only be between neighbours, limited to one per round (unless broadcast)
 		//id is the sender? 
-		//Message format: "<recipient> <message>" (<recipient> can be "BROADCAST")
+		//Message format: "<recipients> <message>"
 		String[] chunks = m.split(" ");
-		if (chunks[0].equals("BROADCAST")) {
-			
-		} else {
-			
-		}
+		String[] recipients = chunks[0].split(",");
+		
 		msgToDeliver.put(id, m);
 	}
 	
@@ -165,6 +216,7 @@ public class Network {
 		Implement this logic here.
 		The network must ensure that a node can send only to its neighbours, one message per round per neighbour.
 		*/
+		//TODO: print if a message is denied
 	}
 		
 	//TODO
@@ -172,6 +224,7 @@ public class Network {
 		/*
 		Method to inform the neighbours of a failed node about the event.
 		*/
+		//TODO: need to re-sort the ring
 	}
 	
 	
@@ -188,7 +241,11 @@ public class Network {
 		
 		net.parseFile(args[0]);
 		
-		net.NetSimulator();
+		RingFinder rf = new RingFinder(net.nodes);
+		List<Node> sorted = rf.run();
+		System.out.println("\n"+sorted);
+		
+		//net.NetSimulator();
 		
 	}
 }

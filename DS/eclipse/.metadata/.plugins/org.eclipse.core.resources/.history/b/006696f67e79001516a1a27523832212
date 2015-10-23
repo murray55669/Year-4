@@ -1,0 +1,123 @@
+import java.util.*;
+import java.io.*;
+
+/* Class to represent a node. Each node must run on its own thread.*/
+
+public class Node extends Thread {
+
+	private int id;
+	private boolean participant = false;
+	private boolean leader = false;
+	private Network network;
+	
+	// Neighbouring nodes
+	public List<Node> myNeighbours;
+	private List<Integer> n_ids;
+
+	// Queues for the incoming messages
+	public List<String> incomingMsg;
+	
+	//Timings this node will initiate an election
+	private List<Integer> elections;
+	
+	public Node(int id){
+	
+		this.id = id;
+		
+		myNeighbours = new ArrayList<Node>();
+		incomingMsg = new ArrayList<String>();
+		
+		n_ids = new ArrayList<Integer>();
+		elections = new ArrayList<Integer>();
+	}
+	
+	// Basic methods for the Node class
+	
+	public int getNodeId() {
+		/*
+		Method to get the Id of a node instance
+		*/
+		return this.id;
+	}
+			
+	public boolean isNodeLeader() {
+		/*
+		Method to return true if the node is currently a leader
+		*/
+		return leader;
+	}
+		
+	public List<Node> getNeighbors() {
+		/*
+		Method to get the neighbours of the node
+		*/
+		return myNeighbours;
+	}
+		
+	public void addNeighbour(Node n) {
+		/*
+		Method to add a neighbour to a node
+		*/
+		this.myNeighbours.add(n);
+	}
+	
+	public void add_n_id(int id) {
+		n_ids.add(id);
+	}
+	public List<Integer> dump_n_ids() {
+		List<Integer> temp = new ArrayList<Integer>(this.n_ids);
+		this.n_ids.clear();
+		return temp;
+	}
+	
+	public void add_election(int round) {
+		elections.add(round);
+	}
+				
+	//TODO
+	public void receiveMsg(String m) {
+		/*
+		Method that implements the reception of an incoming message by a node
+		*/
+		//Check if we're the intended recipient
+		//If not, check if our neighbour is the intended recipient - forward it to them
+		//If not, broadcast 
+		
+	} 
+	
+	public void sendMsg(String m) {
+		/*
+		Method that implements the sending of a message by a node. 
+		The message must be delivered to its recepients through the network.
+		This method need only implement the logic of the network receiving an outgoing message from a node.
+		The remainder of the logic will be implemented in the network class.
+		*/
+		System.out.println("Sending message "+m);
+		this.network.addMessage(this.id, m);
+	}
+	
+	//TODO
+	public void tick (int round) {
+		/*
+		 * Have the node carry out tasks at the appropriate time
+		 * Round dependent: election initiation; failure(?)
+		 * Round independent: messaging
+		 */
+		System.out.println("Node "+this.getNodeId()+" ticking at round "+round);
+		
+		for (Integer election : this.elections) {
+			if (round == election) {
+				//TODO: start election
+				System.out.println("Starting election!");
+				//Sets own state to participant
+				this.participant = true;
+				//Send election message to 1st neighbour
+				this.sendMsg("ELECTION "+this.getNodeId());
+			}
+		}
+	}
+
+	public void setNetwork(Network net) {
+		this.network = net;
+	}
+}

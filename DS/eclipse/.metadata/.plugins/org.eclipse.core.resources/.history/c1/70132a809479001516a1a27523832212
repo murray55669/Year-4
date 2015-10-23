@@ -1,0 +1,74 @@
+import java.util.*;
+
+public class RingFinder {
+
+	private List<Node> nodes;
+	private int depth;
+	
+	private int requiredDepth;
+	
+	private List<Node> history;
+	
+	public RingFinder(List<Node> nodes) {
+		this.nodes = nodes;
+		this.history = new ArrayList<Node>();
+	}
+	
+	public List<Node> run () {
+		System.out.println("Finding ring in network..");
+		this.depth = 0;
+		this.requiredDepth = this.nodes.size()-1;
+		
+		//Sort the list of nodes, and the node's lists of neighbours
+		Collections.sort(this.nodes, new NodeIdComparator());
+		System.out.println("Nodes: "+this.nodes);
+		for (Node node : this.nodes) {
+			Collections.sort(node.myNeighbours, new NodeIdComparator());
+			System.out.println("Node "+node.getNodeId()+" neighbours: "+node.myNeighbours);
+		}
+		System.out.println("Required depth: "+this.requiredDepth);
+		System.out.println();
+		
+		
+		this.history.add(nodes.get(0));
+		
+		return this.search();
+	}
+	
+	private List<Node> search() {
+		
+		//Check children of previous node
+		Node parent = history.get(history.size()-1);
+		System.out.println("Searching from parent: "+parent.getNodeId());
+		System.out.println("Current history: "+this.history);
+		System.out.println("Current depth: "+this.depth);
+		
+		//For each child..
+		for (Node child : parent.myNeighbours) {
+			//If the child is the initial node, and the depth has been reached
+			if ((child == this.history.get(0)) && (this.depth == this.requiredDepth)) {
+				//Cycle has been found
+				history.add(child);
+				System.out.println("SUCCESS: Cycle found.\nRing ordering: "+this.history);
+				
+				return history;
+			} 
+			
+			//If the child has already been visited, skip over it
+			else if(history.contains(child)){
+				
+			}
+			
+			//If the child has never been visited, add it to the path, and continue the path
+			else {
+				history.add(child);
+				this.depth++;
+				search();
+			}
+		}
+		//If no path was found, remove the last piece of history, decrement depth, and try another path
+		history.remove(history.size()-1);
+		depth--;
+	}
+	
+}
