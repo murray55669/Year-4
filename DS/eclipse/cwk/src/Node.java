@@ -20,6 +20,8 @@ public class Node extends Thread {
 	//Timings this node will initiate an election
 	private List<Integer> elections;
 	
+	private String nextMsg = "";
+	
 	public Node(int id){
 	
 		this.id = id;
@@ -51,6 +53,10 @@ public class Node extends Thread {
 		*/
 		return leader;
 	}
+	
+	public boolean isNodeParticipant() {
+		return participant;
+	}
 		
 	public List<Node> getNeighbors() {
 		/*
@@ -78,12 +84,18 @@ public class Node extends Thread {
 	public void add_election(int round) {
 		elections.add(round);
 	}
+	
+	public Network getNetwork () {
+		return this.network;
+	}
 				
-	//TODO
 	public void receiveMsg(String m) {
 		/*
 		Method that implements the reception of an incoming message by a node
 		*/ 
+		
+		this.incomingMsg.add(m);
+		
 		String[] chunks = m.split(" ");
 		int incId = Integer.parseInt(chunks[1]);
 		
@@ -94,22 +106,31 @@ public class Node extends Thread {
 				
 				int outId = Math.max(incId, this.getNodeId());
 				
-				sendMsg("ELECTION "+outId);
+				this.nextMsg = ("ELECTION "+outId);
 			} else {
 				
 				if (incId == this.getNodeId()) {
-					//If we're the new leader
+					//If we're the new leader, send a message informing the other nodes
+					this.participant = false;
+					this.leader = true;
+					this.nextMsg = ("LEADER "+this.getNodeId());
 				} else if (incId < this.getNodeId()) {
-					
+					//We have already send an election message with higher id, so do nothing
+				} else if (incId > this.getNodeId()) {
+					//If inc id is greater than ours, forward the message
+					this.nextMsg = ("ELECTION "+incId);
 				}
 			}
 		} else if (chunks[0].equals("LEADER")) {
-			this.leader = false;
+			if (this.getNodeId() == incId) {
+				//If we are the leader, do nothing
+			} else {
+				//Remove ourselves from the election, forward the leader message
+				this.participant = false;
+				this.leader = false;
+				this.nextMsg = "LEADER "+incId;
+			}
 		}
-
-		//If an election message is received, set 
-		
-		//If a leader message is received, set leader/own state to non-participant
 	} 
 	
 	public void sendMsg(String m) {
@@ -119,28 +140,28 @@ public class Node extends Thread {
 		This method need only implement the logic of the network receiving an outgoing message from a node.
 		The remainder of the logic will be implemented in the network class.
 		*/
-		System.out.println("Sending message "+m);
 		this.network.addMessage(this.id, m);
 	}
 	
-	//TODO
-	public void tick (int round) {
-		/*
-		 * Have the node carry out tasks at the appropriate time
-		 * Round dependent: election initiation; failure(?)
-		 * Round independent: messaging
-		 */
-		System.out.println("Node "+this.getNodeId()+" ticking at round "+round);
-		
+	public void tick(int round) {
+		//Send whatever message we have queued
+		if (!(this.nextMsg.equals(""))) {
+			this.sendMsg(this.nextMsg);
+		}
+		this.nextMsg = "";
 		
 		//Start an election if required on this round
 		for (Integer election : this.elections) {
 			if (round == election) {
-				System.out.println("Node starting election!");
-				//Sets own state to participant
-				this.participant = true;
-				//Send election message to 1st neighbour
-				this.sendMsg("ELECTION "+this.getNodeId());
+				if (this.participant) {
+					System.out.println("Node "+this.getNodeId()+" didn't start election; already a participant!");
+				} else {
+					System.out.println("Node "+this.getNodeId()+" starting election!");
+					//Sets own state to participant
+					this.participant = true;
+					//Send election message to 1st neighbour
+					this.sendMsg("ELECTION "+this.getNodeId());
+				}
 			}
 		}
 	}

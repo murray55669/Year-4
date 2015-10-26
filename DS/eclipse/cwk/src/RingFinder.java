@@ -11,12 +11,16 @@ public class RingFinder {
 	
 	private boolean finished;
 	
-	public RingFinder(List<Node> nodes) {
-		this.nodes = nodes;
-		this.history = new ArrayList<Node>();
+	public boolean debug = false;
+	
+	public RingFinder() {
+		
 	}
 	
-	public List<Node> run () {
+	public List<Node> run (List<Node> nodes) {
+		this.nodes = nodes;
+		this.history = new ArrayList<Node>();
+		
 		System.out.println("Finding ring in network..");
 		this.depth = 0;
 		this.requiredDepth = this.nodes.size()-1;
@@ -29,7 +33,9 @@ public class RingFinder {
 			Collections.sort(node.myNeighbours, new NodeIdComparator());
 			System.out.println("Node "+node.getNodeId()+" neighbours: "+node.myNeighbours);
 		}
-		System.out.println("Required depth: "+this.requiredDepth);
+		if (debug) {
+			System.out.println("Required depth: "+this.requiredDepth);
+		}
 		System.out.println();
 		
 		
@@ -42,9 +48,11 @@ public class RingFinder {
 		
 		//Check children of previous node
 		Node parent = history.get(history.size()-1);
-		System.out.println("Searching from parent: "+parent.getNodeId());
-		System.out.println("Current history: "+this.history);
-		System.out.println("Current depth: "+this.depth);
+		if (debug) {
+			System.out.println("Searching from parent: "+parent.getNodeId());
+			System.out.println("Current history: "+this.history);
+			System.out.println("Current depth: "+this.depth);
+		}
 		
 		//For each child..
 		for (Node child : parent.myNeighbours) {
