@@ -110,6 +110,7 @@ public class Network {
 							out.println(log);
 	                    	out.close();
 						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
                     	
@@ -384,7 +385,6 @@ public class Network {
 			System.exit(0);
 		}
 		Network net = new Network();
-		//net.debug = true;
 		
 		net.parseFile(args[0]);
 		

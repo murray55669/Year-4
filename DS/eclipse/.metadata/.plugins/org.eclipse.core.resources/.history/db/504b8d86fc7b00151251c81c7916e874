@@ -18,7 +18,7 @@ public class Network {
 
 	private List<Node> nodes;
 	private int round;
-	private int period = 20;
+	private int period = 20; //TODO: revert to 20
 	private Map<Integer, String> msgToDeliver; //Integer for the id of the receiver and String for the message
 	
 	private Map<Integer, List<Integer>> election_lists;
@@ -69,6 +69,7 @@ public class Network {
         	}
         	
         	//Tick nodes
+        	//TODO: logging
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -102,17 +103,7 @@ public class Network {
                     	timer.cancel();
                     	timer.purge();
                     	System.out.println("LOG:");
-                    	System.out.print(log);
-                    	
-                    	PrintWriter out;
-						try {
-							out = new PrintWriter("log.txt");
-							out.println(log);
-	                    	out.close();
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						}
-                    	
+                    	System.out.print(this.log);
                     }
                     
                     round++;
@@ -310,15 +301,12 @@ public class Network {
 		msgToDeliver.clear();
 	}
 		
+	//TODO
 	public synchronized void informNodeFailure(int id) {
 		/*
 		Method to inform the neighbours of a failed node about the event.
 		*/
-		if (debug)
-			System.out.println();
-		System.out.println("Node "+id+" failed!");
-		if (debug)
-			System.out.println();
+		System.out.println("\nNode "+id+" failed!\n");
 		this.failureCount++;
 		
 		int i = 0;
@@ -370,6 +358,7 @@ public class Network {
 				neighbour.add_election(round+1);
 			}
 		}
+		
 		System.out.println();
 	}
 	
@@ -384,7 +373,6 @@ public class Network {
 			System.exit(0);
 		}
 		Network net = new Network();
-		//net.debug = true;
 		
 		net.parseFile(args[0]);
 		

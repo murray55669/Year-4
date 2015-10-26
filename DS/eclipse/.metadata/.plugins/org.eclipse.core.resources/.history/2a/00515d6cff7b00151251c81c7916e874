@@ -89,6 +89,8 @@ public class Node extends Thread {
 		Method that implements the reception of an incoming message by a node
 		*/ 
 		
+		this.incomingMsg.add(m);
+		
 		String[] chunks = m.split(" ");
 		int incId = Integer.parseInt(chunks[1]);
 		

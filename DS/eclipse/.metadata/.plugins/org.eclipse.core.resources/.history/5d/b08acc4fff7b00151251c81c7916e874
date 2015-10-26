@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 /* Class to represent a node. Each node must run on its own thread.*/
 
@@ -12,6 +13,9 @@ public class Node extends Thread {
 	// Neighbouring nodes
 	public List<Node> myNeighbours;
 	private List<Integer> n_ids;
+
+	// Queues for the incoming messages
+	public List<String> incomingMsg;
 	
 	//Timings this node will initiate an election
 	private List<Integer> elections;
@@ -23,6 +27,7 @@ public class Node extends Thread {
 		this.id = id;
 		
 		myNeighbours = new ArrayList<Node>();
+		incomingMsg = new ArrayList<String>();
 		
 		n_ids = new ArrayList<Integer>();
 		elections = new ArrayList<Integer>();
@@ -88,6 +93,8 @@ public class Node extends Thread {
 		/*
 		Method that implements the reception of an incoming message by a node
 		*/ 
+		
+		this.incomingMsg.add(m);
 		
 		String[] chunks = m.split(" ");
 		int incId = Integer.parseInt(chunks[1]);

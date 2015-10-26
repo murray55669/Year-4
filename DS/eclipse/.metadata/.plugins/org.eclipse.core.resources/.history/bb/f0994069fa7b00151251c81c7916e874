@@ -39,8 +39,7 @@ public class RingFinder {
 		if (debug) {
 			System.out.println("Required depth: "+this.requiredDepth);
 		}
-		if (debug)
-			System.out.println();
+		System.out.println();
 		
 		
 		this.history.add(nodes.get(0));
@@ -63,7 +62,7 @@ public class RingFinder {
 			//If the child is the initial node, and the depth has been reached
 			if ((child == this.history.get(0)) && (this.depth == this.requiredDepth)) {
 				//Cycle has been found
-				System.out.println("New ring: "+this.history);
+				System.out.println("SUCCESS: Cycle found.\nRing ordering: "+this.history);
 				this.finished = true;
 			} 
 			

@@ -18,7 +18,7 @@ public class Network {
 
 	private List<Node> nodes;
 	private int round;
-	private int period = 20;
+	private int period = 20; //TODO: revert to 20
 	private Map<Integer, String> msgToDeliver; //Integer for the id of the receiver and String for the message
 	
 	private Map<Integer, List<Integer>> election_lists;
@@ -103,16 +103,6 @@ public class Network {
                     	timer.purge();
                     	System.out.println("LOG:");
                     	System.out.print(log);
-                    	
-                    	PrintWriter out;
-						try {
-							out = new PrintWriter("log.txt");
-							out.println(log);
-	                    	out.close();
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						}
-                    	
                     }
                     
                     round++;
@@ -310,6 +300,7 @@ public class Network {
 		msgToDeliver.clear();
 	}
 		
+	//TODO
 	public synchronized void informNodeFailure(int id) {
 		/*
 		Method to inform the neighbours of a failed node about the event.
@@ -384,7 +375,6 @@ public class Network {
 			System.exit(0);
 		}
 		Network net = new Network();
-		//net.debug = true;
 		
 		net.parseFile(args[0]);
 		

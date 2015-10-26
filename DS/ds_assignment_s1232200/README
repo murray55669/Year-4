@@ -1,0 +1,32 @@
+"summary of specific implementation devisions you have made and a short summary description of the logic you followed for Part B"
+
+IMPLEMENTATION DECISIONS:
+-a node can only send messages to it's next neighbour
+-a DFS algorithm is used to sort the nodes back into a ring if one fails
+    :the nodes on the network, and their neighbours, are sorted by ID (not necessary, I just found it easier to reason about the process with the nodes sorted)
+    :the first node is arbitrarily selected as the "base" 
+    :a path is formed from the base through every other node, only visiting each node once, with the final node visited having the base as a neighbour (thus completing a full ring)
+-nodes queue messages on the way out, as opposed to on the way in (they prepare one message to send)
+-nodes can only send one message per round, as the network will only accept the last message from each node
+
+-when the following conditions are met:
+    :the network is no longer active
+    :the "final round" (where the final election was set to start) has been passed
+    :a leader exists
+    :all failures have occurred
+the simulation quits, producing the log.
+
+-an additional "debug" flag can be set in the Network to print more information to the screen
+
+
+PART B LOGIC:
+-a node will only be "allowed" to fail when:
+    :the network is no longer active
+    :the "final round" (where the final election was set to start) has been passed
+    :a leader exists
+-when a node fails, the following occurs:
+    :the node that failed is removed from the network's list of nodes
+    :the node that failed is removed from all other node's list of neighbours
+    :the entire network is re-organised into a new ring
+    :if the failed node was the leader, the failed node's neighbours are instructed to begin an election upon the next round of communication
+

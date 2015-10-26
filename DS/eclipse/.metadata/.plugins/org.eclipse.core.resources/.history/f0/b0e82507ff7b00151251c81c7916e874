@@ -384,7 +384,6 @@ public class Network {
 			System.exit(0);
 		}
 		Network net = new Network();
-		//net.debug = true;
 		
 		net.parseFile(args[0]);
 		

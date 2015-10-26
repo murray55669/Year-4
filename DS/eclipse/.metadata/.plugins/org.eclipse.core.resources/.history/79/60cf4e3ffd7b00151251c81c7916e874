@@ -103,16 +103,6 @@ public class Network {
                     	timer.purge();
                     	System.out.println("LOG:");
                     	System.out.print(log);
-                    	
-                    	PrintWriter out;
-						try {
-							out = new PrintWriter("log.txt");
-							out.println(log);
-	                    	out.close();
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						}
-                    	
                     }
                     
                     round++;
@@ -384,7 +374,6 @@ public class Network {
 			System.exit(0);
 		}
 		Network net = new Network();
-		//net.debug = true;
 		
 		net.parseFile(args[0]);
 		

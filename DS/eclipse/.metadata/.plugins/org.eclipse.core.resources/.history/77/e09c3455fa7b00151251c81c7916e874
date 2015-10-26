@@ -21,26 +21,22 @@ public class RingFinder {
 		this.nodes = nodes;
 		this.history = new ArrayList<Node>();
 		
-		if (debug)
-			System.out.println("Finding ring in network..");
+		System.out.println("Finding ring in network..");
 		this.depth = 0;
 		this.requiredDepth = this.nodes.size()-1;
 		this.finished = false;
 		
 		//Sort the list of nodes, and the node's lists of neighbours
 		Collections.sort(this.nodes, new NodeIdComparator());
-		if (debug)
-			System.out.println("Nodes: "+this.nodes);
+		System.out.println("Nodes: "+this.nodes);
 		for (Node node : this.nodes) {
 			Collections.sort(node.myNeighbours, new NodeIdComparator());
-			if (debug)
-				System.out.println("Node "+node.getNodeId()+" neighbours: "+node.myNeighbours);
+			System.out.println("Node "+node.getNodeId()+" neighbours: "+node.myNeighbours);
 		}
 		if (debug) {
 			System.out.println("Required depth: "+this.requiredDepth);
 		}
-		if (debug)
-			System.out.println();
+		System.out.println();
 		
 		
 		this.history.add(nodes.get(0));
@@ -63,7 +59,7 @@ public class RingFinder {
 			//If the child is the initial node, and the depth has been reached
 			if ((child == this.history.get(0)) && (this.depth == this.requiredDepth)) {
 				//Cycle has been found
-				System.out.println("New ring: "+this.history);
+				System.out.println("SUCCESS: Cycle found.\nRing ordering: "+this.history);
 				this.finished = true;
 			} 
 			
