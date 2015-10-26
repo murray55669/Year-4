@@ -28,5 +28,5 @@ PART B LOGIC:
     :the node that failed is removed from the network's list of nodes
     :the node that failed is removed from all other node's list of neighbours
     :the entire network is re-organised into a new ring
-    :if the failed node was the leader, the failed node's neighbours are instructed to begin an election upon the next round of communication
+    :if the failed node was the leader, the failed node's neighbours are instructed to begin an election upon the next round of communication (otherwise no further action is taken)
 
