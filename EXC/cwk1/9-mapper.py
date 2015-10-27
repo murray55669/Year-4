@@ -12,7 +12,7 @@ for line in sys.stdin:
     subjects = len(marks)
     total = 0.0
 
-    if subjects >= 4:
+    if subjects > 4:
         for tuple in marks:
             mark = int(tuple.split(",")[1][:-1])
             total += mark
