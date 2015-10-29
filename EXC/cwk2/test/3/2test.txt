@@ -1,0 +1,4 @@
+000:2:{(d1.txt,10) (d5.txt,1)}
+electric:2:{(d1.txt,1), (d3.txt,1)}
+family:1:{(d2.txt,1)}
+horse:2:{(d1.txt,2), (d2.txt,3)}
