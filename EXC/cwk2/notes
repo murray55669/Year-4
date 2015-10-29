@@ -49,12 +49,7 @@ x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyField
 x-rn -input /data/assignments/ex2/task2/logsSmall.txt -output /user/$USER/data/output-2-3-2 -mapper 3-mapper-2.py -reducer 3-reducer-2.py -file 3-mapper-2.py -file 3-reducer-2.py
 x-rn -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D  mapred.text.key.comparator.options=-nr -input /user/$USER/data/output-2-3-2/ -output /user/$USER/data/output-2-3-2-2 -mapper 3-mapper-2-2.py -reducer 3-reducer-2-2.py -file 3-mapper-2-2.py -file 3-reducer-2-2.py -numReduceTasks 1
 
-x-rn -D mapreduce.job.output.key.comparator.class=org.apache.hadoop.mapreduce.lib.partition.KeyFieldBasedComparator \
- -D stream.num.map.output.key.fields=2 \
- -D num.key.fields.for.partition=1 \
- -D mapreduce.partition.keypartitioner.options=-k1,1 \
- -D mapreduce.partition.keycomparator.options='-k1,1 -k2,2n' \
--input /data/assignments/ex2/task2/logsSmall.txt -output /user/$USER/data/output-2-3-3 -mapper 3-mapper-3.py -reducer 3-reducer-3.py -file 3-mapper-3.py -file 3-reducer-3.py -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner
+x-rn -D mapreduce.job.output.key.comparator.class=org.apache.hadoop.mapreduce.lib.partition.KeyFieldBasedComparator -D stream.num.map.output.key.fields=2 -D num.key.fields.for.partition=1 -D mapreduce.partition.keypartitioner.options=-k1,1 -D mapreduce.partition.keycomparator.options='-k1,1 -k2,2n' -input /data/assignments/ex2/task2/logsSmall.txt -output /user/$USER/data/output-2-3-3 -mapper 3-mapper-3.py -reducer 3-reducer-3.py -file 3-mapper-3.py -file 3-reducer-3.py -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner
 
 
 x-fs -rm -r /user/$USER/data/output-2-3-2-2/

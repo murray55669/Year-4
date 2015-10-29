@@ -29,10 +29,10 @@ for line in sys.stdin:
         
         timestamp = timestamp[1:-7]
         pattern = '%d/%b/%Y:%H:%M:%S'
-        epoch = int(time.mktime(time.strptime(timestamp, pattern)))
+        #-14400 seconds is GMT-0400
+        epoch = int(time.mktime(time.strptime(timestamp, pattern)))-14400
         print "{0}\t{1}".format(ip, epoch)
-       
+    
        
     except:
         break
-        #print "Failed on line: "+line

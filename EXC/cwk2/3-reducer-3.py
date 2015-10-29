@@ -1,24 +1,45 @@
 #!/usr/bin/python
 
 import sys
+from time import strftime, gmtime
+
+test = ["11.ts1.mnet.medstroms.se\t807619425",
+        "11.ts1.mnet.medstroms.se\t807619426",
+        "11.ts1.mnet.medstroms.se\t807619428",
+        "11.ts1.mnet.medstroms.se\t807619430",
+        "120.33.med.umich.edu\t807451951"]
 
 cur = ""
-first = 1
-count = 0
+first_line = 1
 
+first = 0
+last = 0
+
+#for line in test:
 for line in sys.stdin:
     line = line.strip()
     
-    if first:
-        first = 0
-        cur = line
+    ip, epoch = line.split("\t")
+    
+    if first_line:
+        first_line = 0
+        cur = ip
         
-    if not (cur == line):
-        print "{0}\t{1}".format(count, cur)
-        cur = line
-        count = 1
+    if not (cur == ip):
+        if (first == last):
+            print "{0}\t{1}".format(ip, strftime('%d/%b/%Y:%H:%M:%S +0000', gmtime(first)))
+        else:
+            print "{0}\t{1} seconds".format(ip, (last-first))
+        
+        cur = ip
+        first = int(epoch)
+        last = int(epoch)
+        
     else:
-        count += 1
+        last = int(epoch)
 
 #handle last line
-print "{0}\t{1}".format(count, cur)
+if (first == last):
+    print "{0}\t{1}".format(ip, strftime('%d/%b/%Y:%H:%M:%S +0000', gmtime(first)))
+else:
+    print "{0}\t{1} seconds".format(ip, (last-first))
