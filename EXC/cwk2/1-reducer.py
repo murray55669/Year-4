@@ -11,6 +11,9 @@ document_names = []
 word_counts = []
 output_tuples = ""
 
+word = ""
+document = ""
+
 for line in sys.stdin:
     #input = '<word>:<document>' pairs
     #output = '<word>:<total documents word appears in>:{(<document>,<count in document>), ..}'

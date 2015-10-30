@@ -4,6 +4,9 @@ import sys
 
 total = 0
 
+views = ""
+id = ""
+
 for line in sys.stdin:
     if total < 10:
         views, id = line.strip().split('\t')
@@ -11,4 +14,3 @@ for line in sys.stdin:
         print "{0},\t{1}".format(id, views)
     
         total += 1
-    

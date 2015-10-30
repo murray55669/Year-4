@@ -9,6 +9,9 @@ answered = ""
 
 first_line = 1
 
+user = ""
+post = ""
+
 for line in sys.stdin:
     user, post = line.strip().split("\t")
     
@@ -17,6 +20,9 @@ for line in sys.stdin:
         
         current_user = user
         current_post = post
+        
+        answered += post+", "
+        count += 1
         
     if current_user == user:
         if not (post == current_post):

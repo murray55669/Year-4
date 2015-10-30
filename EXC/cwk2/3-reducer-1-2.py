@@ -4,6 +4,9 @@ import sys
 
 flag = 1
 
+count = ""
+page = ""
+
 for line in sys.stdin:
     if flag:
         count, page = line.strip().split('\t')

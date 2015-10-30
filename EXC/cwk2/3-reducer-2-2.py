@@ -4,6 +4,9 @@ import sys
 
 total = 0
 
+count = ""
+host = ""
+
 for line in sys.stdin:
     if total < 10:
         count, host = line.strip().split('\t')

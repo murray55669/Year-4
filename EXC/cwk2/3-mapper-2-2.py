@@ -2,6 +2,9 @@
 
 import sys
 
+count= ""
+host = ""
+
 for line in sys.stdin:
     line = line.strip()
     
