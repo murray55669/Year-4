@@ -19,39 +19,55 @@ Object::Object(const glm::mat4 &transform, const Material &material):
 
 /* TODO: Implement */
 bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const { 
-    //Ray has origin + direction
-    //Assuming the sphere is radius 0.2, centred at Position()
-    //b^2 - 4*a*c
     glm::vec3 d = ray.origin;
     glm::vec3 e = ray.direction;
     glm::vec3 s = Position();
-    float r = 0.2f;
+    float r = Radius();
     
     glm::vec3 e_min_s = e-s;
     float d_dot_d = glm::dot(d, d);
     
     float discriminant = pow( (glm::dot((2.0f*d), (e_min_s))) , 2.0f) - 4.0f*(d_dot_d)*(glm::dot((e_min_s), (e_min_s))-pow(r, 2.0f));
 
-    /* The time along the ray that the intersection occurs */
-    float front = glm::dot((-2.0f*d), (e_min_s));
+    float front = -2.0f*glm::dot(d, (e_min_s));
     float discriminant_sqrt = sqrt(discriminant);
     
-    float t1 = (front + discriminant_sqrt) / 2.0f*d_dot_d;
+    /* The time along the ray that the intersection occurs */
+    float t1 = (front + discriminant_sqrt) / (2.0f*d_dot_d);
+    float t2 = (front - discriminant_sqrt) / (2.0f*d_dot_d);
+    
+    bool intersected = false;
     
     if (t1 >= 0.0f) {
-        if (discriminant != 0.0f) {
-            float t2 = (front - discriminant_sqrt) / 2.0f*d_dot_d;
-            //Take the smallest t value; discard results less than zero
-            if (t1 < t2) {
-                info.time = t1;
-            } else if (t2 >= 0.0f) {
-                info.time = t2;
-            }
+        if (t1 < t2) {
+            info.time = t1;
+            intersected = true;
+        }
+        else if (t2 >= 0.0f) {
+            info.time = t2;
+            intersected = true;
         } else {
             info.time = t1;
+            intersected = true;
         }
     }
-    if (info.time >= 0.0f) {
+    
+    /*
+        printf("d: [%f, %f, %f]\n",d[0], d[1], d[2]);
+        printf("e: [%f, %f, %f]\n",e[0], e[1], e[2]);
+        printf("s: [%f, %f, %f]\n",s[0], s[1], s[2]);
+        printf("r: %f\n", r);
+        printf("Discriminant: %f \n", discriminant);
+        
+        printf("sqrt dis: %f\n", discriminant_sqrt);
+        printf("front: %f\n", front);
+        printf("d dot d: %f\n", d_dot_d);
+        printf("time: %f\n", info.time);
+        printf("t1: %f\n", t1);
+        printf("t2: %f\n", t2);
+    */
+    
+    if (intersected) {
         /* The material of the object that was intersected */
         info.material = MaterialPtr();
         /* The position of the intersection in 3D coordinates */
@@ -64,11 +80,7 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
         float n_z = (info.hitPoint[2] - s[2])/r;
         info.normal = glm::normalize(glm::vec3(n_x, n_y, n_z));
         
-        if (discriminant >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
     return false;
 

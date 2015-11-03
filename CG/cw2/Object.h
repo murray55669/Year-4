@@ -21,6 +21,11 @@ class Object {
     int SetMaterial(Material &mat) {
         this->material = mat;
     }
+    int SetPosition(glm::vec3 pos) {
+        transform[3][0] = pos[0];
+        transform[3][1] = pos[1];
+        transform[3][2] = pos[2];
+    }
 
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const { return true; }
     glm::vec3 Position() const { return glm::vec3(transform[3][0], transform[3][1], transform[3][2]); }
@@ -39,7 +44,8 @@ class Object {
 /* TODO: Implement */
 class Sphere : public Object {
   public:
-
+    float radius;
+    float Radius() const { return radius; }
       
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const; //  To figure out if the Ray hit this object.
     

@@ -5,9 +5,12 @@ int windowX = 640;
 int windowY = 480;
 
 //light at (0, 15, 0)
-glm::vec3 lightPos = glm::vec3(-20.0f, 20.0f, 20.0f);
-float lightIntensity = 1.0f;
+glm::vec3 lightPos = glm::vec3(-12.0f, 11.0f, 10.0f);
+glm::vec3 eyePos = glm::vec3(-10.0f, 10.0f, 10.0f);
+glm::vec3 lightIntensity = glm::vec3(1.0f);
 float ambientIntensity = 0.2f;
+
+int shadowCount = 0;
 
 /*
 ** std::vector is a data format similar with list in most of  script language, which allows users to change its size after claiming.
@@ -38,12 +41,27 @@ bool CheckIntersection(const Ray &ray, IntersectInfo &info) {
 	//Runing the function Intersect() of each of the objects would be one of the options.
 	//Each time when intersect happens, the payload of ray will need to be updated, but that's no business of this function.
 	//To make it clear, keyword const prevents the function from changing parameter ray.
+    
+    bool objectHit = false;
+    
     for(unsigned int i = 0; i < objects.size(); ++i) {
+        //ensure objects appear in the correct order - set info intersection with the minimum time (light has constant speed, so time essentially = distance)
+        IntersectInfo tempInfo;
+        
         if(objects[i]) {
-            return objects[i]->Intersect(ray, info);
+            if (objects[i]->Intersect(ray, tempInfo)) {
+                objectHit = true;
+                
+                if (tempInfo.time < info.time) {
+                    info.time = tempInfo.time;
+                    info.hitPoint = tempInfo.hitPoint;
+                    info.normal = tempInfo.normal;
+                    info.material = tempInfo.material;
+                }
+            }
         }
     }
-    return false;
+    return objectHit;
 }
 
 /*
@@ -62,28 +80,50 @@ float CastRay(Ray &ray, Payload &payload) {
 
 	if (CheckIntersection(ray,info)) {
 		/* TODO: Set payload color based on object materials, not direction */
-                //payload.color = ray.direction;
                 // In this case, it's just because we want to show something and we do not want to show the same color for every pixel.
                 // Usually payload.color will be decided by the bounces.
                 
-                //TODO: lighting calculations
-                //unit vector from point -> lightsource (lightsource - point)
-                glm::vec3 lightVec = glm::normalize(glm::vec3(lightPos - info.hitPoint));
-                //normal . lightvec = cos theta
-                float cosTheta = max(0.0f, glm::dot(lightVec, info.normal));
+                //At every intersection, send a shadow ray from the intersection to the light source, to check if the light is blocked
+                bool inShadow = false;
+                //create a ray from hitpoint -> lightsource; if it intersects with another object the hitpoint is in shadow
+                Ray shadowRay(info.hitPoint, glm::normalize(lightPos - info.hitPoint));
+                IntersectInfo shadowInfo;
                 
                 
-                //float diffuseReflectivity = 0.5; //kd
-                //float cosTheta = max(0.0, dot(lightVec, normOut)); //cos(theta)
-                //float diff = lightIntensity * diffuseReflectivity * cosTheta; //Idiff
+                shadowCount = 0;
+                //TODO: this always returns true
+                inShadow = CheckIntersection(shadowRay, shadowInfo);
+                //printf("%f\n", shadowInfo.time);
+                //printf("%i\n", shadowCount);
+                //inShadow = false;
+                //printf("%f\n", info.time);
                 
-                glm::vec3 diff = glm::vec3((lightIntensity*info.material->diffuse[0]*cosTheta), (lightIntensity*info.material->diffuse[1]*cosTheta), (lightIntensity*info.material->diffuse[2]*cosTheta));
-                
-                glm::vec3 ambient = ambientIntensity * info.material->ambient;
-                
-                glm::vec3 specular = glm::vec3(0.0f);
-                
-		payload.color = ambient + diff + specular;
+                if (!inShadow) {
+                    //Phong illumination
+                    //Ambient
+                    glm::vec3 ambient = ambientIntensity * info.material->ambient;
+                    
+                    //Diffuse
+                    glm::vec3 lightVec = glm::normalize(glm::vec3(lightPos - info.hitPoint));
+                    float cosTheta = max(0.0f, glm::dot(lightVec, info.normal));
+                    glm::vec3 diff = glm::vec3((lightIntensity[0]*info.material->diffuse[0]*cosTheta), 
+                                            (lightIntensity[1]*info.material->diffuse[1]*cosTheta), 
+                                            (lightIntensity[2]*info.material->diffuse[2]*cosTheta));
+
+                    //Specular                
+                    glm::vec3 eyeVec = glm::normalize(glm::vec3(eyePos - info.hitPoint));
+                    float cosAlpha = max(0.0f, glm::dot((2.0f * info.normal * (glm::dot(lightVec, info.normal)) - lightVec), eyeVec));
+                    glm::vec3 specular = glm::vec3((lightIntensity[0]*info.material->specular[0]*pow(cosAlpha, info.material->glossiness)), 
+                                                (lightIntensity[1]*info.material->specular[1]*pow(cosAlpha, info.material->glossiness)), 
+                                                (lightIntensity[2]*info.material->specular[2]*pow(cosAlpha, info.material->glossiness))
+                                                );
+                    
+                    //Final pixel colour
+                    payload.color = ambient + diff + specular;
+                } else {
+                    payload.color = glm::vec3(0.2f);
+                }
+                payload.numBounces += 1;
                 
 		return info.time;
 	}
@@ -136,7 +176,7 @@ void Render()
 				glColor3f(payload.color.x,payload.color.y,payload.color.z);
 			} 
 			else {
-				glColor3f(0.4,0.4,0.4);
+				glColor3f(0.0f, 0.0f, 0.0f);
 			}
 
 			glVertex3f(pixelX,pixelY,0.0f);
@@ -165,17 +205,29 @@ int main(int argc, char **argv) {
 	//	This part is related to function CheckIntersection().
 	//	Being added into scene means that the object will take part in the intersection checking, so try to make these two connected to each other.
         
-        Material mat1;
-        mat1.diffuse = glm::vec3(0.6f, 0.0f, 0.0f);
-        mat1.specular = glm::vec3(0.5f);
-        mat1.glossiness = 13.0f;
+        Material yellow;
+        yellow.diffuse = glm::vec3(0.8f, 0.8f, 0.0f);
+        yellow.specular = glm::vec3(0.6f);
+        yellow.glossiness = 10.0f;
+        
+        Material red;
+        red.diffuse = glm::vec3(0.8f, 0.0f, 0.0f);
+        red.specular = glm::vec3(0.6f);
+        red.glossiness = 10.0f;
         
         //Plane* plane = new Plane();
         Sphere* sphere = new Sphere();
-        sphere->SetMaterial(mat1);
+        sphere->SetMaterial(yellow);
+        sphere->SetPosition(glm::vec3(-5.0f,5.0f,5.0f));
+        sphere->radius = 0.6f;
+        Sphere* sphere2 = new Sphere();
+        sphere2->SetMaterial(red);
+        sphere2->SetPosition(glm::vec3(0.0f,-0.25f,-0.5f));
+        sphere2->radius = 0.3f;
         //Triangle* triangle = new Triangle()
         
         //objects.push_back(plane);
+        //objects.push_back(sphere2);
         objects.push_back(sphere);
         //objects.push_back(triangle);
         
