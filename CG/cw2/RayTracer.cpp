@@ -5,12 +5,13 @@ int windowX = 640;
 int windowY = 480;
 
 //light at (0, 15, 0)
-glm::vec3 lightPos = glm::vec3(-12.0f, 11.0f, 10.0f);
+glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 eyePos = glm::vec3(-10.0f, 10.0f, 10.0f);
 glm::vec3 lightIntensity = glm::vec3(1.0f);
 float ambientIntensity = 0.2f;
+int bounceLimit = 3;
 
-int shadowCount = 0;
+Object* shadowRaySource;
 
 /*
 ** std::vector is a data format similar with list in most of  script language, which allows users to change its size after claiming.
@@ -44,23 +45,41 @@ bool CheckIntersection(const Ray &ray, IntersectInfo &info) {
     
     bool objectHit = false;
     
-    for(unsigned int i = 0; i < objects.size(); ++i) {
+    for(unsigned int i = 0; i < objects.size(); i++) {
         //ensure objects appear in the correct order - set info intersection with the minimum time (light has constant speed, so time essentially = distance)
         IntersectInfo tempInfo;
         
-        if(objects[i]) {
-            if (objects[i]->Intersect(ray, tempInfo)) {
-                objectHit = true;
+        if (objects[i]->Intersect(ray, tempInfo)) {
+            objectHit = true;
+            
+            if (tempInfo.time < info.time) {
+                info.time = tempInfo.time;
+                info.hitPoint = tempInfo.hitPoint;
+                info.normal = tempInfo.normal;
+                info.material = tempInfo.material;
                 
-                if (tempInfo.time < info.time) {
-                    info.time = tempInfo.time;
-                    info.hitPoint = tempInfo.hitPoint;
-                    info.normal = tempInfo.normal;
-                    info.material = tempInfo.material;
-                }
+                shadowRaySource = objects[i];
+            }
+        }
+
+    }
+    return objectHit;
+}
+
+bool CheckShadow(const Ray &shadowRay) {
+    bool objectHit = false;
+    
+    IntersectInfo shadowInfo;
+
+    for(unsigned int i = 0; i < objects.size(); i++) {
+        
+        if(objects[i] != shadowRaySource) {
+            if (objects[i]->Intersect(shadowRay, shadowInfo)) {
+                objectHit = true;
             }
         }
     }
+    
     return objectHit;
 }
 
@@ -85,20 +104,16 @@ float CastRay(Ray &ray, Payload &payload) {
                 
                 //At every intersection, send a shadow ray from the intersection to the light source, to check if the light is blocked
                 bool inShadow = false;
-                //create a ray from hitpoint -> lightsource; if it intersects with another object the hitpoint is in shadow
+                //create a ray from hitpoint -> lightsource; if it intersects with an object the hitpoint is in shadow
                 Ray shadowRay(info.hitPoint, glm::normalize(lightPos - info.hitPoint));
-                IntersectInfo shadowInfo;
                 
-                
-                shadowCount = 0;
-                //TODO: this always returns true
-                inShadow = CheckIntersection(shadowRay, shadowInfo);
-                //printf("%f\n", shadowInfo.time);
-                //printf("%i\n", shadowCount);
+                //TODO: this always returns true?!
+                inShadow = CheckShadow(shadowRay);
+                //printf("n: %f\n", info.time);
+                //printf("s: %f\n", shadowInfo.time);
                 //inShadow = false;
-                //printf("%f\n", info.time);
                 
-                if (!inShadow) {
+                if (not(inShadow)) {
                     //Phong illumination
                     //Ambient
                     glm::vec3 ambient = ambientIntensity * info.material->ambient;
@@ -118,12 +133,15 @@ float CastRay(Ray &ray, Payload &payload) {
                                                 (lightIntensity[2]*info.material->specular[2]*pow(cosAlpha, info.material->glossiness))
                                                 );
                     
-                    //Final pixel colour
-                    payload.color = ambient + diff + specular;
+                //Initial pixel colour (with no reflection added)
+                payload.color = ambient + diff + specular;
                 } else {
-                    payload.color = glm::vec3(0.2f);
+                    //if in shadow, just use ambient
+                    payload.color = ambientIntensity * info.material->ambient;
                 }
                 payload.numBounces += 1;
+                
+                //TODO: calculate reflection stuff
                 
 		return info.time;
 	}
@@ -215,20 +233,40 @@ int main(int argc, char **argv) {
         red.specular = glm::vec3(0.6f);
         red.glossiness = 10.0f;
         
-        //Plane* plane = new Plane();
+        Material blue;
+        blue.diffuse = glm::vec3(0.57f, 0.76f, 0.83f);
+        blue.specular = glm::vec3(0.6f);
+        blue.glossiness = 10.0f;
+        
+        Plane* plane = new Plane();
+        plane->SetMaterial(blue);
+        plane->SetPosition(glm::vec3(-6.0f, 5.0f, 5.0f));
+        plane->normal = (glm::normalize(glm::vec3(-1.0f, 0.0f, 0.0f)));
+        
+        Plane* plane2 = new Plane();
+        plane2->SetMaterial(red);
+        plane->SetPosition(glm::vec3(-6.2f, 5.0f, 5.0f));
+        plane2->normal = (glm::normalize(glm::vec3(-1.0f, 0.2f, 0.0f)));
+        
         Sphere* sphere = new Sphere();
         sphere->SetMaterial(yellow);
         sphere->SetPosition(glm::vec3(-5.0f,5.0f,5.0f));
         sphere->radius = 0.6f;
+        
         Sphere* sphere2 = new Sphere();
         sphere2->SetMaterial(red);
-        sphere2->SetPosition(glm::vec3(0.0f,-0.25f,-0.5f));
-        sphere2->radius = 0.3f;
-        //Triangle* triangle = new Triangle()
+        sphere2->SetPosition(glm::vec3(-5.5f,5.0f,5.0f));
+        sphere2->radius = 0.4f;
         
-        //objects.push_back(plane);
-        //objects.push_back(sphere2);
+        Triangle* triangle = new Triangle();
+        triangle->SetMaterial(red);
+        triangle->SetPoints(glm::vec3(-5.0f, 5.0f, 5.0f), glm::vec3(-5.5f, 5.0f, 5.0f), glm::vec3(-4.5f, 5.5f, 5.0f));
+        plane->normal = (glm::normalize(glm::vec3(-1.0f, 0.0f, 0.0f)));
+        
+        //objects.push_back(plane);        
+        //objects.push_back(plane2);
         objects.push_back(sphere);
+        objects.push_back(sphere2);
         //objects.push_back(triangle);
         
 

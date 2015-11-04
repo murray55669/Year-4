@@ -53,12 +53,33 @@ class Sphere : public Object {
 
 /* TODO: Implement */
 class Plane : public Object {
-  public:
-    virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
+    public:
+        glm::vec3 normal;
+        glm::vec3 Normal() const { return normal; }
+        
+        virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
 };
 
 /* TODO: Implement */
 class Triangle : public Object {
   public:
+      glm::vec3 normal;
+      glm::vec3 Normal() const { return normal; }
+      
+      glm::vec3 p1;
+      glm::vec3 p2;
+      glm::vec3 p3;
+      
+      glm::vec3 P1() const { return p1; }
+      glm::vec3 P2() const { return p2; }
+      glm::vec3 P3() const { return p3; }
+      
+      int SetPoints(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3) {
+            p1 = pos1;
+            p2 = pos2;
+            p3 = pos3;
+      }
+      
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
+    float BaryF(int a, int b, glm::vec2 points2D[], glm::vec2 hP) const;
 };
