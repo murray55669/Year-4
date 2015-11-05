@@ -6,6 +6,7 @@
 #include <cmath>
 
 class Material;
+class Object;
 
 class Ray {
   public:
@@ -30,7 +31,8 @@ class IntersectInfo {
       time(std::numeric_limits<float>::infinity()),
       hitPoint(0.0f),
       normal(0.0f),
-      material(NULL)
+      material(NULL),
+      objectHit(NULL)
     {}
     // It allows you to init variables in another way. Equal to:
     // IntersectInfo(){
@@ -48,6 +50,8 @@ class IntersectInfo {
     float time;
     /* The material of the object that was intersected */
     const Material *material;
+    //the object hit
+    const Object* objectHit;
 
     // Reloading "operator =" for class IntersectInfo
     IntersectInfo &operator =(const IntersectInfo &rhs) {
@@ -55,6 +59,7 @@ class IntersectInfo {
       material = rhs.material;
       normal = rhs.normal;
       time = rhs.time;
+      objectHit = rhs.objectHit;
       return *this;
     }
 };
@@ -63,10 +68,14 @@ class Payload {//In this case, it stands for the light particle shot from a cert
   public:
     Payload():
       color(0.0f),
-      numBounces(0) 
+      numBounces(0),
+      lastObjectHit(NULL),
+      refractiveIndex(1)
     {}
     
     glm::vec3 color;//  Each time, intersecting with something will change the color of this Payload.
     int numBounces; //  To make the calculation not so expensive, Ray hits more times than a certain number of bounces will not be taken into consideration.
+    const Object* lastObjectHit;
+    float refractiveIndex;
 };
 

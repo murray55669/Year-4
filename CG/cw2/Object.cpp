@@ -6,7 +6,10 @@ Material::Material():
     ambient(1.0f),
     diffuse(1.0f),
     specular(1.0f),
-    glossiness(10.0f)
+    glossiness(10.0f),
+    reflection(0.0f),
+    refraction(0.0f),
+    refractiveIndex(0.0f)
   {}
 
 Object::Object(const glm::mat4 &transform, const Material &material):
@@ -19,7 +22,7 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     glm::vec3 d = ray.direction;
     glm::vec3 e = ray.origin;
     glm::vec3 s = Position();
-    float r = Radius();
+    float r = radius;
     
     glm::vec3 e_min_s = e-s;
     float d_dot_d = glm::dot(d, d);
@@ -48,14 +51,13 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     }
     
     if (intersected) {
-        // The material of the object that was intersected 
         info.material = MaterialPtr();
-        // The position of the intersection in 3D coordinates 
         info.hitPoint = ray(info.time);
         
-        // The normal vector of the surface at the point of the intersection
         //N = ((x - cx)/R, (y - cy)/R, (z - cz)/R) ** skip the /R as we normalize anyway
         info.normal = glm::normalize(info.hitPoint - s);
+        
+        info.objectHit = thisObject();
         
         return true;
     }
@@ -86,6 +88,8 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
             info.hitPoint = ray(info.time);
             
             info.normal = n;
+            
+            info.objectHit = thisObject();
             
             return true;
         }
@@ -155,6 +159,8 @@ bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const {
                 info.hitPoint = hitPoint;
                 
                 info.normal = n;
+                
+                info.objectHit = thisObject();
                 
                 return true;    
             }

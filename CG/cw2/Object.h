@@ -10,6 +10,8 @@ class Material {
     glm::vec3 specular;	
     float glossiness; //Specular intensity
     float reflection;
+    float refraction;
+    float refractiveIndex;
 };
 
 // The father class of all the objects displayed. Some features would be shared between objects, others will be overloaded.
@@ -26,6 +28,7 @@ class Object {
         transform[3][1] = pos[1];
         transform[3][2] = pos[2];
     }
+    const Object* thisObject() const { return this; }
 
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const { return true; }
     glm::vec3 Position() const { return glm::vec3(transform[3][0], transform[3][1], transform[3][2]); }
@@ -40,12 +43,10 @@ class Object {
 //  Actually, it's also possible to use some other objects, but those geometries are easy to describe and the intersects are easier to calculate.
 //  Try something else if you like, for instance, a box?
 
-// IMPLEMENTED IN Object.cpp ??
 /* TODO: Implement */
 class Sphere : public Object {
   public:
     float radius;
-    float Radius() const { return radius; }
       
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const; //  To figure out if the Ray hit this object.
     
