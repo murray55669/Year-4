@@ -62,24 +62,22 @@ class Plane : public Object {
 
 /* TODO: Implement */
 class Triangle : public Object {
-  public:
-      glm::vec3 normal;
-      glm::vec3 Normal() const { return normal; }
+    public:
+        glm::vec3 Normal() const { 
+            return glm::normalize(glm::cross((points[0] - points[1]), (points[2] - points[0])));
+        }
+        
+        glm::vec3 points [3];
       
-      glm::vec3 p1;
-      glm::vec3 p2;
-      glm::vec3 p3;
-      
-      glm::vec3 P1() const { return p1; }
-      glm::vec3 P2() const { return p2; }
-      glm::vec3 P3() const { return p3; }
-      
-      int SetPoints(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3) {
-            p1 = pos1;
-            p2 = pos2;
-            p3 = pos3;
-      }
-      
-    virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
-    float BaryF(int a, int b, glm::vec2 points2D[], glm::vec2 hP) const;
+        glm::vec3 P(int i) const { return points[i]; }
+
+        int SetPoints(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3) {
+            points[0] = pos1;
+            points[1] = pos2;
+            points[2] = pos3;
+        }
+    
+        virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
+        float BaryF(glm::vec2 p, glm::vec2 q, glm::vec2 z) const;
+        int MaxNormalIndex() const;
 };

@@ -66,14 +66,10 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
 
 /* TODO: Implement */
 bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const { 
-    
-    //check d.n
     glm::vec3 d = ray.direction;
     glm::vec3 e = ray.origin;
     glm::vec3 s = Position();
     glm::vec3 n = Normal();
-    
-    //printf("[%f, %f, %f]\n", n[0], n[1], n[2]);
     
     float d_dot_n = glm::dot(d, n);
     
@@ -101,67 +97,98 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
 
 /* TODO: Implement */
 bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const { 
-//check d.n
-    glm::vec3 d = ray.origin;
-    glm::vec3 e = ray.direction;
-    glm::vec3 p1 = P1();
-    glm::vec3 p2 = P2();
-    glm::vec3 p3 = P3();
-    
-    glm::vec2 hP; //(x, y)
-    glm::vec2 points2D [3];//(x0, y0), (x1, y1), (x2, y2)
-    
+   
+    glm::vec3 d = ray.direction;
+    glm::vec3 e = ray.origin;
     glm::vec3 n = Normal();
     
     float d_dot_n = glm::dot(d, n);
     
+    glm::vec2 hP; //(x, y)
+    glm::vec2 points2D [3];//(x0, y0), (x1, y1), (x2, y2)
+
+    
     //if triangle is not parallel to ray
     if (!(d_dot_n == 0.0f)) {
-        float time = (glm::dot((p1-e), n)) / (d_dot_n); //time ray hits plane extension of triangle
-        glm::vec3 hitPoint = ray(time); //point where "plane" is hit
         
-        //remove one co-ordinate and check if hitpoint is within triangle using barycentric co-ords
-        if ((n[0] >= n[1]) && (n[1] >= n[2])) {
-            hP = glm::vec2(hitPoint[1], hitPoint[2]);
-            points2D[0] = glm::vec2(p1[1], p1[2]);
-            points2D[1] = glm::vec2(p2[1], p2[2]);
-            points2D[2] = glm::vec2(p3[1], p3[2]);
-        } else if ((n[2] >= n[1]) && (n[1] >= n[0])) {
-            hP = glm::vec2(hitPoint[0], hitPoint[1]);
-            points2D[0] = glm::vec2(p1[0], p1[1]);
-            points2D[1] = glm::vec2(p2[0], p2[1]);
-            points2D[2] = glm::vec2(p3[0], p3[1]);
-        } else {
-            hP = glm::vec2(hitPoint[0], hitPoint[2]);
-            points2D[0] = glm::vec2(p1[0], p1[2]);
-            points2D[1] = glm::vec2(p2[0], p2[2]);
-            points2D[2] = glm::vec2(p3[0], p3[2]);
-        }
+        float time = (glm::dot((points[0]-e), n)) / (d_dot_n);
         
-        float alpha = BaryF(1, 2, points2D, hP) / BaryF(1, 2, points2D, points2D[0]);
-        float beta = BaryF(2, 0, points2D, hP) / BaryF(1, 2, points2D, points2D[1]);
-        float gamma = BaryF(0, 1, points2D, hP) / BaryF(1, 2, points2D, points2D[2]);
+        if (time > 0.0f) {
         
-        if ((alpha >=0 && alpha <= 1) && (beta >= 0 && beta <= 1) && (gamma >= 0 && gamma <= 1)) {
-            info.time = time;
+            glm::vec3 hitPoint = ray(time);
             
-            info.material = MaterialPtr();
-            info.hitPoint = hitPoint;
+            //project onto a plane
+            int maxN = MaxNormalIndex();
+            if (maxN == 0) {
+                hP = glm::vec2(hitPoint.y, hitPoint.z);
+                for (int i = 0; i < 3; ++i) {
+                    points2D[i] = glm::vec2(points[i].y, points[i].z);
+                }
+            } else if (maxN == 1) {
+                hP = glm::vec2(hitPoint.x, hitPoint.z);
+                for (int i = 0; i < 3; ++i) {
+                    points2D[i] = glm::vec2(points[i].x, points[i].z);
+                }
+            } else {
+                hP = glm::vec2(hitPoint.x, hitPoint.y);
+                for (int i = 0; i < 3; ++i) {
+                    points2D[i] = glm::vec2(points[i].x, points[i].y);
+                }
+            }
             
-            info.normal = n;
+            float a1 = BaryF(points2D[1], points2D[2], hP);
+            float a2 = BaryF(points2D[1], points2D[2], points2D[0]);
+            float b1 = BaryF(points2D[2], points2D[0], hP);
+            float b2 = BaryF(points2D[2], points2D[0], points2D[1]);
+            float g1 = BaryF(points2D[0], points2D[1], hP);
+            float g2 = BaryF(points2D[0], points2D[1], points2D[2]);
+            float alpha = a1/a2; 
+            float beta =  b1/b2; 
+            float gamma = g1/g2 ;
+
             
-            return true;    
+            //test for point being within triangle using barycentric coordinates
+            if ((alpha >= 0 && alpha <= 1) && (beta >= 0 && beta <= 1) && (gamma >= 0 && gamma <= 1)) {
+                info.time = time;
+                
+                info.material = MaterialPtr();
+                info.hitPoint = hitPoint;
+                
+                info.normal = n;
+                
+                return true;    
+            }
         }
         
     } 
     
-    return false; 
+    return false;
+    
 }
 
-float Triangle::BaryF(int a, int b, glm::vec2 points2D[], glm::vec2 hP) const {
-    float fab;
+float Triangle::BaryF(glm::vec2 p, glm::vec2 q, glm::vec2 z) const {
+    float f;
     
-    fab = ((points2D[a][1] - points2D[b][1])*hP[0]) + ((points2D[b][0] - points2D[a][0])*hP[1]) + (points2D[a][0] * points2D[b][1]) - (points2D[b][0] * points2D[a][1]);
+    //f = ((points2D[q].y-points2D[p].y)*point.x) - ((points2D[q].x-points2D[p].x)*point.y) + (points2D[q].x*points2D[p].y) - (points2D[q].y*points2D[p].x);
+    f = (q.y-p.y)*z.x - (q.x-p.x)*z.y + q.x*p.y - q.y*p.x;
     
-    return fab;
+    return f;
+}
+int Triangle::MaxNormalIndex() const {
+    glm::vec3 n = Normal();
+    n = glm::vec3(abs(n.x), abs(n.y), abs(n.z));
+    
+    //x is the largest
+    if ((n.x >= n.y) && (n.y >= n.z)) {
+        return 0;
+    }
+    //y is the largest
+    else if ((n.y >= n.x) && (n.x >= n.z)) {
+        return 1;
+    }
+    //z is the largest
+    else {
+        return 2;
+    }
+        
 }
