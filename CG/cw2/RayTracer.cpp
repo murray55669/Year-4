@@ -104,11 +104,11 @@ float CastRay(Ray &ray, Payload &payload) {
                 
                 //At every intersection, send a shadow ray from the intersection to the light source, to check if the light is blocked
                 //create a ray from hitpoint -> lightsource; if it intersects with an object the hitpoint is in shadow
-                glm::vec3 shadowNormal = glm::normalize(lightPos - info.hitPoint);
-                Ray shadowRay(info.hitPoint, shadowNormal);
+                glm::vec3 shadowDir = glm::normalize(lightPos - info.hitPoint);
+                Ray shadowRay(info.hitPoint, shadowDir);
                 //ensure object doesn't self-shadow due to floating point innaccuracies
                 glm::vec3 floatOffsetShadow = shadowRay(epsilon);
-                shadowRay = Ray(floatOffsetShadow, shadowNormal);
+                shadowRay = Ray(floatOffsetShadow, shadowDir);
                 bool inShadow = false;
                 inShadow = CheckShadow(shadowRay);
                 
@@ -152,42 +152,46 @@ float CastRay(Ray &ray, Payload &payload) {
                    
                 //Refraction
                 if (info.material->refraction > 0) {
-                    float refractionRatio;
+                    float r;
                     //leaving an object (sphere)
                     if (payload.lastObjectHit == info.objectHit) {
-                        refractionRatio = payload.refractiveIndex; //should be payload.index/air.index, but air.index is 1
+                        r = payload.refractiveIndex; //should be payload.index/air.index, but air.index is 1
                         
                         payload.lastObjectHit = NULL;
                         payload.refractiveIndex = 1;
                     } 
                     //entering an object
                     else {
-                        refractionRatio = payload.refractiveIndex / info.material->refractiveIndex;
+                        r = payload.refractiveIndex / info.material->refractiveIndex;
                         
                         payload.lastObjectHit = info.objectHit;
                         payload.refractiveIndex = info.material->refractiveIndex;
                     }
                     
                     //check for total internal reflection
-                    //float radicand = stuff
-                    /*
-                     * if (radicand >= 0) {
-                     *  dir = stuff
-                     * 
-                     * Ray refraction = Ray(info.hitPoint, dir);
-                     * Ray offset = Rat(refraction(epsilon), dir);
-                     * 
-                     * payload.refractiveIndex = info.material->refractiveIndex;
-                     * refraction = info.material->refraction;
-                     * 
-                     * CastRay(offset, payload);
-                     * 
-                     * } else {
-                     *  refraction = 0;
-                     * }
-                     * 
-                     * payload.color = info.material->reflection * payload.color + (1-info.material->reflection) * initColour + refraction * payload.color;
-                     */
+                    //"Total internal reflection is indicated by a negative radicand" ** radicand = 1-r^2(1-c^2); c = -n.l; l = (normalized) incident ray
+                    glm::vec3 l = glm::normalize(ray.direction);
+                    float c = -1.0f * glm::dot(info.normal, l);
+                    float radicand = 1.0f - (pow(r, 2) * (1.0f - pow(c, 2)));
+                    float refractionFactor;
+                    
+                    if (radicand >= 0.0f) {
+                        glm::vec3 refractionDir = (r*l) + (((r*c) - sqrt(radicand))*info.normal);
+
+                        Ray refractionRay = Ray(info.hitPoint, refractionDir);
+                        Ray refractionRayOffset = Ray(refractionRay(epsilon), refractionDir);
+
+                        payload.refractiveIndex = info.material->refractiveIndex;
+                        refractionFactor = info.material->refraction;
+
+                        CastRay(refractionRayOffset, payload);
+
+                    } else {
+                        refractionFactor = 0;
+                    }
+
+                    payload.color = info.material->reflection * payload.color + (1-info.material->reflection) * initColour + refractionFactor * payload.color;
+                     
                 } else {
                     payload.color = info.material->reflection * payload.color + (1-info.material->reflection) * initColour;
                 }
@@ -285,8 +289,8 @@ int main(int argc, char **argv) {
         red.specular = glm::vec3(0.6f);
         red.ambient = glm::vec3(0.2f);
         red.glossiness = 10.0f;
-        red.reflection = 0.5f;
-        red.refraction = 0.5f;
+        red.reflection = 0.0f;
+        red.refraction = 1.0f;
         red.refractiveIndex = 1.5f;
         
         Material blue;
@@ -318,7 +322,7 @@ int main(int argc, char **argv) {
         
         Sphere* sphere2 = new Sphere();
         sphere2->SetMaterial(red);
-        sphere2->SetPosition(glm::vec3(-5.5f,0.5f,1.0f));
+        sphere2->SetPosition(glm::vec3(-5.5f,3.0f,4.0f));
         sphere2->radius = 0.8f;
         
         Triangle* triangle = new Triangle();
