@@ -68,14 +68,10 @@ class Payload {//In this case, it stands for the light particle shot from a cert
   public:
     Payload():
       color(0.0f),
-      numBounces(0),
-      lastObjectHit(NULL),
-      refractiveIndex(1)
+      numBounces(0)
     {}
     
     glm::vec3 color;//  Each time, intersecting with something will change the color of this Payload.
     int numBounces; //  To make the calculation not so expensive, Ray hits more times than a certain number of bounces will not be taken into consideration.
-    const Object* lastObjectHit;
-    float refractiveIndex;
 };
 

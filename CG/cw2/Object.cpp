@@ -17,7 +17,6 @@ Object::Object(const glm::mat4 &transform, const Material &material):
     material(material)
   {}
 
-/* TODO: Implement */
 bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const { 
     glm::vec3 d = ray.direction;
     glm::vec3 e = ray.origin;
@@ -66,7 +65,6 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
 }
 // Function glm::dot(x,y) will return the dot product of parameters. (It's the inner product of vectors)
 
-/* TODO: Implement */
 bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const { 
     glm::vec3 d = ray.direction;
     glm::vec3 e = ray.origin;
@@ -99,7 +97,6 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
     
 }
 
-/* TODO: Implement */
 bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const { 
    
     glm::vec3 d = ray.direction;
@@ -175,7 +172,6 @@ bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const {
 float Triangle::BaryF(glm::vec2 p, glm::vec2 q, glm::vec2 z) const {
     float f;
     
-    //f = ((points2D[q].y-points2D[p].y)*point.x) - ((points2D[q].x-points2D[p].x)*point.y) + (points2D[q].x*points2D[p].y) - (points2D[q].y*points2D[p].x);
     f = (q.y-p.y)*z.x - (q.x-p.x)*z.y + q.x*p.y - q.y*p.x;
     
     return f;

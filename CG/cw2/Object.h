@@ -43,7 +43,6 @@ class Object {
 //  Actually, it's also possible to use some other objects, but those geometries are easy to describe and the intersects are easier to calculate.
 //  Try something else if you like, for instance, a box?
 
-/* TODO: Implement */
 class Sphere : public Object {
   public:
     float radius;
@@ -52,7 +51,6 @@ class Sphere : public Object {
     
 };
 
-/* TODO: Implement */
 class Plane : public Object {
     public:
         glm::vec3 normal;
@@ -61,7 +59,6 @@ class Plane : public Object {
         virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
 };
 
-/* TODO: Implement */
 class Triangle : public Object {
     public:
         glm::vec3 Normal() const { 

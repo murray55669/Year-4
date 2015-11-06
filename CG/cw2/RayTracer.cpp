@@ -10,6 +10,11 @@ int bounceLimit = 10;
 float epsilon = 0.01f;
 glm::vec3 eyePos = glm::vec3(-10, 10, 10);
 
+//refraction - keep track of last object hit, and the refractive index of that object
+//Air: object = NULL, index = 1
+const Object* lastObjectHit = NULL;
+float lastObjectRefractiveIndex = 1.0f;
+
 /*
 ** std::vector is a data format similar with list in most of  script language, which allows users to change its size after claiming.
 * 
@@ -27,7 +32,6 @@ void cleanup() {
 }
 
 /*
-** TODO: Function for testing intersection against all the objects in the scene
 **
 ** If an object is hit then the IntersectionInfo object should contain
 ** the information about the intersection. Returns true if any object is hit, 
@@ -35,10 +39,6 @@ void cleanup() {
 ** 
 */
 bool CheckIntersection(const Ray &ray, IntersectInfo &info) {
-	//You need to add your own solution for this funtion, to replace the 'return true'.	
-	//Runing the function Intersect() of each of the objects would be one of the options.
-	//Each time when intersect happens, the payload of ray will need to be updated, but that's no business of this function.
-	//To make it clear, keyword const prevents the function from changing parameter ray.
     
     bool objectHit = false;
     
@@ -82,7 +82,6 @@ bool CheckShadow(const Ray &shadowRay) {
 }
 
 /*
-** TODO: Recursive ray-casting function. It might be the most important Function in this demo cause it's the one decides the color of pixels.
 **
 ** This function is called for each pixel, and each time a ray is reflected/used 
 ** for shadow testing. The Payload object can be used to record information about
@@ -90,15 +89,11 @@ bool CheckShadow(const Ray &shadowRay) {
 ** This function should return either the time of intersection with an object
 ** or minus one to indicate no intersection.
 */
-//	The function CastRay() will have to deal with light(), shadow() and reflection(). The impement of them would also be important.
 float CastRay(Ray &ray, Payload &payload) {
 
 	IntersectInfo info;
 
 	if (CheckIntersection(ray,info)) {
-		/* TODO: Set payload color based on object materials, not direction */
-                // In this case, it's just because we want to show something and we do not want to show the same color for every pixel.
-                // Usually payload.color will be decided by the bounces.
                 
                 payload.numBounces += 1;
                 
@@ -121,7 +116,7 @@ float CastRay(Ray &ray, Payload &payload) {
                 if (payload.numBounces < bounceLimit) {
                     CastRay(reflectRay, payload);
                 }
-                //save the reflected colour
+                //save the reflected colour, as the payload could be updated with refracted values
                 glm::vec3 reflectedColour = info.material->reflection * payload.color;
                 
                 
@@ -153,20 +148,20 @@ float CastRay(Ray &ray, Payload &payload) {
                    
                 //Refraction
                 if (info.material->refraction > 0) {
-                    float r;
+                    float r; //r = n1/n2 - ratio of refractive indices
                     //leaving an object (sphere)
-                    if (payload.lastObjectHit == info.objectHit) {
-                        r = payload.refractiveIndex; //should be payload.index/air.index, but air.index is 1
+                    if (lastObjectHit == info.objectHit) {
+                        r = lastObjectRefractiveIndex; //should be lastObjectRefIndex/airIndex, but airIndex is 1
                         
-                        payload.lastObjectHit = NULL;
-                        payload.refractiveIndex = 1;
+                        lastObjectHit = NULL;
+                        lastObjectRefractiveIndex = 1;
                     } 
                     //entering an object
                     else {
-                        r = payload.refractiveIndex / info.material->refractiveIndex;
+                        r = lastObjectRefractiveIndex / info.material->refractiveIndex;
                         
-                        payload.lastObjectHit = info.objectHit;
-                        payload.refractiveIndex = info.material->refractiveIndex;
+                        lastObjectHit = info.objectHit;
+                        lastObjectRefractiveIndex = info.material->refractiveIndex;
                     }
                     
                     //check for total internal reflection
@@ -174,7 +169,6 @@ float CastRay(Ray &ray, Payload &payload) {
                     glm::vec3 l = glm::normalize(ray.direction);
                     float c = -1.0f * glm::dot(info.normal, l);
                     float radicand = 1.0f - (pow(r, 2) * (1.0f - pow(c, 2)));
-                    float refractionFactor;
                     
                     if (radicand >= 0.0f) {
                         glm::vec3 refractionDir = (r*l) + (((r*c) - sqrt(radicand))*info.normal);
@@ -182,26 +176,25 @@ float CastRay(Ray &ray, Payload &payload) {
                         Ray refractionRay = Ray(info.hitPoint, refractionDir);
                         Ray refractionRayOffset = Ray(refractionRay(epsilon), refractionDir);
 
-                        payload.refractiveIndex = info.material->refractiveIndex;
-                        refractionFactor = info.material->refraction;
+                        lastObjectRefractiveIndex = info.material->refractiveIndex;
 
                         CastRay(refractionRayOffset, payload);
-
+                        
+                        payload.color = reflectedColour + (1-info.material->reflection) * initColour + info.material->refraction * payload.color;
                     } else {
-                        refractionFactor = 0;
+                        //No refraction
+                        payload.color = reflectedColour + (1-info.material->reflection) * initColour;
                     }
-                    //printf("%f\n", refractionFactor);
-                    //printf("[%f, %f, %f]\n", payload.color.x, payload.color.y, payload.color.z);
-                    payload.color = reflectedColour + (1-info.material->reflection) * initColour + refractionFactor * payload.color;
-                     
                 } else {
                     payload.color = reflectedColour * payload.color + (1-info.material->reflection) * initColour;
                 }
                 
+                lastObjectHit = NULL;
+                lastObjectRefractiveIndex = 1.0f;
                 
 		return info.time;
 	}
-	else{
+	else {
 		payload.color = glm::vec3(0.0f);
 		// The Ray from camera hits nothing so nothing will be seen. In this case, the pixel should be totally black.
 		return -1.0f;	
@@ -274,10 +267,6 @@ int main(int argc, char **argv) {
 	//Set the function demoDisplay (defined above) as the function that
 	//is called when the window must display.
 	glutDisplayFunc(Render);
-  
-	//	TODO: Add Objects to scene
-	//	This part is related to function CheckIntersection().
-	//	Being added into scene means that the object will take part in the intersection checking, so try to make these two connected to each other.
         
         Material yellow;
         yellow.diffuse = glm::vec3(0.8f, 0.8f, 0.0f);
@@ -288,12 +277,9 @@ int main(int argc, char **argv) {
         
         Material red;
         red.diffuse = glm::vec3(0.8f, 0.0f, 0.0f);
-        red.specular = glm::vec3(0.6f);
+        red.specular = glm::vec3(1.0f);
         red.ambient = glm::vec3(0.2f);
         red.glossiness = 10.0f;
-        red.reflection = 0.0f;
-        red.refraction = 1.0f;
-        red.refractiveIndex = 1.5f;
         
         Material blue;
         blue.diffuse = glm::vec3(0.57f, 0.76f, 0.83f);
@@ -301,6 +287,21 @@ int main(int argc, char **argv) {
         blue.ambient = glm::vec3(0.2f);
         blue.glossiness = 10.0f;
         blue.reflection = 0.2f;
+        
+        Material green;
+        green.diffuse = glm::vec3(0.0f, 0.8f, 0.0f);
+        green.specular = glm::vec3(0.6f);
+        green.ambient = glm::vec3(0.2f);
+        green.glossiness = 10.0f;
+        
+        Material glass;
+        glass.diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
+        glass.specular = glm::vec3(0.6f);
+        glass.ambient = glm::vec3(0.2f);
+        glass.glossiness = 10.0f;
+        glass.reflection = 0.0f;
+        glass.refraction = 1.0f;
+        glass.refractiveIndex = 1.5f;
         
         Plane* plane = new Plane();
         plane->SetMaterial(yellow);
@@ -313,7 +314,7 @@ int main(int argc, char **argv) {
         plane2->normal = (glm::vec3(-1.0f, 0.0f, 0.0f));
         
         Plane* plane3 = new Plane();
-        plane3->SetMaterial(blue);
+        plane3->SetMaterial(green);
         plane3->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
         plane3->normal = (glm::vec3(0.0f, 0.0f, 1.0f));
         
@@ -323,12 +324,12 @@ int main(int argc, char **argv) {
         sphere->radius = 1.0f;
         
         Sphere* sphere2 = new Sphere();
-        sphere2->SetMaterial(red);
-        sphere2->SetPosition(glm::vec3(-5.0f,2.0f,3.0f));
+        sphere2->SetMaterial(glass);
+        sphere2->SetPosition(glm::vec3(-5.0f,1.0f,3.0f));
         sphere2->radius = 0.8f;
         
         Triangle* triangle = new Triangle();
-        triangle->SetMaterial(yellow);
+        triangle->SetMaterial(red);
         triangle->SetPoints(glm::vec3(-1, 3, 4), glm::vec3(-1, 0, 4), glm::vec3(-1, 0, 0));
         
         objects.push_back(plane);        
