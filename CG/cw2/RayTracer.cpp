@@ -189,7 +189,6 @@ float CastRay(Ray &ray, Payload &payload) {
                     } else {
                         refractionFactor = 0;
                     }
-
                     payload.color = info.material->reflection * payload.color + (1-info.material->reflection) * initColour + refractionFactor * payload.color;
                      
                 } else {
@@ -322,7 +321,7 @@ int main(int argc, char **argv) {
         
         Sphere* sphere2 = new Sphere();
         sphere2->SetMaterial(red);
-        sphere2->SetPosition(glm::vec3(-5.5f,3.0f,4.0f));
+        sphere2->SetPosition(glm::vec3(-5.0f,3.0f,3.0f));
         sphere2->radius = 0.8f;
         
         Triangle* triangle = new Triangle();
