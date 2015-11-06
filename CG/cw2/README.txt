@@ -23,9 +23,6 @@ EXTRA FEATURES:
 -Refraction: [2]
 To decide if we're entering/exiting an object, we need to keep track of the last object hit, and check what object we hit on any intersection of ray and object. To do so "IntersectInfo" is updated with the object hit, when an intersection occurs, and this can be compared against a record of the last object hit/it's refractive index. This allows a refractive index ratio to be created ("r"), then used to determine if refraction occurs, or if total internal reflection takes place instead. The refracted ray's direction can then be calculated as needed, and recursive ray casting can take place.
 
-NB:
-To my understanding, material reflection/refraction should sum to 1 at the most, as an object shouldn't be able to amplify light (transmission + reflection + refraction should total to 100% of the original light).
-
 TO RUN:
 Simply "make run" from main directory.
 
