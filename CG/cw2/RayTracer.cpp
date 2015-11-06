@@ -121,7 +121,8 @@ float CastRay(Ray &ray, Payload &payload) {
                 if (payload.numBounces < bounceLimit) {
                     CastRay(reflectRay, payload);
                 }
-                
+                //save the reflected colour
+                glm::vec3 reflectedColour = info.material->reflection * payload.color;
                 
                 
                 glm::vec3 initColour;
@@ -189,10 +190,12 @@ float CastRay(Ray &ray, Payload &payload) {
                     } else {
                         refractionFactor = 0;
                     }
-                    payload.color = info.material->reflection * payload.color + (1-info.material->reflection) * initColour + refractionFactor * payload.color;
+                    //printf("%f\n", refractionFactor);
+                    //printf("[%f, %f, %f]\n", payload.color.x, payload.color.y, payload.color.z);
+                    payload.color = reflectedColour + (1-info.material->reflection) * initColour + refractionFactor * payload.color;
                      
                 } else {
-                    payload.color = info.material->reflection * payload.color + (1-info.material->reflection) * initColour;
+                    payload.color = reflectedColour * payload.color + (1-info.material->reflection) * initColour;
                 }
                 
                 
@@ -321,7 +324,7 @@ int main(int argc, char **argv) {
         
         Sphere* sphere2 = new Sphere();
         sphere2->SetMaterial(red);
-        sphere2->SetPosition(glm::vec3(-5.0f,3.0f,3.0f));
+        sphere2->SetPosition(glm::vec3(-5.0f,2.0f,3.0f));
         sphere2->radius = 0.8f;
         
         Triangle* triangle = new Triangle();
