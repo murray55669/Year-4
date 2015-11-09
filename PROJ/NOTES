@@ -4,3 +4,56 @@ generally: reduce effort needed to process some information.
 -remove any audio/visual stimulation outwith the necessary
 -minimize necessary reading - e.g. narration for text; heavy image usage (links to the dual-coding theory: https://en.wikipedia.org/wiki/Dual-coding_theory where memory performance is aided by remembering the information in audio+visual forms)
 -allow learner to move at their own page through small chunks of content
+
+Additional principles/best practices (general e-learning - not all of these are relevant for revision):
+-some combination of text+graphics+narration is better than any one, or all three
+-narrated graphics > graphics w/ text
+-no excess/unecessary material present
+-keep related info together (text+graphics related spatially)
+-split content into small/manageable chunks
+-draw attention to critical elements
+-allow control over rate of segmented content being seen
+-use "personal" language ("We can see.." etc.)
+-pretraining - present contepts, then explain/expand
+
+"Expertise effect:  Instructional methods, such as those described above, that are helpful to domain novices or low prior knowledge learners may have no effect or may even depress learning in high prior knowledge learners."
+-problems arise when trying to combine prior knowledge with similar information, un-learning/re-learning something is harder than learning it the first time
+
+====
+App design principles (learning):
+-keep interface as simple, clean, and distraction-free as possible
+-have imaged overlaid with as much information as possible
+-allow user to customize the material (most probably limited to text; perhaps include ability to draw over existing graphics/add labels?) to try and mitigate "expertise effect"
+
+-content naturally seperated into pre-defined segments, as given by information source
+-pace of learning naturally to user's preference, given that they navigate between slides
+...-severl other principles satisfied by nature of content
+===
+Terminology:
+-page: relates to 1 diagram set (paper background with acetate sheets)
+-slide: relates to 1 acetate sheet, associated with a page
+
+App:
+java:
+-reads JSON/XML(? probably JSON) file plus image package (need to be able to add/removed these from a catalogue)
+-handles navigation between different pages (plus search functionality? bookmarking?)
+-chunks off and presents data to JScript web app to display
+
+web app written in HTML+JScript+CSS:
+-displays the information, allows for per-page navigation (between slides)
+-potentially allow for drawing on slides; live text editing
+-generate HTML for the page as needed?
+
+Python-based slides generator:
+-file operations: browsing/importing, exporting
+-use OpenCV(?) to process scanned images; generate page package
+-build JSON file plus image package gradually
+    -able to name pages, order/reorder slides; select page slide belongs to from list
+-image processing:
+    -crop/rotate
+    -clustering/colour-based recognition
+    -image cleaning/filtering/noise removal etc to produce slides
+    -ability to cut regions from slides (eg, text being recognized as part of image); draw on slide(?)
+-adding text to slides (either labels or text companion to slide)
+-ability to edit any of the above
+
