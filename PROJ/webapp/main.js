@@ -85,6 +85,33 @@ function goToSlide(value) {
             }
         }
     }
+    var prevButton = document.getElementById('prev_button');
+    var navButton = document.getElementById('nav_button');
+    var nextButton = document.getElementById('next_button');
+    var textButton = document.getElementById('text_button');
+    
+    var enabled = 'button noselect bold';
+    var disabled = 'button noselect bold disabled';
+    if (currentSlide == 0) {
+        prevButton.className = disabled;
+        nextButton.className = enabled;
+    } else if (currentSlide == data.length-1) {
+        prevButton.className = enabled;
+        nextButton.className = disabled;
+    } else {
+        prevButton.className = enabled;
+        nextButton.className = enabled;
+    }
+    
+    if (data.len == 1) {
+        navButton.className = disabled;
+    }
+    
+    if (data[currentSlide].text == '') {
+        textButton.className = disabled; 
+    } else {
+        textButton.className = enabled;
+    }
 }
 function toggleSlidesList() {
     if (document.getElementById('nav_list').style.display == '') {

@@ -103,6 +103,10 @@ body {
     float: left;
     font-size: 200%;
 }
+.disabled {
+    color: #606060;
+    background: #d0d0d0;
+}
 .slide_list {
     position: fixed;
     bottom: 120px;
@@ -171,7 +175,8 @@ body {
     height: 80px;
     line-height: 80px;
     text-align: center;
-    font-size: 200%;
+    font-size: 300%;
+    font-family: sans-serif;
     background: #d0d0d0;
     color: #ff0000;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
