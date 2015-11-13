@@ -34,23 +34,22 @@ function generate(slides) {
     var navEntry;
     
     for (var i = 0; i < data.length; i++) {
+        //Images
         slideImg = document.createElement('img');
         slideImg.src = data[i].image;
-        
         if (first) {
             first = false;
             slideImg.className = 'base_layer';
         } else {
             slideImg.className = 'layer';
         }
-        
         slideImages.push(slideImg);
         imgRoot.appendChild(slideImg);
-        
+        //Nav menu (order reversed, so menu arranged with base layer button closest to control bar)
         navEntry = document.createElement('div');
         navEntry.className = 'slide_list_entry noselect';
-        navEntry.innerHTML = data[i].id;
-        navEntry.onclick = navClickFunction(data[i].id);
+        navEntry.innerHTML = data[(data.length-1)-i].id;
+        navEntry.onclick = navClickFunction((data.length-1)-i);
         navRoot.appendChild(navEntry);
     }
     

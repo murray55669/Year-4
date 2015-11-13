@@ -117,8 +117,8 @@ body {
     float: left;
     width: 100%;
     font-size: 160%;
-    height: 38px;
-    line-height: 38px;
+    height: 58px;
+    line-height: 58px;
     text-align: center;
     background: #d0d0d0;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
@@ -237,7 +237,7 @@ body {
     float: right;
 }
 .label_text {
-    font-size: 150%;
+    font-size: 180%;
     color: #000000;
 }
 .llabel_text {
