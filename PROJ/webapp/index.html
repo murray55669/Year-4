@@ -6,29 +6,15 @@
     <script src="main.js"></script>
     
     <script>
+        
+        var exLabel1 = new labelObj(10, 10, 'Test label 1');
+        var exLabel2 = new labelObj(30, 30, 'Test label 2');
 
-        var exSlide1 = {
-            image:'cat0.png',
-            title:'Slide 1 Title',
-            text:'This is some example text to be displayed.',
-            labels:[[10, 10, 'Test label 1'], [30, 30, 'Test label 2']]
-        };
-        var exSlide2 = {
-            image:'cat1.png',
-            title:'Slide 2 Title',
-            text:'',
-            labels:[]
-        };
-        var exSlide3 = {
-            image:'cat2.png',
-            title:'Slide 3 Title',
-            text:'Slide 3 text explaining why this cat is floating in a cloud.',
-            labels:[]
-        };
+        var exSlide1 = new slideObj(0,'cat0.png','Slide 1 Title','This is some example text to be displayed.',[exLabel1, exLabel2]);
+        var exSlide2 = new slideObj(1, 'cat1.png','Slide 2 Title','',[]);
+        var exSlide3 = new slideObj(2,'cat2.png','Slide 3 Title','Slide 3 text explaining why this cat is floating in a cloud.',[]);
         
         var exampleContent = [exSlide1, exSlide2, exSlide3];
-        
-        
         
     </script>
     
@@ -38,13 +24,7 @@
 <body onload="pageInit()">
     <div class="container">
         <div class="images_wrapper" id="images_wrapper">
-            <!-- generate this with JS 
-            <img class="layer" id="image_0" onclick="addLabelClick(event, 'This is a label')">
-            <img class="layer" id="image_1">
-            <img class="layer" id="image_2">
-            -->
-            
-            <div class="clear"></div>
+            <!-- generate this with JS -->
         </div>
                     
         <div class="controls" id="controls">
@@ -53,12 +33,9 @@
             <div class="button noselect bold" onclick="nextSlide()">&gt;</div>
             <div class="button noselect bold" onclick="toggleText()">T</div>
         </div>
+        
         <div class="slide_list" id="nav_list">
-            <!-- generate this with JS 
-            <div class="slide_list_entry noselect" onclick="goToSlide(1)">1</div>
-            <div class="slide_list_entry noselect" onclick="goToSlide(2)">2</div>
-            <div class="slide_list_entry noselect" onclick="goToSlide(3)">3</div>
-            -->
+            <!-- generate this with JS -->
         </div>
 
         <div class="textbox_wrapper" id="text_wrap">

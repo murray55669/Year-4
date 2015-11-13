@@ -1,25 +1,34 @@
 var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 var height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-var currentSlide = 1;
-
-/*
-var slides = ["image_0", "image_1", "image_2"];
-var images = ["cat0.png", "cat1.png", "cat2.png"];
-var titles = ["Title 1", "Title 2", "Title 3"];
-var texts = ["Slide text 1.", "", "Slide text 3."];
-var labels = [[[10, 10, "L1S1"], [10, 20, 'L2S1']], [[10, 10, "L1S2"], [10, 20, 'L2S2']], [[10, 10, "L1S3"], [10, 20, 'L2S3']]];
-*/
+var currentSlide = 0;
 
 var slideImages = [];
 var data = [];
 
+function slideObj (id, image, title, text, labels) {
+    this.id = id;
+    this.image = image;
+    this.title = title;
+    this.text = text;
+    this.labels = labels;
+}
+function labelObj (xPos, yPos, text) {
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.text = text;
+}
+function navClickFunction(slideId) {
+    return function() {
+        goToSlide(slideId);
+    };
+}
 function generate(slides) {
     data = slides
     
     var imgRoot = document.getElementById('images_wrapper');
     var navRoot = document.getElementById('nav_list');
-    var first = true;
+    var first = true; 
     
     var slideImg;
     var navEntry;
@@ -38,13 +47,16 @@ function generate(slides) {
         slideImages.push(slideImg);
         imgRoot.appendChild(slideImg);
         
-        //TODO: broken af
         navEntry = document.createElement('div');
         navEntry.className = 'slide_list_entry noselect';
-        navEntry.innterHTML = i+1;
-        navEntry.onclick = function(){ goToSlide(i+1); };
+        navEntry.innerHTML = data[i].id;
+        navEntry.onclick = navClickFunction(data[i].id);
         navRoot.appendChild(navEntry);
     }
+    
+    var clearDiv = document.createElement('div')
+    clearDiv.className = 'clear'
+    imgRoot.appendChild(clearDiv)
 }
 function nextSlide() {
     goToSlide(currentSlide+1);
@@ -54,17 +66,23 @@ function previousSlide() {
 }
 function goToSlide(value) {
     cleanScreen();
-    if (value < 1) {
-        value = 1;
-    } else if (value > data.length) {
-        value = data.length;
+    if (value < 0) {
+        value = 0;
+    } else if (value >= data.length) {
+        value = data.length-1;
     }
     currentSlide = value;
-    for (var i = 1; i < data.length; i++) {
-        if (i < currentSlide) {
+    for (var i = 0; i < data.length; i++) {
+        if (i <= currentSlide) {
             slideImages[i].style.display = '';
         } else {
             slideImages[i].style.display = 'none';
+        }
+        if (i == currentSlide) {
+            //Add labels
+            for (var j = 0; j < data[i].labels.length; j++) {
+                addLabel(data[i].labels[j].xPos, data[i].labels[j].yPos, data[i].labels[j].text);
+            }
         }
     }
 }
@@ -77,13 +95,13 @@ function toggleSlidesList() {
 }
 function toggleText() {
     //Toggles text box overlay on slide on and off.
-    if (data[currentSlide-1].text != "") {
+    if (data[currentSlide].text != "") {
         if (document.getElementById('text_wrap').style.display == '') {
             document.getElementById('text_wrap').style.display = 'none'
         } else {
             document.getElementById('text_wrap').style.display = ''
-            document.getElementById('title').innerHTML = data[currentSlide-1].title;
-            document.getElementById('text').innerHTML = data[currentSlide-1].text;
+            document.getElementById('title').innerHTML = data[currentSlide].title;
+            document.getElementById('text').innerHTML = data[currentSlide].text;
         }
     }
 }
@@ -153,9 +171,5 @@ function cleanScreen() {
 }
 function pageInit() {
     generate(exampleContent);
-    document.getElementById('text_wrap').style.display = 'none';
-    for (var i = 1; i < slideImages.length; i++) {
-        slideImages[i].style.display = 'none';
-    }
-    toggleSlidesList();
+    goToSlide(0);
 }
