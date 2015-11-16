@@ -50,6 +50,7 @@ table {
 html {
     height: 100%;
     width: 100%;
+    font-family: "Times New Roman";
 }
 body {
     height: 100%;
@@ -75,7 +76,7 @@ body {
     position: relative;
     width: 100%;
     top: 0;
-        min-height:100%;
+    min-height:100%;
     background: #f0f0f0;
 }
 .images_wrapper {
@@ -116,7 +117,7 @@ body {
 .slide_list_entry {
     float: left;
     width: 100%;
-    font-size: 160%;
+    font-size: 120%;
     height: 58px;
     line-height: 58px;
     text-align: center;
@@ -159,11 +160,11 @@ body {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: calc(100% - 30px);
-    height: 80px;
-    line-height: 80px;
+    right: 0px;
+    height: 60px;
+    line-height: 60px;
     background: #e0e0e0;
-    font-size: 200%;
+    font-size: 160%;
     padding: 0 15px;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
 }
@@ -171,11 +172,11 @@ body {
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
     text-align: center;
-    font-size: 300%;
+    font-size: 250%;
     font-family: sans-serif;
     background: #d0d0d0;
     color: #ff0000;
@@ -183,13 +184,13 @@ body {
 }
 .textbox_content {
     position: absolute;
-    top: 80px;
+    top: 60px;
     left: 0px;
     bottom: 0px;
     right: 0px;
     color: #000000;
-    padding: 15px;
-    font-size: 160%;
+    padding: 10px;
+    font-size: 120%;
 }
 /*********/
 /* label */
@@ -223,7 +224,7 @@ body {
     float: right;
 }
 .label_line {
-    width: calc(100% - 24px);
+    width: 82%;
     height: 4px;
     margin: 2px 0;
     background: #000000; 
@@ -237,7 +238,7 @@ body {
     float: right;
 }
 .label_text {
-    font-size: 180%;
+    font-size: 150%;
     color: #000000;
 }
 .llabel_text {

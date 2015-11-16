@@ -136,7 +136,9 @@ function addLabel(xPos, yPos, text) {
     if (xPos < 50) {
         var label = document.createElement("div");
         label.className = "label";
-        label.style = "top:"+yPos+"%; left:"+xPos+"%; max-width: "+(100-xPos)+"%;";
+        label.style.top = yPos+"%";
+        label.style.left = xPos+"%";
+        label.style.maxWidth = (100-xPos)+"%";
         
         var label_marker = document.createElement("div");
         label_marker.className = "label_marker llabel_marker";
@@ -156,7 +158,9 @@ function addLabel(xPos, yPos, text) {
     } else {
         var label = document.createElement("div");
         label.className = "label";
-        label.style = "top:"+yPos+"%; right:"+(100-xPos)+"%; max-width: "+xPos+"%;";
+        label.style.top = yPos+"%";
+        label.style.right = (100-xPos)+"%";
+        label.style.maxWidth = xPos+"%";
         
         var label_marker = document.createElement("div");
         label_marker.className = "label_marker rlabel_marker";
