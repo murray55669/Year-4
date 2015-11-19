@@ -32,7 +32,8 @@ class IntersectInfo {
       hitPoint(0.0f),
       normal(0.0f),
       material(NULL),
-      objectHit(NULL)
+      objectHit(NULL),
+      objectHitId(0)
     {}
     // It allows you to init variables in another way. Equal to:
     // IntersectInfo(){
@@ -52,6 +53,7 @@ class IntersectInfo {
     const Material *material;
     //the object hit
     const Object* objectHit;
+    int objectHitId;
 
     // Reloading "operator =" for class IntersectInfo
     IntersectInfo &operator =(const IntersectInfo &rhs) {
@@ -60,6 +62,7 @@ class IntersectInfo {
       normal = rhs.normal;
       time = rhs.time;
       objectHit = rhs.objectHit;
+      objectHitId = rhs.objectHitId;
       return *this;
     }
 };

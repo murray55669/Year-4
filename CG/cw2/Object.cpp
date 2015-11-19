@@ -1,4 +1,5 @@
 #include "Object.h"
+#include <typeinfo>
 
 float depthMin = 0.01f;
 
@@ -57,6 +58,7 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
         info.normal = glm::normalize(info.hitPoint - s);
         
         info.objectHit = thisObject();
+        info.objectHitId = OjbectID();
         
         return true;
     }
@@ -88,6 +90,7 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
             info.normal = n;
             
             info.objectHit = thisObject();
+            info.objectHitId = OjbectID();
             
             return true;
         }
@@ -158,6 +161,7 @@ bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const {
                 info.normal = n;
                 
                 info.objectHit = thisObject();
+                info.objectHitId = OjbectID();
                 
                 return true;    
             }

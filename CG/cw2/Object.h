@@ -49,6 +49,8 @@ class Sphere : public Object {
       
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const; //  To figure out if the Ray hit this object.
     
+    virtual int OjbectID() const { return 1; } 
+    
 };
 
 class Plane : public Object {
@@ -57,6 +59,8 @@ class Plane : public Object {
         glm::vec3 Normal() const { return normal; }
         
         virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
+        
+        virtual int OjbectID() const { return 2; }
 };
 
 class Triangle : public Object {
@@ -78,4 +82,6 @@ class Triangle : public Object {
         virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
         float BaryF(glm::vec2 p, glm::vec2 q, glm::vec2 z) const;
         int MaxNormalIndex() const;
+        
+        virtual int OjbectID() const { return 3; }
 };

@@ -1,4 +1,5 @@
 #include "RayTracer.h"
+#include <typeinfo>
 using namespace std;
 
 int windowX = 640;
@@ -13,6 +14,7 @@ glm::vec3 eyePos = glm::vec3(-10, 10, 10);
 //refraction - keep track of last object hit, and the refractive index of that object
 //Air: object = NULL, index = 1
 const Object* lastObjectHit = NULL;
+int lastObjectHitId = 0;
 float lastObjectRefractiveIndex = 1.0f;
 
 /*
@@ -146,18 +148,23 @@ float CastRay(Ray &ray, Payload &payload) {
                     initColour = info.material->ambient;
                 }      
                    
+                
+                bool refracted = false;
                 //Refraction
                 if (info.material->refraction > 0) {
                     float r; //r = n1/n2 - ratio of refractive indices
-                    //leaving an object (sphere)
-                    if (lastObjectHit == info.objectHit) {
+                    
+                    //leaving an object (sphere) TODO: broke-ass
+                    if (lastObjectHitID == info.objectHit && lastObjectHitID == 2) {
                         r = lastObjectRefractiveIndex; //should be lastObjectRefIndex/airIndex, but airIndex is 1
+                        //printf("%f\n", r);
                         
                         lastObjectHit = NULL;
-                        lastObjectRefractiveIndex = 1;
-                    } 
+                        lastObjectRefractiveIndex = 1.0f;
+                    }
                     //entering an object
                     else {
+                        printf("enter\n");
                         r = lastObjectRefractiveIndex / info.material->refractiveIndex;
                         
                         lastObjectHit = info.objectHit;
@@ -169,8 +176,8 @@ float CastRay(Ray &ray, Payload &payload) {
                     glm::vec3 l = glm::normalize(ray.direction);
                     float c = -1.0f * glm::dot(info.normal, l);
                     float radicand = 1.0f - (pow(r, 2) * (1.0f - pow(c, 2)));
-                    
                     if (radicand >= 0.0f) {
+                        refracted = true;
                         glm::vec3 refractionDir = (r*l) + (((r*c) - sqrt(radicand))*info.normal);
 
                         Ray refractionRay = Ray(info.hitPoint, refractionDir);
@@ -178,19 +185,17 @@ float CastRay(Ray &ray, Payload &payload) {
 
                         lastObjectRefractiveIndex = info.material->refractiveIndex;
 
-                        CastRay(refractionRayOffset, payload);
-                        
-                        payload.color = reflectedColour + (1-info.material->reflection) * initColour + info.material->refraction * payload.color;
-                    } else {
-                        //No refraction
-                        payload.color = reflectedColour + (1-info.material->reflection) * initColour;
+                        CastRay(refractionRayOffset, payload);                        
                     }
-                } else {
-                    payload.color = reflectedColour * payload.color + (1-info.material->reflection) * initColour;
                 }
                 
-                lastObjectHit = NULL;
-                lastObjectRefractiveIndex = 1.0f;
+                if (refracted) {
+                    payload.color = reflectedColour + ((1-info.material->reflection)*initColour) + (info.material->refraction*payload.color);
+                } else {
+                    payload.color = reflectedColour + ((1-info.material->reflection)*initColour);
+                }
+                
+                //payload.color = reflectedColour + ((1-info.material->reflection)*initColour);
                 
 		return info.time;
 	}
@@ -245,6 +250,10 @@ void Render()
 			else {
 				glColor3f(0.0f, 0.0f, 0.0f);
 			}
+                        //reset for next ray
+                        lastObjectHit = NULL;
+                        lastObjectHitId = 0;
+                        lastObjectRefractiveIndex = 1.0f;
 
 			glVertex3f(pixelX,pixelY,0.0f);
 		}
