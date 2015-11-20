@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>Hello World</title>
+		
+		<script src="js/main.js"></script>
+		
+		<script>
+        
+        var exLabel1 = new labelObj(10, 10, 'Test label 1');
+        var exLabel2 = new labelObj(75, 30, 'Test label 2');
+
+        var exSlide1 = new slideObj('Base','cat0.png','Slide 1 Title','This is some example text to be displayed.',[exLabel1, exLabel2]);
+        var exSlide2 = new slideObj('Outline', 'cat1.png','Slide 2 Title','',[]);
+        var exSlide3 = new slideObj('Bones','cat2.png','Slide 3 Title','Slide 3 text explaining why this cat is floating in a cloud.',[]);
+        
+        var exampleContent = [exSlide1, exSlide2, exSlide3];
+        
+        var l1 = new labelObj(35, 40, 'EPIPHYSIS OF THE BONE');
+        var l2 = new labelObj(35, 65, 'EPIPHYSIS OF THE BONE');
+        
+        var l3 = new labelObj(40, 61, 'HYALINE');
+        
+        var l4 = new labelObj(43, 55, 'JOINT CAVITY');
+        var l5 = new labelObj(13, 47, 'SYNOVIAL MEMBRANE containing SYNOVIAL FLUID');
+        
+        var s1 = new slideObj('1', 'img/001.png', 'Typical synovial joint', '', [l1, l2]);
+        var s2 = new slideObj('2', 'img/002.png', 'Typical synovial joint', 'HYALINE: Articular surface covered in a thin layer of cartilage', [l3]);
+        var s3 = new slideObj('3', 'img/003.png', 'Typical synovial joint', 'JOINT CAVITY: filled with synovial fluid - provides lubrication and nutrition to the cartilage<br><br>SYNOVIAL MEMBRANE: Sleeve of delicate cartilage attached around the periphery of the articular surface', [l4, l5]);
+        var s4 = new slideObj('4', 'img/004.png', 'Typical synovial joint', '', []);
+        
+        var exampleContent = [s1, s2, s3, s4];
+        
+    </script>
+    </head>
+    <body onload="pageInit()">
+		<div class="container">
+			<div class="images_wrapper" id="images_wrapper">
+				<!-- generate this with JS -->
+			</div>
+						
+			<div class="controls" id="controls">
+				<div class="button noselect bold" id="prev_button" onclick="previousSlide()">&lt;</div>
+				<div class="button noselect bold" id="nav_button" onclick="toggleSlidesList()">=</div>
+				<div class="button noselect bold" id="next_button" onclick="nextSlide()">&gt;</div>
+				<div class="button noselect bold" id="text_button" onclick="toggleText()">T</div>
+			</div>
+			
+			<div class="slide_list" id="nav_list">
+				<!-- generate this with JS -->
+			</div>
+
+			<div class="textbox_wrapper" id="text_wrap">
+				<div class="textbox">
+					<div class="textbox_title bold" id="title"></div>
+					<div class="textbox_controls noselect" onclick="toggleText()">X</div>
+					<div class="textbox_content" id="text"></div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="clear"></div>
+	
+	
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+    </body>
+</html>
