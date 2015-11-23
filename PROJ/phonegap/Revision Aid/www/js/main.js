@@ -2,13 +2,17 @@ var windowWidth = window.innerWidth
 var windowHeight = window.innerHeight
 
 var currentSlide = 0;
+var currentPage = "";
 
 var slideImages = [];
 var data = [];
 
-function slideObj (id, image, title, text, labels) {
+function pageObj (pageId, slides) {
+	this.pageId = pageId;
+	this.slides = slides;
+}
+function slideObj (id, title, text, labels) {
     this.id = id;
-    this.image = image;
     this.title = title;
     this.text = text;
     this.labels = labels;
@@ -23,9 +27,11 @@ function navClickFunction(slideId) {
         goToSlide(slideId);
     };
 }
-function generate(slides) {
-    data = slides
-    
+function generate(p) {
+    //takes a page object and generates the app content
+	data = p.slides;
+	currentPage = p.pageId;
+	
     var imgRoot = document.getElementById('images_wrapper');
     var navRoot = document.getElementById('nav_list');
     var first = true; 
@@ -36,7 +42,8 @@ function generate(slides) {
     for (var i = 0; i < data.length; i++) {
         //Images
         slideImg = document.createElement('img');
-        slideImg.src = data[i].image;
+		// img/000/0.png for slide 0 of page 000
+        slideImg.src = 'img/'+p.pageId+'/'+data[i].id+'.png';
         if (first) {
             first = false;
             slideImg.className = 'base_layer';
@@ -84,23 +91,11 @@ function goToSlide(value) {
             }
         }
     }
-    var prevButton = document.getElementById('prev_button');
     var navButton = document.getElementById('nav_button');
-    var nextButton = document.getElementById('next_button');
     var textButton = document.getElementById('text_button');
     
     var enabled = 'button noselect bold';
     var disabled = 'button noselect bold disabled';
-    if (currentSlide == 0) {
-        prevButton.className = disabled;
-        nextButton.className = enabled;
-    } else if (currentSlide == data.length-1) {
-        prevButton.className = enabled;
-        nextButton.className = disabled;
-    } else {
-        prevButton.className = enabled;
-        nextButton.className = enabled;
-    }
     
     if (data.len == 1) {
         navButton.className = disabled;
@@ -112,6 +107,7 @@ function goToSlide(value) {
         textButton.className = enabled;
     }
 	resizeWidth();
+	localStorage.setItem("currentSlide", currentSlide);
 }
 function toggleSlidesList() {
     if (document.getElementById('nav_list').style.display == '') {
@@ -131,6 +127,34 @@ function toggleText() {
             document.getElementById('text').innerHTML = data[currentSlide].text;
         }
     }
+}
+function togglePagesList() {
+	//TODO
+}
+function goToPage(value) {
+	//TODO
+	//save state to local storage
+	localStorage.setItem("currentPage", currentPage);
+}
+function selectPackage(input) {
+	//TODO
+	/*
+	-allow user to browse for ZIP file
+	
+	-AJAX the zip file to some page where we can...
+	-unpack ZIP
+	-check if zip contains valid layout file - if not, throw an alert and return
+	
+	-get size of unpacked content
+	-request that size plus 1MB as storage quota
+	-save the contents of the zip file to persistent storage
+	-save a web variable 
+	
+	*/
+	if (input) {
+		alert(input.value);
+		localStorage.setItem("packageDir", "something");
+	}
 }
 function addLabel(xPos, yPos, text) {
     //xPos, yPos should be precentages
@@ -234,8 +258,22 @@ function vw(val) {
 	return ((windowWidth*val)/100)+'px';
 }	
 function pageInit() {
-    generate(exampleContent);
-    goToSlide(0);
-    
-    //document.getElementById('html').style.fontSize = (width/60)+"px";
+	//TODO: use HTML5 storage to store a package to be loaded - if none exists, ask user to select one?
+	generate(testPage);
+	
+	var cp = localStorage.getItem("currentPage");
+	if (cp) {
+		goToPage(parseInt(cp));
+	}
+	else {
+		goToPage(0);
+	}
+	
+	var cs = localStorage.getItem("currentSlide");
+	if (cs) {
+		goToSlide(parseInt(cs));
+	}
+	else {
+		goToSlide(0);
+	}
 }

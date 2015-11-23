@@ -57,3 +57,6 @@ Python-based slides generator:
 -adding text to slides (either labels or text companion to slide)
 -ability to edit any of the above
 
+====
+-Cross Walk: better WebView?
+-PhoneGap database plugin: better storage?
