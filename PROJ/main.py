@@ -19,6 +19,14 @@ TODO:
     -split into CTRL-S / CTRL-E?
 
 -be able to layer images (same crop/ratio, but able to drag the images around?)
+
+-convert everything to some sort of array
+    -same crop points/scale ratio for each
+    -array of offset points (allow shit to be shifted around)
+    -same scale ratio
+    -array of labels
+
+-optimize rendering so it's not slow as shit
 """
 
 POINT_SCALE = 6
@@ -37,23 +45,66 @@ NO_OP = ""
 CROP = "crop"
 ERASE = "erase"
 LABEL_POINT = "label_point"
+MOVE_LAYER = "move_layer"
+
+
+class Slide(object):
+    def __init__(self):
+        self.labels = []
+
+        self.image_orig = None
+        self.image_cv = None
+        self.image_render = None
+
+        self.dirty = True
+
+        self.offset = None
+
+    def render(self, crop_points):
+        if self.image_cv is not None and self.dirty:
+            # don't lose the original information
+            display = np.copy(self.image_cv)
+
+            if crop_points:
+                x1, y1, x2, y2 = crop_points
+                # crop
+                # img[y: y + h, x: x + w]
+                display = display[y1:y2, x1:x2]
+
+            if self.offset:
+                rows = display.shape[0]
+                cols = display.shape[1]
+
+                translate = np.float32([[1, 0, self.offset[0]], [0, 1, self.offset[1]]])
+
+                display = cv2.warpAffine(display, translate, (cols, rows))
+
+            self.image_render = display
+            self.dirty = False
 
 
 class Master(object):
     def __init__(self):
         self.root = Tk()
-        cols = 0
 
-        self.regions = []
-        self.points = []
+        # slides
+        self.slides = []
+        self.slide_index = -1
+
+        # Image
         self.crop_points = None
         self.scale_ratio = 1.0
-        self.labels = []
+        self.points = []
+        # self.render = None
 
+        # Undo/redo
         self.op_current = StringVar()
         self.op_current.set(NO_OP)
         self.op_history = []
         self.op_history_index = -1
+
+        # UI
+        cols = 0
 
         self.root.resizable(width=FALSE, height=FALSE)
         self.root.wm_title("GUI Test")
@@ -73,7 +124,7 @@ class Master(object):
         self.edit_label = Label(self.root, text="Slide Editor")
         self.edit_label.grid(row=0, column=cols)
         
-        self.file_options = {'initialdir': '~/Year-4/PROJ'}  # TODO: this should point somewhere more useful
+        self.file_options = {'initialdir': '~/Year-4/PROJ'}  # TODO: this should save/reload instead of having default
         self.open_file_button = Button(self.root, text="Open File", command=self.open_file)
         self.open_file_button.grid(row=1, column=cols)
 
@@ -90,8 +141,7 @@ class Master(object):
         self.image_frame = Label(self.image_wrapper, bg='#ffffff')
         self.image_frame.pack()
         self.image_frame.bind("<Button-1>", self.image_clicked)
-        self.image_orig = None
-        self.image_cv = None
+        self.image_frame.bind("<B1-Motion>", self.image_dragged)
         self.image_tk = None
         cols += 1
         # ----- #
@@ -108,6 +158,8 @@ class Master(object):
         self.root.bind('<Control-E>', lambda e: self.erase())
         self.root.bind('<Control-T>', lambda e: self.label())
 
+        self.root.bind('<Control-D>', lambda e: self.move_layer())
+
         self.root.bind('<Control-e>', lambda e: self.export())
         self.root.bind('<Control-s>', lambda e: self.save())
 
@@ -116,10 +168,49 @@ class Master(object):
 
         self.root.bind('<Return>', lambda e: self.accept())
 
+        self.running = False  # Tkinter scales are strange
+
         # debug
         self.root.bind('<Control-r>', lambda e: self.refresh_image())
 
-        self.running = False  # Tkinter scales are strange
+    def slide(self):
+        return self.slides[self.slide_index]
+
+    def op_history_add(self, data):
+        # TODO: remember slide index
+        # discard anything that could be re-done
+        if self.op_history_index < len(self.op_history)-1:
+            self.op_history = self.op_history[:self.op_history_index+1]
+
+        self.op_history.append(data)
+        self.op_history_index = len(self.op_history)-1
+
+    def undo(self):
+        # TODO: act upon slide index; dirty slides
+        if self.op_history_index >= 0:
+            last_op = self.op_history[self.op_history_index]
+
+            op = last_op['op']
+            if op == CROP:
+                self.crop_points = last_op['prev']
+            elif op == ERASE:
+                self.slides[0].image_cv = np.copy(last_op['prev'])  # TODO: broken
+
+            self.op_history_index -= 1
+        self.refresh_image()
+
+    def redo(self):
+        # TODO: act upon slide index; dirty slides
+        if self.op_history_index < len(self.op_history)-1:
+            self.op_history_index += 1
+            next_op = self.op_history[self.op_history_index]
+
+            op = next_op['op']
+            if op == CROP:
+                self.crop_points = next_op['next']
+            elif op == ERASE:
+                self.slides[0].image_cv = np.copy(next_op['next'])  # TODO: broken
+        self.refresh_image()
 
     def escape(self):
         op = self.op_current.get()
@@ -129,7 +220,7 @@ class Master(object):
                 self.refresh_image()
             else:
                 self.root.quit()
-        elif op == CROP or op == ERASE:
+        elif op == CROP or op == ERASE or op == MOVE_LAYER:
             if len(self.points) > 0:
                 self.points = []
                 self.refresh_image()
@@ -145,20 +236,21 @@ class Master(object):
         elif op == CROP:
             self.crop()
         elif op == ERASE:
-            self.escape()
+            self.erase()
         elif op == LABEL_POINT:
             self.label_point(self.label_id_selected)
+        elif op == MOVE_LAYER:
+            self.move_layer()
 
     def no_op(self):
         self.op_current.set(NO_OP)
         self.points = []
         self.refresh_image()
 
-    def image_clicked(self, event):
-
+    def relative_point(self, point):
         # get relative co-ordinates on full image
-        x = int(event.x / self.scale_ratio)
-        y = int(event.y / self.scale_ratio)
+        x = int(point[0] / self.scale_ratio)
+        y = int(point[1] / self.scale_ratio)
 
         # if cropped, offset
         if self.crop_points:
@@ -166,20 +258,35 @@ class Master(object):
             x += x1
             y += y1
 
+        return x, y
+
+    def image_clicked(self, event):
+        point = self.relative_point((event.x, event.y))
+
         size = self.scale_constant(POINT_SCALE) + POINT_CLICK_PADDING
         new_point = True
         # check if spot clicked is already a point
         for index, pt in enumerate(self.points):
             px, py = pt
-            if x in range(px-size, px+size+1) and y in range(py-size, py+size+1):
+            if point[0] in range(px-size, px+size+1) and point[1] in range(py-size, py+size+1):
                 del self.points[index]
                 new_point = False
                 break
 
         if new_point:
-            self.add_point((x, y))
+            self.add_point(point)
 
         self.refresh_image()
+
+    def image_dragged(self, event):
+        op = self.op_current.get()
+        if op == MOVE_LAYER:
+            point = self.relative_point((event.x, event.y))
+            if len(self.points) == 1:
+                self.points.append(point)
+            else:
+                self.points[1] = point
+            self.refresh_image()
 
     def add_point(self, point):
         accept_point = True
@@ -191,11 +298,20 @@ class Master(object):
         elif op == LABEL_POINT:
             if len(self.points) >= 1:
                 self.points.pop()
+        elif op == MOVE_LAYER:
+            self.points = []
 
         if accept_point:
             self.points.append(point)
 
         self.refresh_image()
+
+    def dirty_all(self):
+        for slide in self.slides:
+            slide.dirty = True
+
+    def dirty_index(self, index):
+        self.slides[index].dirty = True
 
     def crop(self):
         # stage 2 of crop
@@ -230,6 +346,8 @@ class Master(object):
                                      'prev': prev,
                                      'next': self.crop_points})
 
+                self.dirty_all()
+
             elif len(self.points) == 0:
                 self.crop_points = None
                 self.op_current.set(NO_OP)
@@ -237,6 +355,8 @@ class Master(object):
                 self.op_history_add({'op': CROP,
                                      'prev': prev,
                                      'next': self.crop_points})
+
+                self.dirty_all()
             else:
                 print DEBUG_INVALID
 
@@ -257,15 +377,24 @@ class Master(object):
         if self.op_current.get() == ERASE:
             if len(self.points) > 2:
                 print "successfully erased"
-                np_points = np.array([self.points])
-                prev_image = np.copy(self.image_cv)
-                cv2.fillPoly(self.image_cv, np_points, NO_COLOUR)
-                next_image = np.copy(self.image_cv)
+                # make a copy of the points in case we need to offset them
+                points = list(self.points)
+                if self.slide().offset:
+                    for index, point in enumerate(points):
+                        x, y = point
+                        points[index] = (x-self.slide().offset[0], y-self.slide().offset[1])
+
+                np_points = np.array([points])
+                prev_image = np.copy(self.slide().image_cv)
+                cv2.fillPoly(self.slide().image_cv, np_points, NO_COLOUR)
+                next_image = np.copy(self.slide().image_cv)
                 self.no_op()
 
                 self.op_history_add({'op': ERASE,
                                      'prev': prev_image,
-                                     'next': next_image})
+                                    'next': next_image})
+
+                self.dirty_index(self.slide_index)
             elif len(self.points) == 0:
                 self.no_op()
             else:
@@ -279,6 +408,27 @@ class Master(object):
         else:
             self.no_op()
             self.erase()
+
+        self.refresh_image()
+
+    def move_layer(self):
+        if self.op_current.get() == MOVE_LAYER:
+            x1, y1 = self.points[0]
+            x2, y2 = self.points[1]
+            self.slide().offset = (x2-x1, y2-y1)
+            self.no_op()
+            self.dirty_index(self.slide_index)
+            # TODO: undo
+        elif self.op_current.get() == NO_OP:
+            if self.slide_index > 0:
+                self.points = []
+                self.op_current.set(MOVE_LAYER)
+                print "please click and drag the layer and hit [CTRL-A|Return]"
+            else:
+                print "base layer cannot be moved!"
+        else:
+            self.no_op()
+            self.move_layer()
 
         self.refresh_image()
 
@@ -296,11 +446,11 @@ class Master(object):
 
         self.label_rows += 1
 
-        self.labels.append({'id': self.label_id,
-                            'label': label,
-                            'button': button,
-                            'colour': colour,
-                            'point': None})
+        self.slide().labels.append({'id': self.label_id,
+                                    'label': label,
+                                    'button': button,
+                                    'colour': colour,
+                                    'point': None})
         self.label_id += 1
 
     def label_point(self, label_id):
@@ -333,69 +483,40 @@ class Master(object):
         self.refresh_image()
 
     def get_label_by_id(self, label_id):
-        for label in self.labels:
+        for label in self.slide().labels:
             if label['id'] == label_id:
                 return label
         return None
 
     def export(self):
-        print "exporting to output.txt"
+        print "exporting..."
         f = open('output.txt', 'w')
 
         # labels
-        label_list = []
-        if self.crop_points:
-            x1, y1, x2, y2 = self.crop_points
-        else:
-            shape = self.image_cv.shape
-            x1 = 0
-            y1 = 0
-            x2 = shape[0]
-            y2 = shape[1]
-        for label in self.labels:
-            if label['point']:
-                x_pct = ((label['point'][0] - x1) / float(x2 - x1)) * 100
-                y_pct = ((label['point'][1] - y1) / float(y2 - y1)) * 100
-                label_list.append((x_pct, y_pct, label['label'].get()))
-        json.dump({'labels': label_list}, f)
+        for slide in self.slides:
+            label_list = []
+            if self.crop_points:
+                x1, y1, x2, y2 = self.crop_points
+            else:
+                shape = slide.image_cv.shape
+                x1 = 0
+                y1 = 0
+                x2 = shape[0]
+                y2 = shape[1]
+            for label in slide.labels:
+                if label['point']:
+                    x_pct = ((label['point'][0] - x1) / float(x2 - x1)) * 100
+                    y_pct = ((label['point'][1] - y1) / float(y2 - y1)) * 100
+                    label_list.append((x_pct, y_pct, label['label'].get()))
+            json.dump({'labels': label_list}, f)
+
+        # images
+        for index, slide in enumerate(self.slides):
+            cv2.imwrite(str(index)+'.png', slide.image_render)
 
     def save(self):
         # TODO: want to be able to save/reload half-complete edits
         pass
-
-    def op_history_add(self, data):
-        # discard anything that could be re-done
-        if self.op_history_index < len(self.op_history)-1:
-            self.op_history = self.op_history[:self.op_history_index+1]
-
-        self.op_history.append(data)
-        self.op_history_index = len(self.op_history)-1
-
-    def undo(self):
-        if self.op_history_index >= 0:
-            last_op = self.op_history[self.op_history_index]
-
-            op = last_op['op']
-            if op == CROP:
-                self.crop_points = last_op['prev']
-            elif op == ERASE:
-                self.image_cv = np.copy(last_op['prev'])
-
-            self.op_history_index -= 1
-            self.refresh_image()
-
-    def redo(self):
-        if self.op_history_index < len(self.op_history)-1:
-            self.op_history_index += 1
-            next_op = self.op_history[self.op_history_index]
-
-            op = next_op['op']
-            if op == CROP:
-                self.crop_points = next_op['next']
-            elif op == ERASE:
-                self.image_cv = np.copy(next_op['next'])
-
-            self.refresh_image()
 
     def run(self):
         try:
@@ -412,40 +533,65 @@ class Master(object):
         if name:
             self.file_options['initialdir'] = name.rsplit('/', 1)[0]
 
-            self.image_orig = cv2.imread(name)
-            self.reset_all()
-            self.image_cv = thresh_image(self.image_orig, self.thresh_slide.get())
+            self.slides.append(Slide())
+            self.slide_index = len(self.slides)-1
+
+            self.slide().image_orig = cv2.imread(name)
+            self.slide().image_cv = thresh_image(self.slide().image_orig, self.thresh_slide.get())
             self.refresh_image()
 
     def reset_all(self):
         self.points = []
-        self.regions = []
         self.crop_points = None
 
     def thresh_slide_update(self, val):
         if self.running:
-            self.image_cv = thresh_image(self.image_orig, self.thresh_slide.get())
+            self.slide().image_cv = thresh_image(self.slide().image_orig, self.thresh_slide.get())
             self.refresh_image()
         else:
             self.running = True
 
     def refresh_image(self):
-        if self.image_cv is not None:
-            # don't lose the original information
-            display = np.copy(self.image_cv)
+        if len(self.slides) > 0:
+            op = self.op_current.get()
+
+            self.slides[0].render(self.crop_points)
+            layered_image = np.copy(self.slides[0].image_render)
+
+            # TODO: broke af
+            for index, slide in enumerate(self.slides):
+                slide.render(self.crop_points)
+                if index > 0 and index < len(self.slides)-1:
+                    layered_image = cv2.add(layered_image, slide.image_render)
+                elif index < len(self.slides):
+                    # Have to render the layer being moved here
+                    if op == MOVE_LAYER and len(self.points) == 2:
+                        x1, y1 = self.points[0]
+                        x2, y2 = self.points[1]
+                        tx = x2-x1
+                        ty = y2-y1
+
+                        temp = np.copy(slide.image_render)
+
+                        rows = temp.shape[0]
+                        cols = temp.shape[1]
+
+                        translate = np.float32([[1, 0, tx], [0, 1, ty]])
+
+                        temp = cv2.warpAffine(temp, translate, (cols, rows))
+
+                        layered_image = cv2.add(layered_image, temp)
+
 
             x_offset = 0
             y_offset = 0
 
             if self.crop_points:
                 x1, y1, x2, y2 = self.crop_points
-                # crop
-                # img[y: y + h, x: x + w]
-                display = display[y1:y2, x1:x2]
                 x_offset = x1
                 y_offset = y1
 
-            self.scale_ratio = calc_scale_ratio(display)
+            self.scale_ratio = calc_scale_ratio(layered_image)
 
             # draw anything else on top of the base image
             # scale to match crop area
@@ -458,11 +604,11 @@ class Master(object):
                 r_x = p_x-x_offset
                 r_y = p_y-y_offset
 
-                cv2.line(display, (r_x-size, r_y-size), (r_x+size, r_y+size), POINT_COLOUR, thickness)
-                cv2.line(display, (r_x-size, r_y+size), (r_x+size, r_y-size), POINT_COLOUR, thickness)
+                cv2.line(layered_image, (r_x-size, r_y-size), (r_x+size, r_y+size), POINT_COLOUR, thickness)
+                cv2.line(layered_image, (r_x-size, r_y+size), (r_x+size, r_y-size), POINT_COLOUR, thickness)
 
             # draw indicators for any labels
-            for label in self.labels:
+            for label in self.slide().labels:
                 if label['point'] and label['id'] != self.label_id_selected:
                     px, py = label['point']
                     rx = px-x_offset
@@ -470,11 +616,10 @@ class Master(object):
 
                     colour = hex_to_rgba(label['colour'])
 
-                    cv2.line(display, (rx-size, ry-size), (rx+size, ry+size), colour, thickness)
-                    cv2.line(display, (rx-size, ry+size), (rx+size, ry-size), colour, thickness)
+                    cv2.line(layered_image, (rx-size, ry-size), (rx+size, ry+size), colour, thickness)
+                    cv2.line(layered_image, (rx-size, ry+size), (rx+size, ry-size), colour, thickness)
 
-            # depending on current operation, draw lines between points
-            op = self.op_current.get()
+            # depending on current operation, draw other stuff
             if op == CROP:
                 if len(self.points) == 2:
                     x1, y1 = self.points[0]
@@ -485,10 +630,10 @@ class Master(object):
                     y2 -= y_offset
 
                     thickness = self.scale_constant(LINE_WIDTH)
-                    cv2.line(display, (x1, y1), (x2, y1), LINE_COLOUR, thickness)
-                    cv2.line(display, (x2, y1), (x2, y2), LINE_COLOUR, thickness)
-                    cv2.line(display, (x2, y2), (x1, y2), LINE_COLOUR, thickness)
-                    cv2.line(display, (x1, y2), (x1, y1), LINE_COLOUR, thickness)
+                    cv2.line(layered_image, (x1, y1), (x2, y1), LINE_COLOUR, thickness)
+                    cv2.line(layered_image, (x2, y1), (x2, y2), LINE_COLOUR, thickness)
+                    cv2.line(layered_image, (x2, y2), (x1, y2), LINE_COLOUR, thickness)
+                    cv2.line(layered_image, (x1, y2), (x1, y1), LINE_COLOUR, thickness)
             elif op == ERASE:
                 if len(self.points) > 2:
                     if self.crop_points:
@@ -499,11 +644,12 @@ class Master(object):
                         np_points = np.array([adjusted])
                     else:
                         np_points = np.array([self.points])
-                    cv2.fillPoly(display, np_points, LINE_COLOUR)
+                    cv2.fillPoly(layered_image, np_points, LINE_COLOUR)
 
             # scale
-            display = cv2.resize(display, (0, 0), fx=self.scale_ratio, fy=self.scale_ratio)
+            display = cv2.resize(layered_image, (0, 0), fx=self.scale_ratio, fy=self.scale_ratio)
 
+            # display image
             img = Image.fromarray(display)
             img_tk = ImageTk.PhotoImage(image=img)
             self.image_tk = img_tk
