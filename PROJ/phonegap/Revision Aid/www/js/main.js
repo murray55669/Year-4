@@ -11,8 +11,7 @@ function pageObj (pageId, slides) {
 	this.pageId = pageId;
 	this.slides = slides;
 }
-function slideObj (id, title, text, labels) {
-    this.id = id;
+function slideObj (title, text, labels) {
     this.title = title;
     this.text = text;
     this.labels = labels;
@@ -43,7 +42,7 @@ function generate(p) {
         //Images
         slideImg = document.createElement('img');
 		// img/000/0.png for slide 0 of page 000
-        slideImg.src = 'img/'+p.pageId+'/'+data[i].id+'.png';
+        slideImg.src = 'img/'+p.pageId+'/'+i+'.png';
         if (first) {
             first = false;
             slideImg.className = 'base_layer';
@@ -55,7 +54,7 @@ function generate(p) {
         //Nav menu (order reversed, so menu arranged with base layer button closest to control bar)
         navEntry = document.createElement('div');
         navEntry.className = 'slide_list_entry noselect';
-        navEntry.innerHTML = data[(data.length-1)-i].id;
+        navEntry.innerHTML = (data.length-1)-i;
         navEntry.onclick = navClickFunction((data.length-1)-i);
         navRoot.appendChild(navEntry);
     }

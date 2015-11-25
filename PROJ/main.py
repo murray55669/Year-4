@@ -27,6 +27,8 @@ TODO:
     -array of labels
 
 -optimize rendering so it's not slow as shit
+
+-checkbox list for layer visibility
 """
 
 POINT_SCALE = 6
@@ -47,10 +49,24 @@ ERASE = "erase"
 LABEL_POINT = "label_point"
 MOVE_LAYER = "move_layer"
 
+THRESH_DEFAULT = 200
+
+DETAILS_TEXT_WIDTH = 8
+
 
 class Slide(object):
     def __init__(self):
         self.labels = []
+
+        self.label_rows = 1
+        self.label_entries = []
+        self.label_buttons = []
+        self.label_id = 0
+
+        self.thresh_value = THRESH_DEFAULT
+
+        self.title_entry = None
+        self.text_text = None
 
         self.image_orig = None
         self.image_cv = None
@@ -89,7 +105,8 @@ class Master(object):
 
         # slides
         self.slides = []
-        self.slide_index = -1
+        self.slide_index = IntVar()
+        self.slide_index.set(-1)
 
         # Image
         self.crop_points = None
@@ -104,6 +121,9 @@ class Master(object):
         self.op_history_index = -1
 
         # UI
+        self.slide_index_text = StringVar()
+        self.slide_index_text.set(self.slide_index_to_string())
+        self.display_layers = True
         cols = 0
 
         self.root.resizable(width=FALSE, height=FALSE)
@@ -119,46 +139,66 @@ class Master(object):
         # ----- #
         self.slide_label = Label(self.root, text="Slides")
         self.slide_label.grid(row=0, column=cols)
+
+        self.file_options = {'initialdir': '~/Year-4/PROJ'}  # TODO: this should save/reload instead of having default
+        self.open_file_button = Button(self.root, text="Add Image", command=self.open_file)
+        self.open_file_button.grid(row=1, column=cols)
+
+        self.slide_up = Button(self.root, text=u'\u2191', command=self.slide_next)
+        self.slide_up.grid(row=2, column=cols)
+
+        self.current_slide_label = Label(self.root, textvariable=self.slide_index_text)
+        self.current_slide_label.grid(row=3, column=cols)
+
+        self.slide_down = Button(self.root, text=u'\u2193', command=self.slide_prev)
+        self.slide_down.grid(row=4, column=cols)
         cols += 1
         # ----- #
         self.edit_label = Label(self.root, text="Slide Editor")
         self.edit_label.grid(row=0, column=cols)
-        
-        self.file_options = {'initialdir': '~/Year-4/PROJ'}  # TODO: this should save/reload instead of having default
-        self.open_file_button = Button(self.root, text="Open File", command=self.open_file)
-        self.open_file_button.grid(row=1, column=cols)
 
         self.thresh_slide = Scale(self.root, from_=1, to=255, orient=HORIZONTAL, label="Threshold", showvalue=0,
                                   length=200, command=self.thresh_slide_update, repeatinterval=250)
-        self.thresh_slide.set(200)
-        self.thresh_slide.grid(row=2, column=cols)
+        self.thresh_slide.set(THRESH_DEFAULT)
+        self.thresh_slide.grid(row=1, column=cols)
 
         self.current_op_label = Label(self.root, textvariable=self.op_current)
-        self.current_op_label.grid(row=3, column=cols)
+        self.current_op_label.grid(row=2, column=cols)
 
         self.image_wrapper = Label(self.root, bg='#e0e0e0', borderwidth=3)
-        self.image_wrapper.grid(row=4, column=cols, rowspan=20)
+        self.image_wrapper.grid(row=5, column=cols)
         self.image_frame = Label(self.image_wrapper, bg='#ffffff')
         self.image_frame.pack()
+
         self.image_frame.bind("<Button-1>", self.image_clicked)
         self.image_frame.bind("<B1-Motion>", self.image_dragged)
         self.image_tk = None
+        cols += 1
+        # ----- #
+        self.details_label = Label(self.root, text="Slide Details")
+        self.details_label.grid(row=0, column=cols)
+        self.title_label = Label(self.root, text="Title")
+        self.title_label.grid(row=1, column=cols)
+        # row 2 is from the slide
+        self.text_label = Label(self.root, text="Text")
+        self.text_label.grid(row=3, column=cols)
+        # row 4 is from the slide
+        self.details_col = cols
         cols += 1
         # ----- #
         self.label_label = Label(self.root, text="Labels")
         self.label_label.grid(row=0, column=cols)
 
         self.label_cols = cols
-        self.label_rows = 1
-        self.label_id = 0
         self.label_id_selected = -1
         # ----- #
 
         self.root.bind('<Control-C>', lambda e: self.crop())
         self.root.bind('<Control-E>', lambda e: self.erase())
         self.root.bind('<Control-T>', lambda e: self.label())
-
         self.root.bind('<Control-D>', lambda e: self.move_layer())
+
+        self.root.bind('<Control-V>', lambda e: self.toggle_layers())
 
         self.root.bind('<Control-e>', lambda e: self.export())
         self.root.bind('<Control-s>', lambda e: self.save())
@@ -173,8 +213,49 @@ class Master(object):
         # debug
         self.root.bind('<Control-r>', lambda e: self.refresh_image())
 
+    def slide_prev(self):
+        self.slide_go_to(self.slide_index.get()-1)
+
+    def slide_next(self):
+        self.slide_go_to(self.slide_index.get()+1)
+
+    def slide_go_to(self, index):
+        # remove previous title/text
+        self.slide().title_entry.grid_forget()
+        self.slide().text_text.grid_forget()
+        # remove previous labels
+        for label_entry in self.slide().label_entries:
+            label_entry.grid_forget()
+        for label_button in self.slide().label_buttons:
+            label_button.grid_forget()
+
+        # update current slide
+        self.slide_index.set(max(min(index, (len(self.slides)-1)), 0))
+        self.slide_index_text.set(self.slide_index_to_string())
+
+        # load the title/text
+        self.slide().title_entry.grid(row=2, column=self.details_col)
+        self.slide().text_text.grid(row=4, column=self.details_col, rowspan=DETAILS_TEXT_WIDTH, sticky=N)
+        # reload any labels for this slide
+        self.slide().label_rows = 1
+        for index in range(0, len(self.slide().label_entries)):
+            self.slide().label_entries[index].grid(row=self.slide().label_rows, column=self.label_cols)
+            self.slide().label_buttons[index].grid(row=self.slide().label_rows, column=self.label_cols+1)
+            self.slide().label_rows += 1
+        # set  the threshold slider
+        self.thresh_slide.set(self.slide().thresh_value)
+
+        self.refresh_image()
+
+    def slide_index_to_string(self):
+        return "Slide: "+str(self.slide_index.get()+1)+"/"+str(len(self.slides))
+
+    def toggle_layers(self):
+        self.display_layers = not self.display_layers
+        self.refresh_image()
+
     def slide(self):
-        return self.slides[self.slide_index]
+        return self.slides[self.slide_index.get()]
 
     def op_history_add(self, data):
         # TODO: remember slide index
@@ -187,6 +268,8 @@ class Master(object):
 
     def undo(self):
         # TODO: act upon slide index; dirty slides
+        pass
+        """
         if self.op_history_index >= 0:
             last_op = self.op_history[self.op_history_index]
 
@@ -198,9 +281,12 @@ class Master(object):
 
             self.op_history_index -= 1
         self.refresh_image()
+        """
 
     def redo(self):
         # TODO: act upon slide index; dirty slides
+        pass
+        """
         if self.op_history_index < len(self.op_history)-1:
             self.op_history_index += 1
             next_op = self.op_history[self.op_history_index]
@@ -211,6 +297,7 @@ class Master(object):
             elif op == ERASE:
                 self.slides[0].image_cv = np.copy(next_op['next'])  # TODO: broken
         self.refresh_image()
+        """
 
     def escape(self):
         op = self.op_current.get()
@@ -394,7 +481,7 @@ class Master(object):
                                      'prev': prev_image,
                                     'next': next_image})
 
-                self.dirty_index(self.slide_index)
+                self.dirty_index(self.slide_index.get())
             elif len(self.points) == 0:
                 self.no_op()
             else:
@@ -417,10 +504,10 @@ class Master(object):
             x2, y2 = self.points[1]
             self.slide().offset = (x2-x1, y2-y1)
             self.no_op()
-            self.dirty_index(self.slide_index)
+            self.dirty_index(self.slide_index.get())
             # TODO: undo
         elif self.op_current.get() == NO_OP:
-            if self.slide_index > 0:
+            if self.slide_index.get() > 0:
                 self.points = []
                 self.op_current.set(MOVE_LAYER)
                 print "please click and drag the layer and hit [CTRL-A|Return]"
@@ -435,23 +522,25 @@ class Master(object):
     def label(self):
         print "adding label"
         label = Entry(self.root)
-        label.grid(row=self.label_rows, column=self.label_cols)
+        self.slide().label_entries.append(label)
+        label.grid(row=self.slide().label_rows, column=self.label_cols)
 
         colour = "#%06x" % random.randint(0, 0xFFFFFF)
 
-        copy = self.label_id
+        copy = self.slide().label_id
 
         button = Button(self.root, command=lambda: self.label_point(copy), bg=colour)
-        button.grid(row=self.label_rows, column=self.label_cols+1)
+        self.slide().label_buttons.append(button)
+        button.grid(row=self.slide().label_rows, column=self.label_cols+1)
 
-        self.label_rows += 1
+        self.slide().label_rows += 1
 
-        self.slide().labels.append({'id': self.label_id,
+        self.slide().labels.append({'id': self.slide().label_id,
                                     'label': label,
                                     'button': button,
                                     'colour': colour,
                                     'point': None})
-        self.label_id += 1
+        self.slide().label_id += 1
 
     def label_point(self, label_id):
         if self.op_current.get() == LABEL_POINT:
@@ -492,8 +581,12 @@ class Master(object):
         print "exporting..."
         f = open('output.txt', 'w')
 
-        # labels
+        # slides
+        slide_list = []
         for slide in self.slides:
+            slide_dump = {'title': slide.title_entry.get(),
+                          'text': slide.text_text.get(1.0, END)}
+            # labels
             label_list = []
             if self.crop_points:
                 x1, y1, x2, y2 = self.crop_points
@@ -501,18 +594,20 @@ class Master(object):
                 shape = slide.image_cv.shape
                 x1 = 0
                 y1 = 0
-                x2 = shape[0]
-                y2 = shape[1]
+                x2 = shape[1]
+                y2 = shape[0]
             for label in slide.labels:
                 if label['point']:
                     x_pct = ((label['point'][0] - x1) / float(x2 - x1)) * 100
                     y_pct = ((label['point'][1] - y1) / float(y2 - y1)) * 100
                     label_list.append((x_pct, y_pct, label['label'].get()))
-            json.dump({'labels': label_list}, f)
+            slide_dump['labels'] = label_list
+            slide_list.append(slide_dump)
+        json.dump(slide_list, f)
 
         # images
         for index, slide in enumerate(self.slides):
-            cv2.imwrite(str(index)+'.png', slide.image_render)
+            cv2.imwrite(str(index)+'.png', cv2.cvtColor(slide.image_render, cv2.COLOR_RGBA2BGRA))
 
     def save(self):
         # TODO: want to be able to save/reload half-complete edits
@@ -533,12 +628,16 @@ class Master(object):
         if name:
             self.file_options['initialdir'] = name.rsplit('/', 1)[0]
 
-            self.slides.append(Slide())
-            self.slide_index = len(self.slides)-1
+            new_slide = Slide()
+            new_slide.image_orig = cv2.imread(name)
+            new_slide.image_cv = thresh_image(new_slide.image_orig, self.thresh_slide.get())
 
-            self.slide().image_orig = cv2.imread(name)
-            self.slide().image_cv = thresh_image(self.slide().image_orig, self.thresh_slide.get())
-            self.refresh_image()
+            new_slide.title_entry = Entry(self.root)
+            new_slide.text_text = Text(self.root, height=DETAILS_TEXT_WIDTH, width=40)
+
+            self.slides.append(new_slide)
+
+            self.slide_go_to(len(self.slides)-1)
 
     def reset_all(self):
         self.points = []
@@ -546,7 +645,9 @@ class Master(object):
 
     def thresh_slide_update(self, val):
         if self.running:
-            self.slide().image_cv = thresh_image(self.slide().image_orig, self.thresh_slide.get())
+            self.slide().thresh_value = self.thresh_slide.get()
+            self.slide().image_cv = thresh_image(self.slide().image_orig, self.slide().thresh_value)
+            self.dirty_index(self.slide_index.get())
             self.refresh_image()
         else:
             self.running = True
@@ -555,33 +656,35 @@ class Master(object):
         if len(self.slides) > 0:
             op = self.op_current.get()
 
-            self.slides[0].render(self.crop_points)
-            layered_image = np.copy(self.slides[0].image_render)
+            if self.display_layers:
+                self.slides[0].render(self.crop_points)
+                layered_image = np.copy(self.slides[0].image_render)
 
-            # TODO: broke af
-            for index, slide in enumerate(self.slides):
-                slide.render(self.crop_points)
-                if index > 0 and index < len(self.slides)-1:
-                    layered_image = cv2.add(layered_image, slide.image_render)
-                elif index < len(self.slides):
-                    # Have to render the layer being moved here
-                    if op == MOVE_LAYER and len(self.points) == 2:
-                        x1, y1 = self.points[0]
-                        x2, y2 = self.points[1]
-                        tx = x2-x1
-                        ty = y2-y1
+                for index, slide in enumerate(self.slides):
+                    if index != 0:
+                        slide.render(self.crop_points)
+                        if op == MOVE_LAYER and len(self.points) == 2 and index == self.slide_index.get():
+                            x1, y1 = self.points[0]
+                            x2, y2 = self.points[1]
+                            tx = x2-x1
+                            ty = y2-y1
 
-                        temp = np.copy(slide.image_render)
+                            temp = np.copy(slide.image_render)
 
-                        rows = temp.shape[0]
-                        cols = temp.shape[1]
+                            rows = temp.shape[0]
+                            cols = temp.shape[1]
 
-                        translate = np.float32([[1, 0, tx], [0, 1, ty]])
+                            translate = np.float32([[1, 0, tx], [0, 1, ty]])
 
-                        temp = cv2.warpAffine(temp, translate, (cols, rows))
+                            temp = cv2.warpAffine(temp, translate, (cols, rows))
 
-                        layered_image = cv2.add(layered_image, temp)
-
+                            layered_image = cv2.add(layered_image, temp)
+                        else:
+                            layered_image = cv2.add(layered_image, slide.image_render)
+            else:
+                # TODO: move layer stuff in here
+                self.slides[self.slide_index.get()].render(self.crop_points)
+                layered_image = np.copy(self.slides[self.slide_index.get()].image_render)
 
             x_offset = 0
             y_offset = 0

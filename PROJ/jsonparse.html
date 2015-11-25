@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<script>
+			function parseJSON(input) {
+				if (input.value) {
+					//only one file allowed
+					file = input.files[0]
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						var contents = e.target.result;
+						
+						//deal with newlines
+						contents = contents.replace(/\n/g, "<br>");
+						document.getElementById("output").innerHTML = contents;
+					}
+					
+					reader.readAsText(file);
+				} else {
+					alert("no file");
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<input type="file" onchange="parseJSON(this)">
+		<br>
+		<div id="output"></div>
+	</body>
+</html>
