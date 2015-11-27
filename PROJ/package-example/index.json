@@ -3,11 +3,10 @@
 	"pages": 
 	[	
 		{
-			"pageId": "000",
+			"title": "Typical synovial joint",
 			"slides":
 			[
 				{
-					"title": "Typical synovial joint",
 					"text": "",
 					"labels": [
 						{
@@ -23,7 +22,6 @@
 					]
 				},
 				{
-					"title": "Typical synovial joint",
 					"text": "HYALINE: Articular surface covered in a thin layer of cartilage",
 					"labels": [
 						{
@@ -34,7 +32,6 @@
 					]
 				},
 				{
-					"title": "Typical synovial joint",
 					"text": "JOINT CAVITY: filled with synovial fluid - provides lubrication and nutrition to the cartilage<br><br>SYNOVIAL MEMBRANE: Sleeve of delicate cartilage attached around the periphery of the articular surface",
 					"labels": [
 						{

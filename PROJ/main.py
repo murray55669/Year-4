@@ -20,7 +20,10 @@ TODO:
 
 -checkbox list for layer visibility
 
--fix exporting
+-have op reset on slide change
+
+-cropping moved layers crops to the position on the original layer, not the cropped layer
+    -repro: add 2nd layer; move it; crop
 """
 
 POINT_SCALE = 6
@@ -60,7 +63,6 @@ class Slide(object):
 
         self.thresh_value = THRESH_DEFAULT
 
-        self.title_entry = None
         self.text_text = None
 
         self.image_orig = None
@@ -140,6 +142,9 @@ class Page():
         # icon
         self.thumb_tk = None
 
+        # title
+        self.title_entry = None
+
     def slide(self):
         if self.slides:
             return self.slides[self.slide_index.get()]
@@ -197,20 +202,23 @@ class Master(object):
         # page browser
         self.page_label = Label(self.master, text="Pages")
         self.page_label.grid(row=0, column=0)
+        self.package_title_label = Label(self.master, text="Package Title")
+        self.package_title_label.grid(row=1, column=0)
+        self.package_title_entry = Entry(self.master)
+        self.package_title_entry.grid(row=2, column=0)
         self.add_page_button = Button(self.master, text="Add Page", command=self.new_page)
-        self.add_page_button.grid(row=1, column=0)
-        self.page_row = 2
+        self.add_page_button.grid(row=3, column=0)
+        self.page_row = 4
 
         self.page_buttons = []
 
         # editor
         self.root = Toplevel(self.master)
         # pages
-        init_page = Page()
         self.pages = []
         self.page_index = IntVar()
         self.page_index.set(-1)
-        self.add_page(init_page)
+        self.new_page()
 
         # UI
         self.slide_index_text = StringVar()
@@ -320,6 +328,7 @@ class Master(object):
 
     def new_page(self):
         new_page = Page()
+        new_page.title_entry = Entry(self.root)
         self.add_page(new_page)
 
     def slide_prev(self):
@@ -330,8 +339,7 @@ class Master(object):
 
     def slide_go_to(self, index):
         if self.slide() is not None:
-            # remove previous title/text
-            self.slide().title_entry.grid_forget()
+            # remove previous text
             self.slide().text_text.grid_forget()
 
             # remove previous labels
@@ -348,8 +356,7 @@ class Master(object):
         self.slide_index_text.set(self.slide_index_to_string())
 
         if self.slide() is not None:
-            # load the title/text
-            self.slide().title_entry.grid(row=2, column=self.details_col)
+            # load the text
             self.slide().text_text.grid(row=4, column=self.details_col, rowspan=DETAILS_TEXT_WIDTH, sticky=N)
             # reload any labels for this slide
             self.slide().label_rows = 1
@@ -365,6 +372,9 @@ class Master(object):
     def page_go_to(self, index):
         # TODO: title/text switching is broken; as is label switching
         if index != self.page_index:
+            # purge current title
+            self.page().title_entry.grid_forget()
+
             # update the thumbnail for the current page before leaving
             if self.page_index.get() >= 0:
                 if self.page().slides:
@@ -390,19 +400,18 @@ class Master(object):
                 self.page().thumb_tk = ImageTk.PhotoImage(image=thumb, master=self.root)
                 self.page_buttons[self.page_index.get()]['image'] = self.page().thumb_tk
 
-            # update page
-            print "index:", index, "new:", max(min(index, (len(self.pages)-1)), 0)
-
             # purge text/description/labels
             if self.slide() is not None:
-                self.slide().title_entry.grid_forget()
                 self.slide().text_text.grid_forget()
                 for label_entry in self.slide().label_entries:
                     label_entry.grid_forget()
                 for label_button in self.slide().label_buttons:
                     label_button.grid_forget()
 
+            # update page
             self.page_index.set(max(min(index, (len(self.pages)-1)), 0))
+            # load the title
+            self.page().title_entry.grid(row=2, column=self.details_col)
             # update rest of UI/load the correct slide
             self.slide_go_to(self.page().slide_index.get())
             self.current_op_label.configure(textvariable=self.page().op_current)
@@ -716,35 +725,59 @@ class Master(object):
 
     def export(self):
         print "exporting..."
-        f = open('output.txt', 'w')
+        import shutil
+        import os
 
-        # slides
-        slide_list = []
-        for slide in self.page().slides:
-            slide_dump = {'title': slide.title_entry.get(),
-                          'text': slide.text_text.get(1.0, END)}
-            # labels
-            label_list = []
-            if self.page().crop_points:
-                x1, y1, x2, y2 = self.page().crop_points
-            else:
-                shape = slide.image_cv.shape
-                x1 = 0
-                y1 = 0
-                x2 = shape[1]
-                y2 = shape[0]
-            for label in slide.labels:
-                if label['point']:
-                    x_pct = ((label['point'][0] - x1) / float(x2 - x1)) * 100
-                    y_pct = ((label['point'][1] - y1) / float(y2 - y1)) * 100
-                    label_list.append((x_pct, y_pct, label['label'].get()))
-            slide_dump['labels'] = label_list
-            slide_list.append(slide_dump)
-        json.dump(slide_list, f)
+        package = {'package': self.package_title_entry.get()}
 
-        # images
-        for index, slide in enumerate(self.page().slides):
-            cv2.imwrite(str(index)+'.png', cv2.cvtColor(slide.image_render, cv2.COLOR_RGBA2BGRA))
+        package_dir = './package'
+        if os.path.exists(package_dir):
+            shutil.rmtree(package_dir)
+            import time
+            time.sleep(1)  # may the gods have mercy upon my soul // prevents OS errors if user has the folder open
+        os.mkdir(package_dir)
+        f = open(package_dir+'/data.json', 'w')
+
+        # pages
+        page_list = []
+        for page_index, page in enumerate(self.pages):
+            page_dir = package_dir+'/'+str(page_index)
+            os.mkdir(page_dir)
+            page_dump = {'title': page.title_entry.get()}
+
+            # slides
+            slide_list = []
+            for slide_index, slide in enumerate(page.slides):
+                # save image
+                slide_loc = page_dir+'/'+str(slide_index)
+                cv2.imwrite(slide_loc+'.png', cv2.cvtColor(slide.image_render, cv2.COLOR_RGBA2BGRA))
+
+                slide_dump = {'text': slide.text_text.get(1.0, END)}
+                # labels
+                label_list = []
+                if page.crop_points:
+                    x1, y1, x2, y2 = page.crop_points
+                else:
+                    shape = slide.image_cv.shape
+                    x1 = 0
+                    y1 = 0
+                    x2 = shape[1]
+                    y2 = shape[0]
+                for label in slide.labels:
+                    if label['point']:
+                        x_pct = ((label['point'][0] - x1) / float(x2 - x1)) * 100
+                        y_pct = ((label['point'][1] - y1) / float(y2 - y1)) * 100
+                        label_list.append((x_pct, y_pct, label['label'].get()))
+                slide_dump['labels'] = label_list
+                slide_list.append(slide_dump)
+
+            page_dump['slides'] = slide_list
+            page_list.append(page_dump)
+
+        package['pages'] = page_list
+
+        json.dump(package, f)
+        print "export complete"
 
     def save(self):
         # TODO: want to be able to save/reload half-complete edits
@@ -769,7 +802,6 @@ class Master(object):
             new_slide.image_orig = cv2.imread(name)
             new_slide.image_cv = thresh_image(new_slide.image_orig, self.thresh_slide.get())
 
-            new_slide.title_entry = Entry(self.root)
             new_slide.text_text = Text(self.root, height=DETAILS_TEXT_WIDTH, width=40)
 
             self.page().slides.append(new_slide)

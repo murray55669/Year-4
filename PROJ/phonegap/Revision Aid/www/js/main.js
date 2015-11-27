@@ -7,12 +7,16 @@ var currentPage = "";
 var slideImages = [];
 var data = [];
 
-function pageObj (pageId, slides) {
-	this.pageId = pageId;
+/*
+	TODO:
+	-be able to load full packages as opposed to pages
+*/
+
+function pageObj (title, slides) {
+	this.title = title;
 	this.slides = slides;
 }
-function slideObj (title, text, labels) {
-    this.title = title;
+function slideObj (text, labels) {
     this.text = text;
     this.labels = labels;
 }
@@ -26,10 +30,10 @@ function navClickFunction(slideId) {
         goToSlide(slideId);
     };
 }
-function generate(p) {
-    //takes a page object and generates the app content
+function generate(p, id) {
+    //takes a page object and it's id in the list generates the app content
 	data = p.slides;
-	currentPage = p.pageId;
+	currentPage = id;
 	
     var imgRoot = document.getElementById('images_wrapper');
     var navRoot = document.getElementById('nav_list');
@@ -41,8 +45,8 @@ function generate(p) {
     for (var i = 0; i < data.length; i++) {
         //Images
         slideImg = document.createElement('img');
-		// img/000/0.png for slide 0 of page 000
-        slideImg.src = 'img/'+p.pageId+'/'+i+'.png';
+		// img/0/0.png for slide 0 of page 0
+        slideImg.src = 'img/'+id+'/'+i+'.png';
         if (first) {
             first = false;
             slideImg.className = 'base_layer';
@@ -122,6 +126,7 @@ function toggleText() {
             document.getElementById('text_wrap').style.display = 'none'
         } else {
             document.getElementById('text_wrap').style.display = ''
+			//todo: pull title from page
             document.getElementById('title').innerHTML = data[currentSlide].title;
             document.getElementById('text').innerHTML = data[currentSlide].text;
         }
