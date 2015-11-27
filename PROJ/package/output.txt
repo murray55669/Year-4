@@ -1,1 +1,0 @@
-{"pages": [{"slides": [{"text": "123\n", "labels": []}, {"text": "asdasdqasd\n", "labels": [[26.527196652719663, 37.05302096177559, "labe"]]}], "title": "title1"}, {"slides": [{"text": "127631267\n", "labels": []}], "title": "title2"}], "package": ""}

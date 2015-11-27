@@ -11,19 +11,16 @@ TODO:
 -undo/redo stuff
 
 -make the whole thing scrollable
--make pages pane l scrollable
 
 -set filetypes that can be read - have a special container for reading in saved stuff to load up editor
     -split into CTRL-S / CTRL-E?
 
--optimize rendering so it's not slow as shit
+-optimize rendering so it's not slow as shit/producing memory errors
+    -dump stuff to disk? have a finalize page option?
 
 -checkbox list for layer visibility
 
--have op reset on slide change
-
--cropping moved layers crops to the position on the original layer, not the cropped layer
-    -repro: add 2nd layer; move it; crop
+-update thumbnails in refresh image
 """
 
 POINT_SCALE = 6
@@ -76,48 +73,28 @@ class Slide(object):
 
     def render(self, crop_points):
         if self.image_cv is not None and self.dirty:
-            # don't lose the original information
-            display = np.copy(self.image_cv)
+
+            if self.offset:
+                rows = self.image_cv.shape[0]
+                cols = self.image_cv.shape[1]
+
+                translate = np.float32([[1, 0, self.offset[0]], [0, 1, self.offset[1]]])
+
+                self.image_render = cv2.warpAffine(self.image_cv, translate, (cols, rows))
+            else:
+                self.image_render = np.copy(self.image_cv)
 
             if crop_points:
                 x1, y1, x2, y2 = crop_points
                 # crop
                 # img[y: y + h, x: x + w]
-                display = display[y1:y2, x1:x2]
+                self.image_render = self.image_render[y1:y2, x1:x2]
 
-            if self.offset:
-                rows = display.shape[0]
-                cols = display.shape[1]
+            # thumbnail
+            scale_ratio = calc_scale_ratio(THUMBNAIL_WIDTH, self.image_render.shape)
+            self.image_thumbnail = cv2.resize(self.image_render, (0, 0), fx=scale_ratio, fy=scale_ratio)
 
-                translate = np.float32([[1, 0, self.offset[0]], [0, 1, self.offset[1]]])
-
-                display = cv2.warpAffine(display, translate, (cols, rows))
-
-            self.image_render = display
             self.dirty = False
-
-    def render_thumbnail(self, crop_points, scale_ratio):
-        if self.image_cv is not None:
-            # don't lose the original information
-            display = np.copy(self.image_cv)
-
-            if crop_points:
-                x1, y1, x2, y2 = crop_points
-                # crop
-                # img[y: y + h, x: x + w]
-                display = display[y1:y2, x1:x2]
-
-            if self.offset:
-                rows = display.shape[0]
-                cols = display.shape[1]
-
-                translate = np.float32([[1, 0, self.offset[0]], [0, 1, self.offset[1]]])
-
-                display = cv2.warpAffine(display, translate, (cols, rows))
-
-            display = cv2.resize(display, (0, 0), fx=scale_ratio, fy=scale_ratio)
-
-            self.image_thumbnail = display
 
 
 class Page():
@@ -140,10 +117,26 @@ class Page():
         self.op_current.set(NO_OP)
 
         # icon
+        self.thumb = None
         self.thumb_tk = None
 
         # title
         self.title_entry = None
+
+    def render_thumbnail(self):
+        self.slides[0].render(self.crop_points)
+        display = np.copy(self.slides[0].image_thumbnail)
+
+        images = [display]
+        for i, slide in enumerate(self.slides):
+            if i > 0:
+                slide.render(self.crop_points)
+                temp = np.copy(slide.image_thumbnail)
+                images.append(temp)
+
+        final_image = stack_images(images)
+
+        self.thumb = Image.fromarray(final_image)
 
     def slide(self):
         if self.slides:
@@ -208,7 +201,22 @@ class Master(object):
         self.package_title_entry.grid(row=2, column=0)
         self.add_page_button = Button(self.master, text="Add Page", command=self.new_page)
         self.add_page_button.grid(row=3, column=0)
-        self.page_row = 4
+
+        self.scroll_wrapper = Frame(self.master)
+        self.scroll_wrapper.grid(row=4, column=0)
+        self.page_canvas = Canvas(self.scroll_wrapper, borderwidth=0, width=THUMBNAIL_WIDTH+5, height=3*THUMBNAIL_WIDTH)
+        self.page_frame = Frame(self.page_canvas)
+        self.page_scroll = Scrollbar(self.scroll_wrapper, orient="vertical", command=self.page_canvas.yview)
+        self.page_canvas.configure(yscrollcommand=self.page_scroll.set)
+
+        self.page_scroll.pack(side="right", fill="y")
+        self.page_canvas.pack(side="left", fill="both", expand=True)
+        self.page_canvas.create_window((0, 0), window=self.page_frame, anchor="nw", tags="self.page_frame",
+                                       width=THUMBNAIL_WIDTH+5)
+
+        self.page_frame.bind("<Configure>", self.page_frame_update)
+
+        self.page_row = 0
 
         self.page_buttons = []
 
@@ -252,14 +260,16 @@ class Master(object):
         # ----- #
         self.edit_label = Label(self.root, text="Slide Editor")
         self.edit_label.grid(row=0, column=cols)
+        self.title_label = Label(self.root, text="Title")
+        self.title_label.grid(row=1, column=cols)
+        # row 2 is from the page
+        self.current_op_label = Label(self.root, textvariable=self.page().op_current)
+        self.current_op_label.grid(row=3, column=cols)
 
         self.thresh_slide = Scale(self.root, from_=1, to=255, orient=HORIZONTAL, label="Threshold", showvalue=0,
                                   length=200, command=self.thresh_slide_update, repeatinterval=250)
         self.thresh_slide.set(THRESH_DEFAULT)
-        self.thresh_slide.grid(row=1, column=cols)
-
-        self.current_op_label = Label(self.root, textvariable=self.page().op_current)
-        self.current_op_label.grid(row=2, column=cols)
+        self.thresh_slide.grid(row=4, column=cols)
 
         self.image_wrapper = Label(self.root, bg='#e0e0e0', borderwidth=3)
         self.image_wrapper.grid(row=5, column=cols)
@@ -269,16 +279,15 @@ class Master(object):
 
         self.image_frame.bind("<Button-1>", self.image_clicked)
         self.image_frame.bind("<B1-Motion>", self.image_dragged)
+
+        self.editor_col = cols
         cols += 1
         # ----- #
         self.details_label = Label(self.root, text="Slide Details")
         self.details_label.grid(row=0, column=cols)
-        self.title_label = Label(self.root, text="Title")
-        self.title_label.grid(row=1, column=cols)
-        # row 2 is from the slide
         self.text_label = Label(self.root, text="Text")
-        self.text_label.grid(row=3, column=cols)
-        # row 4 is from the slide
+        self.text_label.grid(row=1, column=cols)
+        # row 2 is from the slide
         self.details_col = cols
         cols += 1
         # ----- #
@@ -289,47 +298,61 @@ class Master(object):
         self.label_id_selected = -1
         # ----- #
 
-        self.root.bind('<Control-C>', lambda e: self.crop())
-        self.root.bind('<Control-E>', lambda e: self.erase())
-        self.root.bind('<Control-T>', lambda e: self.label())
-        self.root.bind('<Control-D>', lambda e: self.move_layer())
+        # bind keys to all windows
+        roots = [self.master, self.root]
+        for root in roots:
+            root.bind('<Control-C>', lambda e: self.crop())
+            root.bind('<Control-E>', lambda e: self.erase())
+            root.bind('<Control-T>', lambda e: self.label())
+            root.bind('<Control-D>', lambda e: self.move_layer())
 
-        self.root.bind('<Control-V>', lambda e: self.toggle_layers())
+            root.bind('<Control-V>', lambda e: self.toggle_layers())
 
-        self.root.bind('<Control-e>', lambda e: self.export())
-        self.root.bind('<Control-s>', lambda e: self.save())
+            root.bind('<Control-e>', lambda e: self.export())
+            root.bind('<Control-s>', lambda e: self.save())
 
-        self.root.bind('<Control-z>', lambda e: self.undo())
-        self.root.bind('<Control-y>', lambda e: self.redo())
+            root.bind('<Control-z>', lambda e: self.undo())
+            root.bind('<Control-y>', lambda e: self.redo())
 
-        self.root.bind('<Escape>', lambda e: self.escape())
-        self.master.bind('<Escape>', lambda e: self.escape())
-        self.root.bind('<Return>', lambda e: self.accept())
+            root.bind('<Escape>', lambda e: self.escape())
+            root.bind('<Return>', lambda e: self.accept())
+            # debug
+            root.bind('<Control-r>', lambda e: self.refresh_image())
 
         self.running = False  # Tkinter scales are strange
 
-        # debug
-        self.root.bind('<Control-r>', lambda e: self.refresh_image())
-
         self.page_go_to(len(self.pages)-1)
         self.loaded = True
+
+    def page_frame_update(self, event):
+        self.page_canvas.configure(scrollregion=self.page_canvas.bbox("all"))
 
     def add_page(self, page):
         self.pages.append(page)
 
         next_index = len(self.pages)-1
-        page_button = Button(self.master, command=lambda: self.page_go_to(next_index))
+        page_button = Button(self.page_frame, command=lambda: self.page_go_to(next_index), borderwidth=2)
         self.page_buttons.append(page_button)
         page_button.grid(row=self.page_row, column=0)
         self.page_row += 1
 
         if self.loaded:
             self.page_go_to(len(self.pages)-1)
+            self.blank_thumbnail()
+        else:
+            self.blank_thumbnail()
 
     def new_page(self):
         new_page = Page()
         new_page.title_entry = Entry(self.root)
+
         self.add_page(new_page)
+
+    def blank_thumbnail(self):
+        display = np.zeros((THUMBNAIL_WIDTH/3, THUMBNAIL_WIDTH, 4), np.uint8)
+        thumb = Image.fromarray(display)
+        self.page().thumb_tk = ImageTk.PhotoImage(image=thumb, master=self.root)
+        self.page_buttons[self.page_index.get()]['image'] = self.page().thumb_tk
 
     def slide_prev(self):
         self.slide_go_to(self.page().slide_index.get()-1)
@@ -357,7 +380,7 @@ class Master(object):
 
         if self.slide() is not None:
             # load the text
-            self.slide().text_text.grid(row=4, column=self.details_col, rowspan=DETAILS_TEXT_WIDTH, sticky=N)
+            self.slide().text_text.grid(row=2, column=self.details_col, rowspan=DETAILS_TEXT_WIDTH, sticky=N)
             # reload any labels for this slide
             self.slide().label_rows = 1
             for index in range(0, len(self.slide().label_entries)):
@@ -367,10 +390,9 @@ class Master(object):
             # set  the threshold slider
             self.thresh_slide.set(self.slide().thresh_value)
 
-        self.refresh_image()
+        self.no_op()
 
     def page_go_to(self, index):
-        # TODO: title/text switching is broken; as is label switching
         if index != self.page_index:
             # purge current title
             self.page().title_entry.grid_forget()
@@ -378,27 +400,11 @@ class Master(object):
             # update the thumbnail for the current page before leaving
             if self.page_index.get() >= 0:
                 if self.page().slides:
-
-                    self.page().slides[0].render(self.page().crop_points)
-                    self.page().slides[0].render_thumbnail(self.page().crop_points,
-                                                           calc_scale_ratio(THUMBNAIL_WIDTH,
-                                                                            self.page().slides[0].image_render))
-                    display = np.copy(self.page().slides[0].image_thumbnail)
-
-                    for i, slide in enumerate(self.page().slides):
-                        if i > 0:
-                            slide.render(self.page().crop_points)
-                            slide.render_thumbnail(self.page().crop_points,
-                                                   calc_scale_ratio(THUMBNAIL_WIDTH, slide.image_render))
-                            # TODO: just adding the image is a bit shit
-                            temp = np.copy(slide.image_thumbnail)
-                            display = cv2.add(display, temp)
+                    self.page().render_thumbnail()
+                    self.page().thumb_tk = ImageTk.PhotoImage(image=self.page().thumb, master=self.root)
+                    self.page_buttons[self.page_index.get()]['image'] = self.page().thumb_tk
                 else:
-                    display = np.zeros((THUMBNAIL_WIDTH, THUMBNAIL_WIDTH, 4), np.uint8)
-
-                thumb = Image.fromarray(display)
-                self.page().thumb_tk = ImageTk.PhotoImage(image=thumb, master=self.root)
-                self.page_buttons[self.page_index.get()]['image'] = self.page().thumb_tk
+                    self.blank_thumbnail()
 
             # purge text/description/labels
             if self.slide() is not None:
@@ -411,12 +417,10 @@ class Master(object):
             # update page
             self.page_index.set(max(min(index, (len(self.pages)-1)), 0))
             # load the title
-            self.page().title_entry.grid(row=2, column=self.details_col)
+            self.page().title_entry.grid(row=2, column=self.editor_col)
             # update rest of UI/load the correct slide
             self.slide_go_to(self.page().slide_index.get())
             self.current_op_label.configure(textvariable=self.page().op_current)
-
-            self.refresh_image()
 
     def slide_index_to_string(self):
         return "Slide: "+str(self.page().slide_index.get()+1)+"/"+str(len(self.page().slides))
@@ -442,11 +446,7 @@ class Master(object):
     def escape(self):
         op = self.page().op_current.get()
         if op == NO_OP:
-            if len(self.page().points) > 0:
-                self.page().points = []
-                self.refresh_image()
-            else:
-                self.quit()
+            self.quit()
         elif op == CROP or op == ERASE or op == MOVE_LAYER:
             if len(self.page().points) > 0:
                 self.page().points = []
@@ -494,22 +494,22 @@ class Master(object):
         return x, y
 
     def image_clicked(self, event):
-        point = self.relative_point((event.x, event.y))
+        if self.page().op_current != NO_OP:
+            point = self.relative_point((event.x, event.y))
 
-        size = self.scale_constant(POINT_SCALE) + POINT_CLICK_PADDING
-        new_point = True
-        # check if spot clicked is already a point
-        for index, pt in enumerate(self.page().points):
-            px, py = pt
-            if point[0] in range(px-size, px+size+1) and point[1] in range(py-size, py+size+1):
-                del self.page().points[index]
-                new_point = False
-                break
+            size = self.scale_constant(POINT_SCALE) + POINT_CLICK_PADDING
+            new_point = True
+            # check if spot clicked is already a point
+            for index, pt in enumerate(self.page().points):
+                px, py = pt
+                if point[0] in range(px-size, px+size+1) and point[1] in range(py-size, py+size+1):
+                    del self.page().points[index]
+                    new_point = False
+                    self.refresh_image()
+                    break
 
-        if new_point:
-            self.add_point(point)
-
-        self.refresh_image()
+            if new_point:
+                self.add_point(point)
 
     def image_dragged(self, event):
         op = self.page().op_current.get()
@@ -533,11 +533,12 @@ class Master(object):
                 self.page().points.pop()
         elif op == MOVE_LAYER:
             self.page().points = []
+        elif op == NO_OP:
+            accept_point = False
 
         if accept_point:
             self.page().points.append(point)
-
-        self.refresh_image()
+            self.refresh_image()
 
     def dirty_all(self):
         for slide in self.page().slides:
@@ -547,146 +548,154 @@ class Master(object):
         self.page().slides[index].dirty = True
 
     def crop(self):
-        # stage 2 of crop
-        if self.page().op_current.get() == CROP:
+        if self.slide() is not None:
+            # stage 2 of crop
+            if self.page().op_current.get() == CROP:
 
-            # store current crop
-            if self.page().crop_points:
-                prev = self.page().crop_points
+                # store current crop
+                if self.page().crop_points:
+                    prev = self.page().crop_points
+                else:
+                    prev = None
+
+                if len(self.page().points) == 2:
+                    xa, ya = self.page().points[0]
+                    xb, yb = self.page().points[1]
+                    if xa <= xb:
+                        x1 = xa
+                        x2 = xb
+                    else:
+                        x1 = xb
+                        x2 = xa
+                    if ya <= yb:
+                        y1 = ya
+                        y2 = yb
+                    else:
+                        y1 = yb
+                        y2 = ya
+
+                    self.page().crop_points = (x1, y1, x2, y2)
+                    self.no_op()
+
+                    self.page().op_history_add({'op': CROP,
+                                                'prev': prev,
+                                                'next': self.page().crop_points})
+
+                    self.dirty_all()
+
+                elif len(self.page().points) == 0:
+                    self.page().crop_points = None
+                    self.page().op_current.set(NO_OP)
+
+                    self.page().op_history_add({'op': CROP,
+                                                'prev': prev,
+                                                'next': self.page().crop_points})
+
+                    self.dirty_all()
+                else:
+                    print DEBUG_INVALID
+
+            # stage 1 of crop
+            elif self.page().op_current.get() == NO_OP:
+                self.page().points = []
+                self.page().op_current.set(CROP)
+                print "please enter [0|2] points and hit [CTRL-C|Return]"
+
+            # we have interrupted some other operation
             else:
-                prev = None
-
-            if len(self.page().points) == 2:
-                xa, ya = self.page().points[0]
-                xb, yb = self.page().points[1]
-                if xa <= xb:
-                    x1 = xa
-                    x2 = xb
-                else:
-                    x1 = xb
-                    x2 = xa
-                if ya <= yb:
-                    y1 = ya
-                    y2 = yb
-                else:
-                    y1 = yb
-                    y2 = ya
-
-                self.page().crop_points = (x1, y1, x2, y2)
                 self.no_op()
+                self.crop()
 
-                self.page().op_history_add({'op': CROP,
-                                            'prev': prev,
-                                            'next': self.page().crop_points})
-
-                self.dirty_all()
-
-            elif len(self.page().points) == 0:
-                self.page().crop_points = None
-                self.page().op_current.set(NO_OP)
-
-                self.page().op_history_add({'op': CROP,
-                                            'prev': prev,
-                                            'next': self.page().crop_points})
-
-                self.dirty_all()
-            else:
-                print DEBUG_INVALID
-
-        # stage 1 of crop
-        elif self.page().op_current.get() == NO_OP:
-            self.page().points = []
-            self.page().op_current.set(CROP)
-            print "please enter [0|2] points and hit [CTRL-C|Return]"
-
-        # we have interrupted some other operation
-        else:
-            self.no_op()
-            self.crop()
-
-        self.refresh_image()
+            self.refresh_image()
 
     def erase(self):
-        if self.page().op_current.get() == ERASE:
-            if len(self.page().points) > 2:
-                print "successfully erased"
-                # make a copy of the points in case we need to offset them
-                points = list(self.page().points)
-                if self.slide().offset:
-                    for index, point in enumerate(points):
-                        x, y = point
-                        points[index] = (x-self.slide().offset[0], y-self.slide().offset[1])
+        if self.slide() is not None:
+            if self.page().op_current.get() == ERASE:
+                if len(self.page().points) > 2:
+                    print "successfully erased"
+                    # make a copy of the points in case we need to offset them
+                    points = list(self.page().points)
+                    if self.slide().offset:
+                        for index, point in enumerate(points):
+                            x, y = point
+                            points[index] = (x-self.slide().offset[0], y-self.slide().offset[1])
 
-                np_points = np.array([points])
-                prev_image = np.copy(self.slide().image_cv)
-                cv2.fillPoly(self.slide().image_cv, np_points, NO_COLOUR)
-                next_image = np.copy(self.slide().image_cv)
-                self.no_op()
+                    np_points = np.array([points])
+                    prev_image = np.copy(self.slide().image_cv)
+                    cv2.fillPoly(self.slide().image_cv, np_points, NO_COLOUR)
+                    next_image = np.copy(self.slide().image_cv)
+                    self.no_op()
 
-                self.page().op_history_add({'op': ERASE,
-                                            'prev': prev_image,
-                                            'next': next_image})
+                    self.page().op_history_add({'op': ERASE,
+                                                'prev': prev_image,
+                                                'next': next_image})
 
-                self.dirty_index(self.page().slide_index.get())
-            elif len(self.page().points) == 0:
-                self.no_op()
+                    self.dirty_index(self.page().slide_index.get())
+                elif len(self.page().points) == 0:
+                    self.no_op()
+                else:
+                    print DEBUG_INVALID
+
+            elif self.page().op_current.get() == NO_OP:
+                self.page().points = []
+                self.page().op_current.set(ERASE)
+                print "please define an area and hit [CTRL-E|Return]"
+
             else:
-                print DEBUG_INVALID
+                self.no_op()
+                self.erase()
 
-        elif self.page().op_current.get() == NO_OP:
-            self.page().points = []
-            self.page().op_current.set(ERASE)
-            print "please define an area and hit [CTRL-E|Return]"
-
-        else:
-            self.no_op()
-            self.erase()
-
-        self.refresh_image()
+            self.refresh_image()
 
     def move_layer(self):
-        if self.page().op_current.get() == MOVE_LAYER:
-            x1, y1 = self.page().points[0]
-            x2, y2 = self.page().points[1]
-            self.slide().offset = (x2-x1, y2-y1)
-            self.no_op()
-            self.dirty_index(self.page().slide_index.get())
-            # TODO: undo
-        elif self.page().op_current.get() == NO_OP:
-            if self.page().slide_index.get() > 0:
-                self.page().points = []
-                self.page().op_current.set(MOVE_LAYER)
-                print "please click and drag the layer and hit [CTRL-A|Return]"
+        if self.slide() is not None:
+            if self.page().op_current.get() == MOVE_LAYER:
+                x1, y1 = self.page().points[0]
+                x2, y2 = self.page().points[1]
+                if self.slide().offset is not None:
+                    x_prev, y_prev = self.slide().offset
+                    self.slide().offset = (x_prev+(x2-x1), y_prev+(y2-y1))
+                else:
+                    self.slide().offset = (x2-x1, y2-y1)
+                self.no_op()
+                self.dirty_index(self.page().slide_index.get())
+                # TODO: undo
+            elif self.page().op_current.get() == NO_OP:
+                if self.page().slide_index.get() > 0:
+                    self.page().points = []
+                    self.page().op_current.set(MOVE_LAYER)
+                    print "please click and drag the layer and hit [CTRL-D|Return]"
+                else:
+                    print "base layer cannot be moved!"
             else:
-                print "base layer cannot be moved!"
-        else:
-            self.no_op()
-            self.move_layer()
+                self.no_op()
+                self.move_layer()
 
-        self.refresh_image()
+            self.refresh_image()
 
     def label(self):
-        print "adding label"
-        label = Entry(self.root)
-        self.slide().label_entries.append(label)
-        label.grid(row=self.slide().label_rows, column=self.label_cols)
+        if self.slide() is not None:
+            print "adding label"
+            label = Entry(self.root)
+            self.slide().label_entries.append(label)
+            label.grid(row=self.slide().label_rows, column=self.label_cols)
 
-        colour = "#%06x" % random.randint(0, 0xFFFFFF)
+            colour = "#%06x" % random.randint(0, 0xFFFFFF)
 
-        copy = self.slide().label_id
+            copy = self.slide().label_id
 
-        button = Button(self.root, command=lambda: self.label_point(copy), bg=colour)
-        self.slide().label_buttons.append(button)
-        button.grid(row=self.slide().label_rows, column=self.label_cols+1)
+            button = Button(self.root, command=lambda: self.label_point(copy), bg=colour, width=2, height=1)
+            self.slide().label_buttons.append(button)
+            button.grid(row=self.slide().label_rows, column=self.label_cols+1)
 
-        self.slide().label_rows += 1
+            self.slide().label_rows += 1
 
-        self.slide().labels.append({'id': self.slide().label_id,
-                                    'label': label,
-                                    'button': button,
-                                    'colour': colour,
-                                    'point': None})
-        self.slide().label_id += 1
+            self.slide().labels.append({'id': self.slide().label_id,
+                                        'label': label,
+                                        'button': button,
+                                        'colour': colour,
+                                        'point': None})
+            self.slide().label_id += 1
 
     def label_point(self, label_id):
         if self.page().op_current.get() == LABEL_POINT:
@@ -750,6 +759,7 @@ class Master(object):
             for slide_index, slide in enumerate(page.slides):
                 # save image
                 slide_loc = page_dir+'/'+str(slide_index)
+                slide.render(self.page().crop_points)
                 cv2.imwrite(slide_loc+'.png', cv2.cvtColor(slide.image_render, cv2.COLOR_RGBA2BGRA))
 
                 slide_dump = {'text': slide.text_text.get(1.0, END)}
@@ -821,6 +831,19 @@ class Master(object):
         else:
             self.running = True
 
+    def render_temp_offset(self, image):
+        x1, y1 = self.page().points[0]
+        x2, y2 = self.page().points[1]
+        tx = x2-x1
+        ty = y2-y1
+
+        rows = image.shape[0]
+        cols = image.shape[1]
+
+        translate = np.float32([[1, 0, tx], [0, 1, ty]])
+
+        return cv2.warpAffine(image, translate, (cols, rows))
+
     def refresh_image(self):
         if self.loaded:
             if len(self.page().slides) > 0:
@@ -828,34 +851,29 @@ class Master(object):
 
                 if self.display_layers:
                     self.page().slides[0].render(self.page().crop_points)
-                    layered_image = np.copy(self.page().slides[0].image_render)
+                    base = np.copy(self.page().slides[0].image_render)
 
+                    images = [base]
                     for index, slide in enumerate(self.page().slides):
                         if index != 0:
                             slide.render(self.page().crop_points)
-                            if op == MOVE_LAYER and len(self.page().points) == 2 and index == self.page().slide_index.get():
-                                x1, y1 = self.page().points[0]
-                                x2, y2 = self.page().points[1]
-                                tx = x2-x1
-                                ty = y2-y1
-
+                            if op == MOVE_LAYER and len(self.page().points) == 2 \
+                                    and index == self.page().slide_index.get():
                                 temp = np.copy(slide.image_render)
+                                temp = self.render_temp_offset(temp)
 
-                                rows = temp.shape[0]
-                                cols = temp.shape[1]
-
-                                translate = np.float32([[1, 0, tx], [0, 1, ty]])
-
-                                temp = cv2.warpAffine(temp, translate, (cols, rows))
-
-                                # TODO: just adding the image is a bit shit
-                                layered_image = cv2.add(layered_image, temp)
+                                images.append(temp)
                             else:
-                                layered_image = cv2.add(layered_image, slide.image_render)
+                                images.append(np.copy(slide.image_render))
+
+                    final_image = stack_images(images)
                 else:
-                    # TODO: 'move layer' stuff in here
                     self.page().slides[self.page().slide_index.get()].render(self.page().crop_points)
-                    layered_image = np.copy(self.page().slides[self.page().slide_index.get()].image_render)
+                    temp = np.copy(self.page().slides[self.page().slide_index.get()].image_render)
+                    if op == MOVE_LAYER and len(self.page().points) == 2:
+                        final_image = self.render_temp_offset(temp)
+                    else:
+                        final_image = temp
 
                 x_offset = 0
                 y_offset = 0
@@ -865,7 +883,7 @@ class Master(object):
                     x_offset = x1
                     y_offset = y1
 
-                self.page().scale_ratio = calc_scale_ratio(IMAGE_WIDTH, layered_image)
+                self.page().scale_ratio = calc_scale_ratio(IMAGE_WIDTH, final_image.shape)
 
                 # draw anything else on top of the base image
                 # scale to match crop area
@@ -873,13 +891,16 @@ class Master(object):
                 thickness = self.scale_constant(POINT_LINE_WIDTH)
 
                 # draw crosses to show points
-                for p_x, p_y in self.page().points:
-                    # point offset due to cropping
-                    r_x = p_x-x_offset
-                    r_y = p_y-y_offset
+                if op == NO_OP or op == MOVE_LAYER:
+                    pass
+                else:
+                    for p_x, p_y in self.page().points:
+                        # point offset due to cropping
+                        r_x = p_x-x_offset
+                        r_y = p_y-y_offset
 
-                    cv2.line(layered_image, (r_x-size, r_y-size), (r_x+size, r_y+size), POINT_COLOUR, thickness)
-                    cv2.line(layered_image, (r_x-size, r_y+size), (r_x+size, r_y-size), POINT_COLOUR, thickness)
+                        cv2.line(final_image, (r_x-size, r_y-size), (r_x+size, r_y+size), POINT_COLOUR, thickness)
+                        cv2.line(final_image, (r_x-size, r_y+size), (r_x+size, r_y-size), POINT_COLOUR, thickness)
 
                 # draw indicators for any labels
                 for label in self.slide().labels:
@@ -890,8 +911,8 @@ class Master(object):
 
                         colour = hex_to_rgba(label['colour'])
 
-                        cv2.line(layered_image, (rx-size, ry-size), (rx+size, ry+size), colour, thickness)
-                        cv2.line(layered_image, (rx-size, ry+size), (rx+size, ry-size), colour, thickness)
+                        cv2.line(final_image, (rx-size, ry-size), (rx+size, ry+size), colour, thickness)
+                        cv2.line(final_image, (rx-size, ry+size), (rx+size, ry-size), colour, thickness)
 
                 # depending on current operation, draw other stuff
                 if op == CROP:
@@ -904,10 +925,10 @@ class Master(object):
                         y2 -= y_offset
 
                         thickness = self.scale_constant(LINE_WIDTH)
-                        cv2.line(layered_image, (x1, y1), (x2, y1), LINE_COLOUR, thickness)
-                        cv2.line(layered_image, (x2, y1), (x2, y2), LINE_COLOUR, thickness)
-                        cv2.line(layered_image, (x2, y2), (x1, y2), LINE_COLOUR, thickness)
-                        cv2.line(layered_image, (x1, y2), (x1, y1), LINE_COLOUR, thickness)
+                        cv2.line(final_image, (x1, y1), (x2, y1), LINE_COLOUR, thickness)
+                        cv2.line(final_image, (x2, y1), (x2, y2), LINE_COLOUR, thickness)
+                        cv2.line(final_image, (x2, y2), (x1, y2), LINE_COLOUR, thickness)
+                        cv2.line(final_image, (x1, y2), (x1, y1), LINE_COLOUR, thickness)
                 elif op == ERASE:
                     if len(self.page().points) > 2:
                         if self.page().crop_points:
@@ -918,10 +939,10 @@ class Master(object):
                             np_points = np.array([adjusted])
                         else:
                             np_points = np.array([self.page().points])
-                        cv2.fillPoly(layered_image, np_points, LINE_COLOUR)
+                        cv2.fillPoly(final_image, np_points, LINE_COLOUR)
 
                 # scale
-                display = cv2.resize(layered_image, (0, 0), fx=self.page().scale_ratio, fy=self.page().scale_ratio)
+                display = cv2.resize(final_image, (0, 0), fx=self.page().scale_ratio, fy=self.page().scale_ratio)
 
                 # display image
                 img = Image.fromarray(display)
@@ -949,10 +970,8 @@ def thresh_image(image, thresh_val):
     return cv2.merge((r, g, b, thresh_gray))
 
 
-def calc_scale_ratio(desired_width, image):
-    shape = image.shape
-    width = shape[1]
-    return desired_width / float(width)
+def calc_scale_ratio(desired_width, image_shape):
+    return desired_width / float(image_shape[1])
 
 
 def hex_to_rgba(value):
@@ -960,6 +979,23 @@ def hex_to_rgba(value):
     lv = len(value)
     rgb = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
     return rgb+(255,)
+
+
+def stack_images(images):
+    # takes an array of images and stacks them up
+    if len(images) > 0:
+        stack = images[0]
+
+        for image in images[1:]:
+            stack_gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
+            ret, stack_mask = cv2.threshold(stack_gray, 10, 255, cv2.THRESH_BINARY)
+            stack_mask_inv = cv2.bitwise_not(stack_mask)
+            stack = cv2.bitwise_and(stack, stack, mask=stack_mask_inv)
+            image = cv2.bitwise_and(image, image, mask=stack_mask)
+
+            stack = cv2.add(stack, image)
+
+        return stack
 
 
 if __name__ == '__main__':
