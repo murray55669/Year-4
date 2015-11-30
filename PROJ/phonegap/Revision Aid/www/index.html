@@ -13,24 +13,6 @@
 		<script src="js/fastclick.js"></script>
 		<script src="js/hammer.js"></script>
 		<script type="text/javascript" src="cordova.js"></script>
-		
-		<script>        
-        var l1 = new labelObj(35, 40, 'EPIPHYSIS OF THE BONE');
-        var l2 = new labelObj(35, 65, 'EPIPHYSIS OF THE BONE');
-        
-        var l3 = new labelObj(40, 61, 'HYALINE');
-        
-        var l4 = new labelObj(43, 55, 'JOINT CAVITY');
-        var l5 = new labelObj(13, 47, 'SYNOVIAL MEMBRANE containing SYNOVIAL FLUID');
-        
-        var s1 = new slideObj('', [l1, l2]);
-        var s2 = new slideObj('HYALINE: Articular surface covered in a thin layer of cartilage', [l3]);
-        var s3 = new slideObj('JOINT CAVITY: filled with synovial fluid - provides lubrication and nutrition to the cartilage<br><br>SYNOVIAL MEMBRANE: Sleeve of delicate cartilage attached around the periphery of the articular surface', [l4, l5]);
-        var s4 = new slideObj('', []);
-		
-		var testPage = new pageObj('Typical Synovial Joint', [s1, s2, s3, s4]);
-        
-    </script>
     </head>
     <body onload="pageInit()">
 		<div class="container">
@@ -40,9 +22,29 @@
 						
 			<div class="controls" id="controls">
 				<div class="button noselect bold" id="text_button" onclick="toggleText()">T</div>
-				<div class="button noselect bold" id="nav_button" onclick="toggleSlidesList()">=</div>
-				<div class="button noselect bold" id="page_button" onclick="togglePagesList()">ls</div>
-				<div class="button noselect bold" id="package_button" onclick="document.getElementById('fileBrowser').click();">cd</div>
+				<div class="button noselect bold" id="nav_button" onclick="toggleSlidesList()">Slides</div>
+				<div class="button noselect bold" id="page_button" onclick="togglePagesList()">Pages</div>
+				<div class="button noselect bold" id="package_button" onclick="document.getElementById('fileBrowser').click();">-</div>
+			</div>
+			
+			<div class="page_list" id="page_list">
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<div id="1" class="page_list_entry" onclick="goToPage(0)">test</div>
+				<!-- generate this with JS -->
 			</div>
 			
 			<div class="slide_list" id="nav_list">
@@ -52,7 +54,6 @@
 			<div class="textbox_wrapper" id="text_wrap">
 				<div class="textbox">
 					<div class="textbox_title bold" id="title"></div>
-					<div class="textbox_controls noselect" onclick="toggleText()">X</div>
 					<div class="textbox_content" id="text"></div>
 				</div>
 			</div>
@@ -66,6 +67,7 @@
 			attachFastClick(document.body);
 			
 			//gestures
+			//TODO: have these only run when screen is available or something
 			var gestures = new Hammer(document.body);
 			gestures.on("swipeleft", function(e) {
 				nextSlide();

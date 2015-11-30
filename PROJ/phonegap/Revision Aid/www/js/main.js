@@ -2,16 +2,25 @@ var windowWidth = window.innerWidth
 var windowHeight = window.innerHeight
 
 var currentSlide = 0;
-var currentPage = "";
+var currentPage = 0;
 
 var slideImages = [];
-var data = [];
 
-/*
-	TODO:
-	-be able to load full packages as opposed to pages
-*/
+var data = {};
+var slides = [];
 
+ function loadJSON(callback) {   
+    var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+    xobj.open('GET', 'package/data.json', false); // Replace 'my_data' with the path to your file
+    xobj.onreadystatechange = function () {
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+          }
+    };
+    xobj.send(null);  
+ }
 function pageObj (title, slides) {
 	this.title = title;
 	this.slides = slides;
@@ -30,23 +39,51 @@ function navClickFunction(slideId) {
         goToSlide(slideId);
     };
 }
-function generate(p, id) {
-    //takes a page object and it's id in the list generates the app content
-	data = p.slides;
+function pageClickFunction(pageId) {
+	return function() {
+        goToPage(pageId);
+    };
+}
+function goToPage(id) {
+    //takes the id of a page and refreshes the app view to match
+	
+	//TODO: save/load stuff
+	/*
+	//save state to local storage
+	localStorage.setItem("currentPage", currentPage);
+	*/
+	if (id < 0) {
+        id = 0;
+    } else if (id >= data.pages.length) {
+        id = data.pages.length-1;
+    }
+	
 	currentPage = id;
 	
+	slides = data.pages[currentPage].slides;
+
     var imgRoot = document.getElementById('images_wrapper');
     var navRoot = document.getElementById('nav_list');
+	
+	//reset page
+	slideImages = []
+	while (imgRoot.firstChild) {	
+		imgRoot.removeChild(imgRoot.firstChild);
+	}
+	while (navRoot.firstChild) {
+		navRoot.removeChild(navRoot.firstChild);
+	}
+	
     var first = true; 
     
     var slideImg;
     var navEntry;
     
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < slides.length; i++) {
         //Images
         slideImg = document.createElement('img');
-		// img/0/0.png for slide 0 of page 0
-        slideImg.src = 'img/'+id+'/'+i+'.png';
+		// package/X/Y.png for slide Y of page X
+        slideImg.src = 'package/'+id+'/'+i+'.png';
         if (first) {
             first = false;
             slideImg.className = 'base_layer';
@@ -58,14 +95,16 @@ function generate(p, id) {
         //Nav menu (order reversed, so menu arranged with base layer button closest to control bar)
         navEntry = document.createElement('div');
         navEntry.className = 'slide_list_entry noselect';
-        navEntry.innerHTML = (data.length-1)-i;
-        navEntry.onclick = navClickFunction((data.length-1)-i);
+        navEntry.innerHTML = (slides.length-1)-i;
+        navEntry.onclick = navClickFunction((slides.length-1)-i);
         navRoot.appendChild(navEntry);
     }
     
     var clearDiv = document.createElement('div')
     clearDiv.className = 'clear'
     imgRoot.appendChild(clearDiv)
+	
+	goToSlide(0);
 }
 function nextSlide() {
     goToSlide(currentSlide+1);
@@ -73,24 +112,26 @@ function nextSlide() {
 function previousSlide() {
     goToSlide(currentSlide-1);
 }
-function goToSlide(value) {
+function goToSlide(value) {	
     cleanScreen();
+	
     if (value < 0) {
         value = 0;
-    } else if (value >= data.length) {
-        value = data.length-1;
+    } else if (value >= slides.length) {
+        value = slides.length-1;
     }
+	
     currentSlide = value;
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < slides.length; i++) {
         if (i <= currentSlide) {
             slideImages[i].style.display = '';
         } else {
             slideImages[i].style.display = 'none';
         }
         if (i == currentSlide) {
-            //Add labels
-            for (var j = 0; j < data[i].labels.length; j++) {
-                addLabel(data[i].labels[j].xPos, data[i].labels[j].yPos, data[i].labels[j].text);
+            //Display labels
+            for (var j = 0; j < slides[i].labels.length; j++) {
+                addLabel(slides[i].labels[j].xPos, slides[i].labels[j].yPos, slides[i].labels[j].text);
             }
         }
     }
@@ -100,11 +141,11 @@ function goToSlide(value) {
     var enabled = 'button noselect bold';
     var disabled = 'button noselect bold disabled';
     
-    if (data.len == 1) {
+    if (slides.len == 1) {
         navButton.className = disabled;
     }
     
-    if (data[currentSlide].text == '') {
+    if (slides[currentSlide].text == '') {
         textButton.className = disabled; 
     } else {
         textButton.className = enabled;
@@ -116,29 +157,46 @@ function toggleSlidesList() {
     if (document.getElementById('nav_list').style.display == '') {
         document.getElementById('nav_list').style.display = 'none'
     } else {
+		entries = document.getElementsByClassName('slide_list_entry');
+		for (var i = 0; i < entries.length; i++) {
+			entries[i].className = 'slide_list_entry noselect';
+		}
+		entries[(slides.length-1)-currentSlide].className = 'slide_list_entry noselect slide_list_entry_selected';
         document.getElementById('nav_list').style.display = ''
+    }
+}
+function togglePagesList() {
+    if (document.getElementById('page_list').style.display == '') {
+        document.getElementById('page_list').style.display = 'none'
+    } else {
+		entries = document.getElementsByClassName('page_list_entry');
+		entries = document.getElementsByClassName('page_list_entry');
+		for (var i = 0; i < entries.length; i++) {
+			if (entries[i].id == currentPage) {
+				entries[i].className = 'page_list_entry noselect page_list_entry_selected';
+			} else {
+				entries[i].className = 'page_list_entry noselect';	
+			}
+		}
+        document.getElementById('page_list').style.display = ''
     }
 }
 function toggleText() {
     //Toggles text box overlay on slide on and off.
-    if (data[currentSlide].text != "") {
+    if (slides[currentSlide].text != "") {
         if (document.getElementById('text_wrap').style.display == '') {
             document.getElementById('text_wrap').style.display = 'none'
         } else {
-            document.getElementById('text_wrap').style.display = ''
-			//todo: pull title from page
-            document.getElementById('title').innerHTML = data[currentSlide].title;
-            document.getElementById('text').innerHTML = data[currentSlide].text;
+			var text_wrap = document.getElementById('text_wrap')
+            text_wrap.style.display = ''
+			var title = document.getElementById('title');
+            title.innerHTML = data.pages[currentPage].title;
+			var text = document.getElementById('text');
+			text.style.top = title.offsetHeight + "px";
+			var breaks = slides[currentSlide].text.replace(/\n/g, "<br>");
+            text.innerHTML = breaks;
         }
     }
-}
-function togglePagesList() {
-	//TODO
-}
-function goToPage(value) {
-	//TODO
-	//save state to local storage
-	localStorage.setItem("currentPage", currentPage);
 }
 function selectPackage(input) {
 	//TODO
@@ -227,6 +285,7 @@ function cleanScreen() {
     removeLabels();
     document.getElementById('text_wrap').style.display = 'none';
     document.getElementById('nav_list').style.display = 'none';
+    document.getElementById('page_list').style.display = 'none';
 }
 function resizeWidth() {
 	var lMarkers = document.getElementsByClassName('label_marker');
@@ -263,8 +322,29 @@ function vw(val) {
 }	
 function pageInit() {
 	//TODO: use HTML5 storage to store a package to be loaded - if none exists, ask user to select one?
-	generate(testPage);
 	
+	//TODO: if previous parse, don't parse
+	actual_JSON = loadJSON(function(response) {
+		// Parse JSON string into object
+		data = JSON.parse(response);
+		
+		//setup page list 
+		var pageRoot = document.getElementById('page_list');
+		
+		for (var i = 0; i < data.pages.length; i++) {
+			pageEntry = document.createElement('div');
+			pageEntry.id = i;
+			pageEntry.className = 'page_list_entry noselect';
+			pageEntry.innerHTML = data.pages[i].title;
+			pageEntry.onclick = pageClickFunction(i);
+			pageRoot.appendChild(pageEntry);
+		}
+	});
+	
+	goToPage(0);
+	
+	/*
+	//TODO: this is related to loading previous packages
 	var cp = localStorage.getItem("currentPage");
 	if (cp) {
 		goToPage(parseInt(cp));
@@ -280,4 +360,5 @@ function pageInit() {
 	else {
 		goToSlide(0);
 	}
+	*/
 }

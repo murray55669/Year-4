@@ -621,14 +621,11 @@ class Master(object):
                             points[index] = (x-self.slide().offset[0], y-self.slide().offset[1])
 
                     np_points = np.array([points])
-                    prev_image = np.copy(self.slide().image_cv)
                     cv2.fillPoly(self.slide().image_cv, np_points, NO_COLOUR)
-                    next_image = np.copy(self.slide().image_cv)
                     self.no_op()
 
                     self.page().op_history_add({'op': ERASE,
-                                                'prev': prev_image,
-                                                'next': next_image})
+                                                'points': np_points})
 
                     self.dirty_index(self.page().slide_index.get())
                 elif len(self.page().points) == 0:
@@ -762,7 +759,8 @@ class Master(object):
                 slide.render(self.page().crop_points)
                 cv2.imwrite(slide_loc+'.png', cv2.cvtColor(slide.image_render, cv2.COLOR_RGBA2BGRA))
 
-                slide_dump = {'text': slide.text_text.get(1.0, END)}
+                # text
+                slide_dump = {'text': slide.text_text.get(1.0, END).strip()}
                 # labels
                 label_list = []
                 if page.crop_points:
@@ -777,7 +775,9 @@ class Master(object):
                     if label['point']:
                         x_pct = ((label['point'][0] - x1) / float(x2 - x1)) * 100
                         y_pct = ((label['point'][1] - y1) / float(y2 - y1)) * 100
-                        label_list.append((x_pct, y_pct, label['label'].get()))
+                        label_list.append({'xPos': x_pct,
+                                           'yPos': y_pct,
+                                           'text': label['label'].get()})
                 slide_dump['labels'] = label_list
                 slide_list.append(slide_dump)
 

@@ -110,6 +110,7 @@ body {
 .images_wrapper {
     position: relative;
     width: 100%;
+	margin-bottom: 96px;
 }
 /***************/
 /* control bar */
@@ -152,6 +153,31 @@ body {
     background: #d0d0d0;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
 }
+.slide_list_entry_selected {
+	background: #c0c0c0;
+}
+.page_list {
+	overflow-y: auto;
+	position: fixed;
+	bottom: 120px;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	background: #e0e0e0;
+}
+.page_list_entry {
+	float: left;
+	width: 100%;
+	font-size: 120%;
+	height: 60px;
+	line-height: 60px;
+    text-align: center;
+    background: #d0d0d0;
+    box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
+}
+.page_list_entry_selected {
+	background: #c0c0c0;
+}
 /*********/
 /* image */
 /*********/
@@ -185,40 +211,27 @@ body {
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
 }
 .textbox_title {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    height: 60px;
-    line-height: 60px;
     background: #e0e0e0;
     font-size: 160%;
-    padding: 0 15px;
+	line-height: 160%;
+    padding: 15px;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
-}
-.textbox_controls {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
-    font-size: 250%;
-    font-family: sans-serif;
-    background: #d0d0d0;
-    color: #ff0000;
-    box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
 }
 .textbox_content {
-    position: absolute;
-    top: 60px;
-    left: 0px;
-    bottom: 0px;
-    right: 0px;
+	overflow-y: auto;
     color: #000000;
     padding: 10px;
-    font-size: 120%;
+    font-size: 140%;
+	line-height: 140%;
+	top: 0px; /* override with JS*/
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
 }
 /*********/
 /* label */
