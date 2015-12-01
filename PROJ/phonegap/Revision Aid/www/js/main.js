@@ -1,6 +1,3 @@
-var windowWidth = window.innerWidth
-var windowHeight = window.innerHeight
-
 var currentSlide = 0;
 var currentPage = 0;
 
@@ -35,12 +32,14 @@ function labelObj (xPos, yPos, text) {
     this.text = text;
 }
 function navClickFunction(slideId) {
-    return function() {
+    return function(event) {
+		event.stopPropagation();
         goToSlide(slideId);
     };
 }
 function pageClickFunction(pageId) {
-	return function() {
+	return function(event) {
+		event.stopPropagation();
         goToPage(pageId);
     };
 }
@@ -59,6 +58,9 @@ function goToPage(id) {
     }
 	
 	currentPage = id;
+	
+	var title = document.getElementById('page_title');
+	title.innerHTML = data.pages[currentPage].title;
 	
 	slides = data.pages[currentPage].slides;
 
@@ -114,6 +116,7 @@ function previousSlide() {
 }
 function goToSlide(value) {	
     cleanScreen();
+	window.scrollTo(0, 0);
 	
     if (value < 0) {
         value = 0;
@@ -189,10 +192,7 @@ function toggleText() {
         } else {
 			var text_wrap = document.getElementById('text_wrap')
             text_wrap.style.display = ''
-			var title = document.getElementById('title');
-            title.innerHTML = data.pages[currentPage].title;
 			var text = document.getElementById('text');
-			text.style.top = title.offsetHeight + "px";
 			var breaks = slides[currentSlide].text.replace(/\n/g, "<br>");
             text.innerHTML = breaks;
         }
@@ -283,7 +283,10 @@ function removeLabels() {
 }
 function cleanScreen() {
     removeLabels();
-    document.getElementById('text_wrap').style.display = 'none';
+    hideOverlays();
+}
+function hideOverlays() {
+	document.getElementById('text_wrap').style.display = 'none';
     document.getElementById('nav_list').style.display = 'none';
     document.getElementById('page_list').style.display = 'none';
 }
@@ -318,7 +321,7 @@ function resizeWidth() {
 	}
 }
 function vw(val) {
-	return ((windowWidth*val)/100)+'px';
+	return ((window.innerWidth*val)/100)+'px';
 }	
 function pageInit() {
 	//TODO: use HTML5 storage to store a package to be loaded - if none exists, ask user to select one?

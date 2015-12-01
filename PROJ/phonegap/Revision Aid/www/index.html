@@ -15,16 +15,19 @@
 		<script type="text/javascript" src="cordova.js"></script>
     </head>
     <body onload="pageInit()">
-		<div class="container">
+		<div class="container" onclick="hideOverlays();toggleText()">
+			<div class="page_title" id="page_title">
+			</div>
+		
 			<div class="images_wrapper" id="images_wrapper">
 				<!-- generate this with JS -->
 			</div>
 						
 			<div class="controls" id="controls">
-				<div class="button noselect bold" id="text_button" onclick="toggleText()">T</div>
-				<div class="button noselect bold" id="nav_button" onclick="toggleSlidesList()">Slides</div>
-				<div class="button noselect bold" id="page_button" onclick="togglePagesList()">Pages</div>
-				<div class="button noselect bold" id="package_button" onclick="document.getElementById('fileBrowser').click();">-</div>
+				<div class="button noselect bold" id="text_button" onclick="event.stopPropagation();toggleText()">T</div>
+				<div class="button noselect bold" id="nav_button" onclick="event.stopPropagation();toggleSlidesList()">Slides</div>
+				<div class="button noselect bold" id="page_button" onclick="event.stopPropagation();togglePagesList()">Pages</div>
+				<div class="button noselect bold" id="package_button" onclick="event.stopPropagation();document.getElementById('fileBrowser').click();">-</div>
 			</div>
 			
 			<div class="page_list" id="page_list">
@@ -51,9 +54,8 @@
 				<!-- generate this with JS -->
 			</div>
 
-			<div class="textbox_wrapper" id="text_wrap">
+			<div class="textbox_wrapper" id="text_wrap" onclick="event.stopPropagation();toggleText();">
 				<div class="textbox">
-					<div class="textbox_title bold" id="title"></div>
 					<div class="textbox_content" id="text"></div>
 				</div>
 			</div>
