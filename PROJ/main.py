@@ -1,10 +1,13 @@
-import cv2
-import numpy as np
 import json
 import random
-from Tkinter import *
+import shutil
+import os
+import time
 from tkFileDialog import *
-from PIL import Image, ImageTk
+from pyapp.slide import *
+from pyapp.page import *
+from pyapp.constants import *
+from pyapp.utils import *
 
 """
 TODO:
@@ -14,181 +17,30 @@ TODO:
 
 -set filetypes that can be read - have a special container for reading in saved stuff to load up editor
     -split into CTRL-S / CTRL-E?
+    -have path saves as part of page object
+    -have details of gui save/load from JSON, with list of slide locations
 
 -optimize rendering so it's not slow as shit/producing memory errors
     -dump stuff to disk? have a finalize page option?
 
 -checkbox list for layer visibility
 
--update thumbnails in refresh image
+-switch from using shitty thumbnails to page titles
+
+-switch package files to "colon-enter" instead of "space-dash-space" formatting
+-add slide ticker to app (e.g. slide 4/5)
 """
 
-POINT_SCALE = 6
-POINT_LINE_WIDTH = 2
-POINT_CLICK_PADDING = 5
-POINT_COLOUR = (255, 0, 255, 255)
 
-LINE_WIDTH = 2
-LINE_COLOUR = (128, 0, 128, 255)
-
-NO_COLOUR = (0, 0, 0, 0)
-
-DEBUG_INVALID = "invalid number of points!"
-
-NO_OP = "no_op"
-CROP = "crop"
-ERASE = "erase"
-LABEL_POINT = "label_point"
-MOVE_LAYER = "move_layer"
-
-THRESH_DEFAULT = 200
-
-DETAILS_TEXT_WIDTH = 8
-
-IMAGE_WIDTH = 640
-THUMBNAIL_WIDTH = 160
-
-
-class Slide(object):
+class Gui(object):
     def __init__(self):
-        self.labels = []
+        # check if a temp folder exits, if so wipe it
+        # TODO: load from this folder instead
+        if os.path.exists(TEMP_DIR):
+            shutil.rmtree(TEMP_DIR)
+            time.sleep(1)
+        os.mkdir(TEMP_DIR)
 
-        self.label_rows = 1
-        self.label_entries = []
-        self.label_buttons = []
-        self.label_id = 0
-
-        self.thresh_value = THRESH_DEFAULT
-
-        self.text_text = None
-
-        self.image_orig = None
-        self.image_cv = None
-        self.image_render = None
-        self.image_thumbnail = None
-
-        self.dirty = True
-
-        self.offset = None
-
-    def render(self, crop_points):
-        if self.image_cv is not None and self.dirty:
-
-            if self.offset:
-                rows = self.image_cv.shape[0]
-                cols = self.image_cv.shape[1]
-
-                translate = np.float32([[1, 0, self.offset[0]], [0, 1, self.offset[1]]])
-
-                self.image_render = cv2.warpAffine(self.image_cv, translate, (cols, rows))
-            else:
-                self.image_render = np.copy(self.image_cv)
-
-            if crop_points:
-                x1, y1, x2, y2 = crop_points
-                # crop
-                # img[y: y + h, x: x + w]
-                self.image_render = self.image_render[y1:y2, x1:x2]
-
-            # thumbnail
-            scale_ratio = calc_scale_ratio(THUMBNAIL_WIDTH, self.image_render.shape)
-            self.image_thumbnail = cv2.resize(self.image_render, (0, 0), fx=scale_ratio, fy=scale_ratio)
-
-            self.dirty = False
-
-
-class Page():
-    def __init__(self):
-        # slides
-        self.slides = []
-        self.slide_index = IntVar()
-        self.slide_index.set(-1)
-
-        # image
-        self.crop_points = None
-        self.scale_ratio = 1.0
-        self.points = []
-
-        # Undo/redo
-        self.op_current = StringVar()
-        self.op_history = []
-        self.op_history_index = -1
-
-        self.op_current.set(NO_OP)
-
-        # icon
-        self.thumb = None
-        self.thumb_tk = None
-
-        # title
-        self.title_entry = None
-
-    def render_thumbnail(self):
-        self.slides[0].render(self.crop_points)
-        display = np.copy(self.slides[0].image_thumbnail)
-
-        images = [display]
-        for i, slide in enumerate(self.slides):
-            if i > 0:
-                slide.render(self.crop_points)
-                temp = np.copy(slide.image_thumbnail)
-                images.append(temp)
-
-        final_image = stack_images(images)
-
-        self.thumb = Image.fromarray(final_image)
-
-    def slide(self):
-        if self.slides:
-            return self.slides[self.slide_index.get()]
-        else:
-            return None
-
-    def op_history_add(self, data):
-        # TODO: remember slide index
-        # discard anything that could be re-done
-        if self.op_history_index < len(self.op_history)-1:
-            self.op_history = self.op_history[:self.op_history_index+1]
-
-        self.op_history.append(data)
-        self.op_history_index = len(self.op_history)-1
-
-    def undo(self):
-        # TODO: act upon slide index; dirty slides
-        pass
-        """
-        if self.op_history_index >= 0:
-            last_op = self.op_history[self.op_history_index]
-
-            op = last_op['op']
-            if op == CROP:
-                self.crop_points = last_op['prev']
-            elif op == ERASE:
-                self.slides[0].image_cv = np.copy(last_op['prev'])  # TODO: broken
-
-            self.op_history_index -= 1
-        self.refresh_image()
-        """
-
-    def redo(self):
-        # TODO: act upon slide index; dirty slides
-        pass
-        """
-        if self.op_history_index < len(self.op_history)-1:
-            self.op_history_index += 1
-            next_op = self.op_history[self.op_history_index]
-
-            op = next_op['op']
-            if op == CROP:
-                self.crop_points = next_op['next']
-            elif op == ERASE:
-                self.slides[0].image_cv = np.copy(next_op['next'])  # TODO: broken
-        self.refresh_image()
-        """
-
-
-class Master(object):
-    def __init__(self):
         self.loaded = False
         self.master = Tk()
 
@@ -217,6 +69,7 @@ class Master(object):
         self.page_frame.bind("<Configure>", self.page_frame_update)
 
         self.page_row = 0
+        self.page_fake_index = 0
 
         self.page_buttons = []
 
@@ -230,7 +83,7 @@ class Master(object):
 
         # UI
         self.slide_index_text = StringVar()
-        self.slide_index_text.set(self.slide_index_to_string())
+        self.slide_index_text.set(self.page().slide_index_to_string())
         self.display_layers = True
         cols = 0
 
@@ -327,8 +180,13 @@ class Master(object):
     def page_frame_update(self, event):
         self.page_canvas.configure(scrollregion=self.page_canvas.bbox("all"))
 
-    def add_page(self, page):
-        self.pages.append(page)
+    def new_page(self):
+        new_page = Page()
+        new_page.title_entry = Entry(self.root)
+        new_page.path = str(self.page_fake_index)+'/'
+        self.page_fake_index += 1
+
+        self.pages.append(new_page)
 
         next_index = len(self.pages)-1
         page_button = Button(self.page_frame, command=lambda: self.page_go_to(next_index), borderwidth=2)
@@ -341,12 +199,6 @@ class Master(object):
             self.blank_thumbnail()
         else:
             self.blank_thumbnail()
-
-    def new_page(self):
-        new_page = Page()
-        new_page.title_entry = Entry(self.root)
-
-        self.add_page(new_page)
 
     def blank_thumbnail(self):
         display = np.zeros((THUMBNAIL_WIDTH/3, THUMBNAIL_WIDTH, 4), np.uint8)
@@ -376,7 +228,7 @@ class Master(object):
             self.page().slide_index.set(max(min(index, (len(self.page().slides)-1)), 0))
         else:
             self.page().slide_index.set(max(min(index, (len(self.page().slides)-1)), -1))
-        self.slide_index_text.set(self.slide_index_to_string())
+        self.slide_index_text.set(self.page().slide_index_to_string())
 
         if self.slide() is not None:
             # load the text
@@ -406,6 +258,19 @@ class Master(object):
                 else:
                     self.blank_thumbnail()
 
+            # dump slide images to disk
+            if os.path.exists(TEMP_DIR+self.page().path):
+                shutil.rmtree(TEMP_DIR+self.page().path)
+            os.mkdir(TEMP_DIR+self.page().path)
+
+            file_index = 0
+            for slide in self.page().slides:
+                np.save(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index), slide.image_orig)
+                np.save(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index), slide.image_cv)
+            for slide in self.page().slides:
+                slide.image_orig = None
+                slide.image_cv = None
+
             # purge text/description/labels
             if self.slide() is not None:
                 self.slide().text_text.grid_forget()
@@ -416,14 +281,19 @@ class Master(object):
 
             # update page
             self.page_index.set(max(min(index, (len(self.pages)-1)), 0))
+
+            # load slide images from disk if they exist
+            if os.path.exists(TEMP_DIR+self.page().path):
+                file_index = 0
+                for slide in self.page().slides:
+                    slide.image_orig = np.load(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index)+'.npy')
+                    slide.image_cv = np.load(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index)+'.npy')
+
             # load the title
             self.page().title_entry.grid(row=2, column=self.editor_col)
             # update rest of UI/load the correct slide
             self.slide_go_to(self.page().slide_index.get())
             self.current_op_label.configure(textvariable=self.page().op_current)
-
-    def slide_index_to_string(self):
-        return "Slide: "+str(self.page().slide_index.get()+1)+"/"+str(len(self.page().slides))
 
     def toggle_layers(self):
         self.display_layers = not self.display_layers
@@ -731,16 +601,13 @@ class Master(object):
 
     def export(self):
         print "exporting..."
-        import shutil
-        import os
 
         package = {'package': self.package_title_entry.get()}
 
         package_dir = './package'
         if os.path.exists(package_dir):
             shutil.rmtree(package_dir)
-            import time
-            time.sleep(1)  # may the gods have mercy upon my soul // prevents OS errors if user has the folder open
+            time.sleep(1)
         os.mkdir(package_dir)
         f = open(package_dir+'/data.json', 'w')
 
@@ -787,6 +654,7 @@ class Master(object):
         package['pages'] = page_list
 
         json.dump(package, f)
+        f.close()
         print "export complete"
 
     def save(self):
@@ -956,48 +824,6 @@ class Master(object):
         return int(constant/self.page().scale_ratio)
 
 
-def blank_image(root):
-    return ImageTk.PhotoImage(Image.new('RGBA', (640, 640), (0, 0, 0, 0)), master=root)
-
-
-def thresh_image(image, thresh_val):
-    blur = cv2.GaussianBlur(image, (5, 5), 0)
-    blur_gray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
-    retval, thresh_gray = cv2.threshold(blur_gray, thresh_val, 255, cv2.THRESH_BINARY_INV)
-    threshed = cv2.bitwise_and(image, image, mask=thresh_gray)
-
-    b, g, r = cv2.split(threshed)
-    return cv2.merge((r, g, b, thresh_gray))
-
-
-def calc_scale_ratio(desired_width, image_shape):
-    return desired_width / float(image_shape[1])
-
-
-def hex_to_rgba(value):
-    value = value.lstrip('#')
-    lv = len(value)
-    rgb = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
-    return rgb+(255,)
-
-
-def stack_images(images):
-    # takes an array of images and stacks them up
-    if len(images) > 0:
-        stack = images[0]
-
-        for image in images[1:]:
-            stack_gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
-            ret, stack_mask = cv2.threshold(stack_gray, 10, 255, cv2.THRESH_BINARY)
-            stack_mask_inv = cv2.bitwise_not(stack_mask)
-            stack = cv2.bitwise_and(stack, stack, mask=stack_mask_inv)
-            image = cv2.bitwise_and(image, image, mask=stack_mask)
-
-            stack = cv2.add(stack, image)
-
-        return stack
-
-
 if __name__ == '__main__':
-    master = Master()
+    master = Gui()
     master.run()

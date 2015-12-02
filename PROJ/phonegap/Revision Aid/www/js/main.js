@@ -319,10 +319,26 @@ function resizeWidth() {
 	for (var i = 0; i < lText.length; i++) {
 		lText[i].style.fontSize = vw(4);
 	}
+	for (var i = 0; i < lMarkers.length; i++) {
+		var target_width = lMarkers[i].offsetWidth;
+		var dot = lMarkers[i].getElementsByClassName('label_dot')[0]
+		var line = lMarkers[i].getElementsByClassName('label_line')[0]
+		line.style.width = (target_width - (dot.offsetWidth*3))+"px";
+	}
 }
 function vw(val) {
 	return ((window.innerWidth*val)/100)+'px';
 }	
+function filterPageList(term) {
+	var page_items = document.getElementsByClassName('page_list_entry');
+	for (var i = 0; i < page_items.length; i++) {
+		if (page_items[i].innerHTML.toLowerCase().indexOf(term.toLowerCase()) == -1) {
+			page_items[i].style.display = 'none';
+		} else {
+			page_items[i].style.display = '';
+		}
+	}
+}
 function pageInit() {
 	//TODO: use HTML5 storage to store a package to be loaded - if none exists, ask user to select one?
 	

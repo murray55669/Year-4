@@ -1,0 +1,28 @@
+POINT_SCALE = 6
+POINT_LINE_WIDTH = 2
+POINT_CLICK_PADDING = 5
+POINT_COLOUR = (255, 0, 255, 255)
+
+LINE_WIDTH = 2
+LINE_COLOUR = (128, 0, 128, 255)
+
+NO_COLOUR = (0, 0, 0, 0)
+
+DEBUG_INVALID = "invalid number of points!"
+
+NO_OP = "no_op"
+CROP = "crop"
+ERASE = "erase"
+LABEL_POINT = "label_point"
+MOVE_LAYER = "move_layer"
+
+THRESH_DEFAULT = 200
+
+DETAILS_TEXT_WIDTH = 8
+
+IMAGE_WIDTH = 640
+THUMBNAIL_WIDTH = 160
+
+TEMP_DIR = './temp/'
+IMAGES_ORIG_DUMP = 'images_orig'
+IMAGES_CV_DUMP = 'images_cv'

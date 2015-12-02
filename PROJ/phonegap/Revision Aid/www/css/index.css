@@ -179,6 +179,15 @@ body {
 	right: 0px;
 	background: #e0e0e0;
 }
+.page_search {
+	display: block;
+	margin: 8px auto;
+	width: 90%;
+	height: 40px;
+	text-align: center;
+	font-size: 140%;
+    font-family: "Times New Roman";
+}
 .page_list_entry {
 	float: left;
 	width: 100%;
