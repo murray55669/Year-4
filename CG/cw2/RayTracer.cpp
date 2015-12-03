@@ -11,10 +11,7 @@ int bounceLimit = 10;
 float epsilon = 0.01f;
 glm::vec3 eyePos = glm::vec3(-10, 10, 10);
 
-//refraction - keep track of last object hit, and the refractive index of that object
-//Air: object = NULL, index = 1
-const Object* lastObjectHit = NULL;
-int lastObjectHitId = 0;
+int lastObjectHitID = 0;
 float lastObjectRefractiveIndex = 1.0f;
 
 /*
@@ -56,6 +53,7 @@ bool CheckIntersection(const Ray &ray, IntersectInfo &info) {
                 info.hitPoint = tempInfo.hitPoint;
                 info.normal = tempInfo.normal;
                 info.material = tempInfo.material;
+                info.objectHitID = tempInfo.objectHitID;
             }
         }
 
@@ -148,26 +146,23 @@ float CastRay(Ray &ray, Payload &payload) {
                     initColour = info.material->ambient;
                 }      
                    
-                
-                bool refracted = false;
                 //Refraction
+                bool refracted = false;
                 if (info.material->refraction > 0) {
                     float r; //r = n1/n2 - ratio of refractive indices
                     
-                    //leaving an object (sphere) TODO: broke-ass
-                    if (lastObjectHitID == info.objectHit && lastObjectHitID == 2) {
+                    //leaving a sphere
+                    if (lastObjectHitID == 1) {
                         r = lastObjectRefractiveIndex; //should be lastObjectRefIndex/airIndex, but airIndex is 1
-                        //printf("%f\n", r);
                         
-                        lastObjectHit = NULL;
+                        lastObjectHitID = 0;
                         lastObjectRefractiveIndex = 1.0f;
                     }
                     //entering an object
                     else {
-                        printf("enter\n");
-                        r = lastObjectRefractiveIndex / info.material->refractiveIndex;
+                        r = 1.0f / info.material->refractiveIndex;
                         
-                        lastObjectHit = info.objectHit;
+                        lastObjectHitID = info.objectHitID;
                         lastObjectRefractiveIndex = info.material->refractiveIndex;
                     }
                     
@@ -190,7 +185,7 @@ float CastRay(Ray &ray, Payload &payload) {
                 }
                 
                 if (refracted) {
-                    payload.color = reflectedColour + ((1-info.material->reflection)*initColour) + (info.material->refraction*payload.color);
+                    payload.color = (1-info.material->refraction)*(reflectedColour + ((1-info.material->reflection)*initColour)) + (info.material->refraction*payload.color);
                 } else {
                     payload.color = reflectedColour + ((1-info.material->reflection)*initColour);
                 }
@@ -251,9 +246,7 @@ void Render()
 				glColor3f(0.0f, 0.0f, 0.0f);
 			}
                         //reset for next ray
-                        lastObjectHit = NULL;
-                        lastObjectHitId = 0;
-                        lastObjectRefractiveIndex = 1.0f;
+                        lastObjectHitID = 0;
 
 			glVertex3f(pixelX,pixelY,0.0f);
 		}
@@ -334,7 +327,7 @@ int main(int argc, char **argv) {
         
         Sphere* sphere2 = new Sphere();
         sphere2->SetMaterial(glass);
-        sphere2->SetPosition(glm::vec3(-5.0f,1.0f,3.0f));
+        sphere2->SetPosition(glm::vec3(-5.0f,1.5f,3.0f));
         sphere2->radius = 0.8f;
         
         Triangle* triangle = new Triangle();

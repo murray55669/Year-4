@@ -33,6 +33,8 @@ class Object {
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const { return true; }
     glm::vec3 Position() const { return glm::vec3(transform[3][0], transform[3][1], transform[3][2]); }
     const Material *MaterialPtr() const { return &material; }
+    
+    virtual int ObjectID() const { return 0; }
 
   protected:  //  The difference between protected and private is that the protected members will still be available in subclasses.
     glm::mat4 transform;  // Usually a transformation matrix is used to decribe the position from the origin.

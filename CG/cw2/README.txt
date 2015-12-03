@@ -20,8 +20,20 @@ IMPLEMENTED:
     In each case, the "IntersectionInfo" is updated with the time of intersection, material of the object being hit, point at which the intersection occurred, surface normal at the point, and the object itself that was hit (used later in refraction to decide if a ray is entering/exiting an object)
 
 EXTRA FEATURES:
--Refraction: [2]
-To decide if we're entering/exiting an object, we need to keep track of the last object hit, and check what object we hit on any intersection of ray and object. To do so "IntersectInfo" is updated with the object hit, when an intersection occurs, and this can be compared against a record of the last object hit/it's refractive index. This allows a refractive index ratio to be created ("r"), then used to determine if refraction occurs, or if total internal reflection takes place instead. The refracted ray's direction can then be calculated as needed, and recursive ray casting can take place.
+-Refraction: 
+By tracking the type of object last hit, and tracing rays through spheres, obeying Snell's laws, basic refraction can be added. The system implemented here is extremely simplified, just tracking an integer for the type of object hit, and does not support, for instance, sphere instersected with one another. The ratio of reflected to refracted light is simplified to: totalLight = (1-refractionCoeff)*reflectedLight + refractionCoeff*refractedLight, which may well be entirely wrong, but at least produces something vaguely resembling refraction. Unfortunately, I ran into issues implementing a more robust method for refraction, and eneded up not having the time to fully complete it. The implementation here is rather sloppy, and goes roughly as follows:
+
+-if a ray hits a refractive surface (jusdged by checking the refraction coefficient of tha material hit)
+    -check if the "lastObjectHitID" is 1 - the integer code for a sphere
+        -if it is, this means we are currently exiting a sphere, so the ratio of refractive indices is set to 1/sphereIndex
+        -if not, we are entering an object, so set the ratio of refractive indices to objectIndex/1
+        --This is where the limitation comes into play, as we are assuming here that a refractive sphere must be entered/exited without anything other intersections occurring
+
+    -calculate refraction by "bending" rays according to Snell's law (the vector form)[2] and continuing ray casting recursively (there is likely a bug here, as there is no limit imposed on the number of refractions that can take place - this could result in unbounded rafraction, again, not something I had time to fully explore) and remember if refraction did in fact take place (total internal reflection could occur, removing the need for refracted light in the final pixel value)
+-if refraction occurred, use the above (likely incorrect) equation to give the final light value of the pixel, otherwise just use reflected light
+
+-the "lastObjectHitID" is reset to 0 (air) ready for the next ray to be cast
+
 
 TO RUN:
 Simply "make run" from main directory.

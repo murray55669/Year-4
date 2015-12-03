@@ -43,8 +43,7 @@ x-fs -copyFromLocal ~/Year-4/EXC/cwk2/test/1 /user/$USER/data/input/1
 1
 x-rn -input /data/assignments/ex2/task1/large/ -output /user/$USER/data/output-2-1 -mapper 1-mapper.py -reducer 1-reducer.py -file 1-mapper.py -file 1-reducer.py -jobconf stream.num.map.output.key.fields=2 -jobconf stream.map.output.field.separator=: -jobconf mapreduce.map.output.key.field.separator=: -jobconf num.key.fields.for.partition=1 -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner
 2
-x-rn -input /data/assignments/ex2/task1/large/d1.txt -output /user/$USER/data/output-2-2 -mapper 1-mapper.py -reducer 1-reducer.py -file 1-mapper.py -file 1-reducer.py -jobconf stream.num.map.output.key.fields=2 -jobconf stream.map.output.field.separator=: -jobconf mapreduce.map.output.key.field.separator=: -jobconf num.key.fields.for.partition=1 -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner
-x-rn -input /user/$USER/data/output-2-2 -output /user/$USER/data/output-2-2-2 -cmdenv corpus_size=1 -mapper 2-mapper.py -reducer 2-reducer.py -file 2-mapper.py -file 2-reducer.py -file terms.txt -jobconf stream.num.map.output.key.fields=3 -jobconf stream.map.output.field.separator=, -numReduceTasks 1
+x-rn -input /user/$USER/data/output-2-1 -output /user/$USER/data/output-2-2 -cmdenv corpus_size=17 -mapper 2-mapper.py -reducer 2-reducer.py -file 2-mapper.py -file 2-reducer.py -file terms.txt -jobconf stream.num.map.output.key.fields=3 -jobconf stream.map.output.field.separator=, -jobconf num.key.fields.for.partition=1 -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner
 
 3:1
 x-rn -input /data/assignments/ex2/task2/logsLarge.txt -output /user/$USER/data/output-2-3-1 -mapper 3-mapper-1.py -reducer 3-reducer-1.py -file 3-mapper-1.py -file 3-reducer-1.py

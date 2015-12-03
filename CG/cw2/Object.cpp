@@ -56,9 +56,8 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
         
         //N = ((x - cx)/R, (y - cy)/R, (z - cz)/R) ** skip the /R as we normalize anyway
         info.normal = glm::normalize(info.hitPoint - s);
-        
-        info.objectHit = thisObject();
-        info.objectHitId = OjbectID();
+
+        info.objectHitID = OjbectID();
         
         return true;
     }
@@ -88,9 +87,8 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
             info.hitPoint = ray(info.time);
             
             info.normal = n;
-            
-            info.objectHit = thisObject();
-            info.objectHitId = OjbectID();
+
+            info.objectHitID = OjbectID();
             
             return true;
         }
@@ -159,9 +157,8 @@ bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const {
                 info.hitPoint = hitPoint;
                 
                 info.normal = n;
-                
-                info.objectHit = thisObject();
-                info.objectHitId = OjbectID();
+
+                info.objectHitID = OjbectID();
                 
                 return true;    
             }

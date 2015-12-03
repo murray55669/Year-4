@@ -33,6 +33,7 @@ for line in sys.stdin:
             #tuple_split[2] may exist, is discarded
             tuple_split = string.split(',')
             
-            score = float(tuple_split[1][:-1]) * math.log((corpus_size / float(1 + int(total_docs_containing))), 10)
-            
-            print tuple_split[0][1:] + "," + word + "," + str(score)
+            if tuple_split[0][1:] == "d1.txt":
+                score = float(tuple_split[1][:-1]) * math.log((corpus_size / float(1 + int(total_docs_containing))), 10)
+                
+                print tuple_split[0][1:] + "," + word + "," + str(score)

@@ -2,13 +2,15 @@
 
 import sys
 
-flag = 1
-
 count = ""
+count_max = 0
 page = ""
+page_max = ""
 
 for line in sys.stdin:
-    if flag:
-        count, page = line.strip().split('\t')
-        print "Most popular page: "+page
-        flag = 0
+    count, page = line.strip().split('\t')
+    if int(count) > count_max:
+        count_max = int(count)
+        page_max = page
+        
+print "Most popular page: "+page_max
