@@ -153,6 +153,9 @@ function goToSlide(value) {
     } else {
         textButton.className = enabled;
     }
+	
+	navButton.innerHTML = "Layers<br>("+(currentSlide+1)+"/"+slides.length+")"
+	
 	resizeWidth();
 	localStorage.setItem("currentSlide", currentSlide);
 }

@@ -147,6 +147,11 @@ body {
     float: left;
     font-size: 200%;
 }
+.button.double {
+	padding: 20px 0;
+	height: 80px;
+	line-height: 40px;
+}
 .disabled {
     color: #606060;
     background: #d0d0d0;

@@ -19,7 +19,6 @@ class Slide(object):
         self.image_orig = None
         self.image_cv = None
         self.image_render = None
-        self.image_thumbnail = None
 
         self.dirty = True
 
@@ -43,10 +42,6 @@ class Slide(object):
                 # crop
                 # img[y: y + h, x: x + w]
                 self.image_render = self.image_render[y1:y2, x1:x2]
-
-            # thumbnail
-            scale_ratio = calc_scale_ratio(THUMBNAIL_WIDTH, self.image_render.shape)
-            self.image_thumbnail = cv2.resize(self.image_render, (0, 0), fx=scale_ratio, fy=scale_ratio)
 
             self.dirty = False
 

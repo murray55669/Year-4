@@ -4,6 +4,7 @@ import shutil
 import os
 import time
 from tkFileDialog import *
+from tkMessageBox import askyesno
 from pyapp.slide import *
 from pyapp.page import *
 from pyapp.constants import *
@@ -11,24 +12,12 @@ from pyapp.utils import *
 
 """
 TODO:
--undo/redo stuff
+EDITOR:
+-REFACTOR REFACTOR REFACTOR
 
--make the whole thing scrollable
+-delete slide option? delete page option?
 
--set filetypes that can be read - have a special container for reading in saved stuff to load up editor
-    -split into CTRL-S / CTRL-E?
-    -have path saves as part of page object
-    -have details of gui save/load from JSON, with list of slide locations
-
--optimize rendering so it's not slow as shit/producing memory errors
-    -dump stuff to disk? have a finalize page option?
-
--checkbox list for layer visibility
-
--switch from using shitty thumbnails to page titles
-
--switch package files to "colon-enter" instead of "space-dash-space" formatting
--add slide ticker to app (e.g. slide 4/5)
+-some way to pass in/set an offset for "page-index" when exporting to easy chopping stuff together
 """
 
 
@@ -43,6 +32,7 @@ class Gui(object):
 
         self.loaded = False
         self.master = Tk()
+        self.master.wm_title("Page Selector")
 
         # page browser
         self.page_label = Label(self.master, text="Pages")
@@ -88,7 +78,7 @@ class Gui(object):
         cols = 0
 
         self.root.resizable(width=FALSE, height=FALSE)
-        self.root.wm_title("GUI Test")
+        self.root.wm_title("Slide Editor")
         self.root.protocol("WM_DELETE_WINDOW", self.quit)  # have the 'X' button close the program
         self.master.protocol("WM_DELETE_WINDOW", self.quit)
 
@@ -111,7 +101,7 @@ class Gui(object):
         self.slide_down.grid(row=4, column=cols)
         cols += 1
         # ----- #
-        self.edit_label = Label(self.root, text="Slide Editor")
+        self.edit_label = Label(self.root, text="Slide")
         self.edit_label.grid(row=0, column=cols)
         self.title_label = Label(self.root, text="Title")
         self.title_label.grid(row=1, column=cols)
@@ -125,7 +115,7 @@ class Gui(object):
         self.thresh_slide.grid(row=4, column=cols)
 
         self.image_wrapper = Label(self.root, bg='#e0e0e0', borderwidth=3)
-        self.image_wrapper.grid(row=5, column=cols)
+        self.image_wrapper.grid(row=5, column=cols, rowspan=50)
         self.image_tk = blank_image(self.root)
         self.image_frame = Label(self.image_wrapper, bg='#ffffff', image=self.image_tk)
         self.image_frame.pack()
@@ -163,6 +153,7 @@ class Gui(object):
 
             root.bind('<Control-e>', lambda e: self.export())
             root.bind('<Control-s>', lambda e: self.save())
+            root.bind('<Control-o>', lambda e: self.open_file())
 
             root.bind('<Control-z>', lambda e: self.undo())
             root.bind('<Control-y>', lambda e: self.redo())
@@ -182,29 +173,21 @@ class Gui(object):
 
     def new_page(self):
         new_page = Page()
-        new_page.title_entry = Entry(self.root)
+        new_page.title_entry = Entry(self.root, textvariable=new_page.title_var)
         new_page.path = str(self.page_fake_index)+'/'
         self.page_fake_index += 1
 
         self.pages.append(new_page)
 
         next_index = len(self.pages)-1
-        page_button = Button(self.page_frame, command=lambda: self.page_go_to(next_index), borderwidth=2)
+        page_button = Button(self.page_frame, command=lambda: self.page_go_to(next_index),
+                             textvariable=new_page.title_var)
         self.page_buttons.append(page_button)
         page_button.grid(row=self.page_row, column=0)
         self.page_row += 1
 
         if self.loaded:
             self.page_go_to(len(self.pages)-1)
-            self.blank_thumbnail()
-        else:
-            self.blank_thumbnail()
-
-    def blank_thumbnail(self):
-        display = np.zeros((THUMBNAIL_WIDTH/3, THUMBNAIL_WIDTH, 4), np.uint8)
-        thumb = Image.fromarray(display)
-        self.page().thumb_tk = ImageTk.PhotoImage(image=thumb, master=self.root)
-        self.page_buttons[self.page_index.get()]['image'] = self.page().thumb_tk
 
     def slide_prev(self):
         self.slide_go_to(self.page().slide_index.get()-1)
@@ -249,27 +232,8 @@ class Gui(object):
             # purge current title
             self.page().title_entry.grid_forget()
 
-            # update the thumbnail for the current page before leaving
-            if self.page_index.get() >= 0:
-                if self.page().slides:
-                    self.page().render_thumbnail()
-                    self.page().thumb_tk = ImageTk.PhotoImage(image=self.page().thumb, master=self.root)
-                    self.page_buttons[self.page_index.get()]['image'] = self.page().thumb_tk
-                else:
-                    self.blank_thumbnail()
-
             # dump slide images to disk
-            if os.path.exists(TEMP_DIR+self.page().path):
-                shutil.rmtree(TEMP_DIR+self.page().path)
-            os.mkdir(TEMP_DIR+self.page().path)
-
-            file_index = 0
-            for slide in self.page().slides:
-                np.save(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index), slide.image_orig)
-                np.save(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index), slide.image_cv)
-            for slide in self.page().slides:
-                slide.image_orig = None
-                slide.image_cv = None
+            self.dump_slides()
 
             # purge text/description/labels
             if self.slide() is not None:
@@ -284,10 +248,10 @@ class Gui(object):
 
             # load slide images from disk if they exist
             if os.path.exists(TEMP_DIR+self.page().path):
-                file_index = 0
-                for slide in self.page().slides:
-                    slide.image_orig = np.load(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index)+'.npy')
-                    slide.image_cv = np.load(TEMP_DIR+self.page().path+IMAGES_ORIG_DUMP+'_'+str(file_index)+'.npy')
+                for file_index, slide in enumerate(self.page().slides):
+                    slide.image_orig = np.load(TEMP_DIR+self.page().path+IMAGE_ORIG_DUMP+'_'+str(file_index)+'.npy')
+                    slide.image_cv = np.load(TEMP_DIR+self.page().path+IMAGE_CV_DUMP+'_'+str(file_index)+'.npy')
+                    slide.image_render = np.load(TEMP_DIR+self.page().path+IMAGE_RENDER_DUMP+'_'+str(file_index)+'.npy')
 
             # load the title
             self.page().title_entry.grid(row=2, column=self.editor_col)
@@ -327,10 +291,11 @@ class Gui(object):
             self.no_op()
 
     def quit(self):
-        self.root.destroy()
-        self.root.quit()
-        self.master.destroy()
-        self.master.quit()
+        if askyesno("Confirm Quit", "Are you sure you want to quit?"):
+            self.root.destroy()
+            self.root.quit()
+            self.master.destroy()
+            self.master.quit()
 
     def accept(self):
         op = self.page().op_current.get()
@@ -447,9 +412,9 @@ class Gui(object):
                     self.page().crop_points = (x1, y1, x2, y2)
                     self.no_op()
 
-                    self.page().op_history_add({'op': CROP,
-                                                'prev': prev,
-                                                'next': self.page().crop_points})
+                    self.page().op_history_add({HIST_OP: CROP,
+                                                HIST_PREV: prev,
+                                                HIST_CURRENT: self.page().crop_points})
 
                     self.dirty_all()
 
@@ -457,9 +422,9 @@ class Gui(object):
                     self.page().crop_points = None
                     self.page().op_current.set(NO_OP)
 
-                    self.page().op_history_add({'op': CROP,
-                                                'prev': prev,
-                                                'next': self.page().crop_points})
+                    self.page().op_history_add({HIST_OP: CROP,
+                                                HIST_PREV: prev,
+                                                HIST_CURRENT: self.page().crop_points})
 
                     self.dirty_all()
                 else:
@@ -494,8 +459,9 @@ class Gui(object):
                     cv2.fillPoly(self.slide().image_cv, np_points, NO_COLOUR)
                     self.no_op()
 
-                    self.page().op_history_add({'op': ERASE,
-                                                'points': np_points})
+                    self.page().op_history_add({HIST_OP: ERASE,
+                                                HIST_POINTS: np_points,
+                                                HIST_THRESH: self.thresh_slide.get()})
 
                     self.dirty_index(self.page().slide_index.get())
                 elif len(self.page().points) == 0:
@@ -520,13 +486,17 @@ class Gui(object):
                 x1, y1 = self.page().points[0]
                 x2, y2 = self.page().points[1]
                 if self.slide().offset is not None:
+                    prev = self.slide().offset
                     x_prev, y_prev = self.slide().offset
                     self.slide().offset = (x_prev+(x2-x1), y_prev+(y2-y1))
                 else:
+                    prev = None
                     self.slide().offset = (x2-x1, y2-y1)
                 self.no_op()
                 self.dirty_index(self.page().slide_index.get())
-                # TODO: undo
+                self.page().op_history_add({HIST_OP: MOVE_LAYER,
+                                            HIST_PREV: prev,
+                                            HIST_CURRENT: self.slide().offset})
             elif self.page().op_current.get() == NO_OP:
                 if self.page().slide_index.get() > 0:
                     self.page().points = []
@@ -555,13 +525,18 @@ class Gui(object):
             self.slide().label_buttons.append(button)
             button.grid(row=self.slide().label_rows, column=self.label_cols+1)
 
-            self.slide().label_rows += 1
+            label_data = {HIST_OP: ADD_LABEL,
+                          'id': self.slide().label_id,
+                          'label': label,
+                          'button': button,
+                          'colour': colour,
+                          'point': None,
+                          'grid_col': self.label_cols}
 
-            self.slide().labels.append({'id': self.slide().label_id,
-                                        'label': label,
-                                        'button': button,
-                                        'colour': colour,
-                                        'point': None})
+            self.slide().labels.append(label_data)
+            self.page().op_history_add(label_data)
+
+            self.slide().label_rows += 1
             self.slide().label_id += 1
 
     def label_point(self, label_id):
@@ -569,7 +544,15 @@ class Gui(object):
             if len(self.page().points) == 1:
                 label = self.get_label_by_id(label_id)
                 if label:
+                    if label['point']:
+                        prev_point = label['point']
+                    else:
+                        prev_point = None
                     label['point'] = self.page().points[0]
+                    self.page().op_history_add({HIST_OP: LABEL_POINT,
+                                                HIST_LABEL: label,
+                                                HIST_PREV: prev_point,
+                                                HIST_CURRENT: self.page().points[0]})
                     self.no_op()
             elif len(self.page().points) == 0:
                 self.no_op()
@@ -599,6 +582,21 @@ class Gui(object):
                 return label
         return None
 
+    def dump_slides(self):
+        # dump slide images to disk
+        if os.path.exists(TEMP_DIR+self.page().path):
+            shutil.rmtree(TEMP_DIR+self.page().path)
+        os.mkdir(TEMP_DIR+self.page().path)
+
+        for file_index, slide in enumerate(self.page().slides):
+            np.save(TEMP_DIR+self.page().path+IMAGE_ORIG_DUMP+'_'+str(file_index), slide.image_orig)
+            np.save(TEMP_DIR+self.page().path+IMAGE_CV_DUMP+'_'+str(file_index), slide.image_cv)
+            np.save(TEMP_DIR+self.page().path+IMAGE_RENDER_DUMP+'_'+str(file_index), slide.image_render)
+        for slide in self.page().slides:
+            slide.image_orig = None
+            slide.image_cv = None
+            slide.image_orig = None
+
     def export(self):
         print "exporting..."
 
@@ -621,10 +619,16 @@ class Gui(object):
             # slides
             slide_list = []
             for slide_index, slide in enumerate(page.slides):
-                # save image
+                # load render dump if needed
+                loaded = False
+                if slide.image_render is None:
+                    slide.image_render = np.load(TEMP_DIR+page.path+IMAGE_RENDER_DUMP+'_'+str(slide_index)+'.npy')
+                    loaded = True
+                # then save image
                 slide_loc = page_dir+'/'+str(slide_index)
-                slide.render(self.page().crop_points)
                 cv2.imwrite(slide_loc+'.png', cv2.cvtColor(slide.image_render, cv2.COLOR_RGBA2BGRA))
+                if loaded:
+                    slide.image_render = None
 
                 # text
                 slide_dump = {'text': slide.text_text.get(1.0, END).strip()}
@@ -633,7 +637,13 @@ class Gui(object):
                 if page.crop_points:
                     x1, y1, x2, y2 = page.crop_points
                 else:
+                    loaded = False
+                    if slide.image_cv is None:
+                        slide.image_cv = np.load(TEMP_DIR+page.path+IMAGE_CV_DUMP+'_'+str(slide_index)+'.npy')
+                        loaded = True
                     shape = slide.image_cv.shape
+                    if loaded:
+                        slide.image_cv = None
                     x1 = 0
                     y1 = 0
                     x2 = shape[1]
