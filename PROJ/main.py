@@ -44,8 +44,13 @@ class Gui(object):
         self.add_page_button = Button(self.master, text="Add Page", command=self.new_page)
         self.add_page_button.grid(row=3, column=0)
 
+        self.page_offset_label = Label(self.master, text="Page offset")
+        self.page_offset_label.grid(row=4, column=0)
+        self.page_offset_entry = Entry(self.master)
+        self.page_offset_entry.grid(row=5, column=0)
+
         self.scroll_wrapper = Frame(self.master)
-        self.scroll_wrapper.grid(row=4, column=0)
+        self.scroll_wrapper.grid(row=6, column=0)
         self.page_canvas = Canvas(self.scroll_wrapper, borderwidth=0, width=THUMBNAIL_WIDTH+5, height=3*THUMBNAIL_WIDTH)
         self.page_frame = Frame(self.page_canvas)
         self.page_scroll = Scrollbar(self.scroll_wrapper, orient="vertical", command=self.page_canvas.yview)
@@ -223,7 +228,7 @@ class Gui(object):
                 self.slide().label_buttons[index].grid(row=self.slide().label_rows, column=self.label_cols+1)
                 self.slide().label_rows += 1
             # set  the threshold slider
-            self.thresh_slide.set(self.slide().thresh_value)
+            #self.thresh_slide.set(self.slide().thresh_value)
 
         self.no_op()
 
@@ -612,7 +617,11 @@ class Gui(object):
         # pages
         page_list = []
         for page_index, page in enumerate(self.pages):
-            page_dir = package_dir+'/'+str(page_index)
+            if self.page_offset_entry.get():
+                page_offset = int(self.page_offset_entry.get())
+            else:
+                page_offset = 0
+            page_dir = package_dir+'/'+str(page_index+page_offset)
             os.mkdir(page_dir)
             page_dump = {'title': page.title_entry.get()}
 
