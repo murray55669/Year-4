@@ -97,7 +97,7 @@ function goToPage(id) {
         //Nav menu (order reversed, so menu arranged with base layer button closest to control bar)
         navEntry = document.createElement('div');
         navEntry.className = 'slide_list_entry noselect';
-        navEntry.innerHTML = (slides.length-1)-i;
+        navEntry.innerHTML = ((slides.length-1)-i)+1;
         navEntry.onclick = navClickFunction((slides.length-1)-i);
         navRoot.appendChild(navEntry);
     }
