@@ -134,7 +134,8 @@ function goToSlide(value) {
         if (i == currentSlide) {
             //Display labels
             for (var j = 0; j < slides[i].labels.length; j++) {
-                addLabel(slides[i].labels[j].xPos, slides[i].labels[j].yPos, slides[i].labels[j].text);
+				
+                addLabel(slides[i].labels[j]);
             }
         }
     }
@@ -221,9 +222,17 @@ function selectPackage(input) {
 		localStorage.setItem("packageDir", "something");
 	}
 }
-function addLabel(xPos, yPos, text) {
+function addLabel(labelData) {
+	var xPos = labelData.xPos;
+	var yPos = labelData.yPos;
+	var text = labelData.text;
+	var flipped = false;
+	if (labelData.flipped === true) {
+		flipped = true;
+	}
+	
     //xPos, yPos should be precentages
-    if (xPos < 50) {
+    if (xPos < 50 || flipped) {
         var label = document.createElement("div");
         label.className = "label";
         label.style.top = yPos+"%";
@@ -271,12 +280,13 @@ function addLabel(xPos, yPos, text) {
     document.getElementById("images_wrapper").appendChild(label);
 }
 function addLabelClick(clickEvent, text) {
+	//deprecated
     var xPos = clickEvent.clientX;
     var yPos = clickEvent.clientY;
     var height = document.getElementById('images_wrapper').clientHeight;
     var width = document.getElementById('images_wrapper').clientWidth;
     
-    addLabel((xPos/width)*100, ((yPos)/height)*100, text);
+    //addLabel((xPos/width)*100, ((yPos)/height)*100, text);
 }
 function removeLabels() {
     var activeLabels = document.getElementsByClassName('label');

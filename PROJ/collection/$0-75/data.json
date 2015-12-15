@@ -2515,7 +2515,7 @@
 				"yPos": 65.35321263755769
 			}, {
 				"text": "Caudal vena cava\n",
-				"xPos": 50.1497005988024,
+				"xPos": 49.1497005988024,
 				"yPos": 74.12140575079871
 			}]
 		}],
@@ -2763,7 +2763,7 @@
 			}, {
 				"text": "V",
 				"xPos": 46.06188466947961,
-				"yPos": 94.23076923076923
+				"yPos": 92.23076923076923
 			}, {
 				"text": "THORAX",
 				"xPos": 22.0112517580872,
@@ -2853,13 +2853,13 @@
 				"yPos": 4.1609822646657575
 			}]
 		}, {
-			"text": "The deep intestinal tract is 3-4 times the length of the body\n\nSPLEEN:\nalways on the left - can be very large",
+			"text": "The deep intestinal tract is 3-4 times the length of the body\n\nSPLEEN:\nalways on the left - can be very large\n\n[1]: CAUDAL FLEXURE\n\n[2]: BLADDER",
 			"labels": [{
 				"text": "DIAPHRAGM",
 				"xPos": 37.90650406504065,
 				"yPos": 14.870395634379264
 			}, {
-				"text": "CAUDAL FLEXURE\n",
+				"text": "[1]",
 				"xPos": 33.739837398373986,
 				"yPos": 83.90177353342429
 			}, {
@@ -2887,7 +2887,7 @@
 				"xPos": 33.23170731707317,
 				"yPos": 65.00682128240109
 			}, {
-				"text": "BLADDER",
+				"text": "[2]",
 				"xPos": 43.08943089430895,
 				"yPos": 86.08458390177354
 			}, {
@@ -3232,7 +3232,7 @@
 			"text": "Cranial to caudal view, dog in dorsal recumbency",
 			"labels": []
 		}, {
-			"text": "[1]: QUADRATE LOBE\n\n[2]: GALL BLADDER\n\n[3]: HEPATIC VEINS:\nVariable in number, empty into caudal vena cava\n\n[4]: CAUDAL VENA CAVA\n\n[5]: PAPILLARY PROCESS OF CAUDATE LOBE\n\n[6]: CAUDAL PROCESS OF CAUDATE LOBE",
+			"text": "[1]: QUADRATE LOBE\n\n[2]: GALL BLADDER\n\n[3]: HEPATIC VEINS:\nVariable in number, empty into caudal vena cava\n\n[4]: CAUDAL VENA CAVA\n\n[5]: PAPILLARY PROCESS OF CAUDATE LOBE\n\n[6]: CAUDAL PROCESS OF CAUDATE LOBE\n\n[7]: LEFT LATERAL LOBE\n",
 			"labels": [{
 				"text": "[1]",
 				"xPos": 53.40670859538784,
@@ -3246,7 +3246,7 @@
 				"xPos": 34.80083857442348,
 				"yPos": 21.3225371120108
 			}, {
-				"text": "LEFT LATERAL LOBE\n",
+				"text": "[7]",
 				"xPos": 21.069182389937108,
 				"yPos": 54.8582995951417
 			}, {
@@ -3339,7 +3339,7 @@
 			"labels": [{
 				"text": "DIAPHRAGM",
 				"xPos": 33.57778941854374,
-				"yPos": 4.016316284907436
+				"yPos": 6.016316284907436
 			}, {
 				"text": "[1]",
 				"xPos": 49.502357255107384,
@@ -3599,7 +3599,7 @@
 				"yPos": 95.77298255985811
 			}, {
 				"text": "[12]",
-				"xPos": 18.724899598393574,
+				"xPos": 17.724899598393574,
 				"yPos": 98.16730712385457
 			}, {
 				"text": "[13]",
@@ -3868,10 +3868,6 @@
 				"text": "[9]",
 				"xPos": 57.33471074380165,
 				"yPos": 68.7725631768953
-			}, {
-				"text": "REMOVE ME",
-				"xPos": 1.084710743801653,
-				"yPos": 2.436823104693141
 			}]
 		}, {
 			"text": "[1]: Acetabular bone (only in carnivore)\n\n[2]: Pubic part\n\n[3]: Posteum of the pelvic symphysis\n\n[4]: Isohal part\n\n[5]: Represent straps of cartilage present in young animal - disappear with age",
@@ -3910,8 +3906,8 @@
 				"yPos": 28.57142857142857
 			}, {
 				"text": "Acetabulum",
-				"xPos": 48.10040705563093,
-				"yPos": 61.82405165456013
+				"xPos": 50.10040705563093,
+				"yPos": 56.82405165456013
 			}, {
 				"text": "Ischial tuberosity\n",
 				"xPos": 80.12211668928086,
@@ -4098,7 +4094,7 @@
 			}, {
 				"text": "[1]",
 				"xPos": 49.04993371630579,
-				"yPos": 18.967026553837172
+				"yPos": 19.967026553837172
 			}, {
 				"text": "[2]",
 				"xPos": 41.22845779938135,
@@ -4113,8 +4109,9 @@
 				"yPos": 14.123139772395682
 			}, {
 				"text": "[5]",
-				"xPos": 56.07600530269554,
-				"yPos": 18.441785818500144
+				"xPos": 55.07600530269554,
+				"yPos": 17.441785818500144,
+				"flipped": true
 			}, {
 				"text": "[6]",
 				"xPos": 73.26557666813964,
@@ -4133,8 +4130,8 @@
 				"yPos": 43.94514152319813
 			}, {
 				"text": "[10]",
-				"xPos": 68.27220503756077,
-				"yPos": 46.221184709658594
+				"xPos": 67.27220503756077,
+				"yPos": 47.221184709658594
 			}, {
 				"text": "[11]",
 				"xPos": 59.96464869642069,
@@ -4146,7 +4143,8 @@
 			}, {
 				"text": "[13]",
 				"xPos": 54.66195315952276,
-				"yPos": 66.03443244820542
+				"yPos": 66.03443244820542,
+				"flipped": true
 			}, {
 				"text": "[14]",
 				"xPos": 43.26115775519222,
@@ -4162,7 +4160,8 @@
 			}, {
 				"text": "[17]",
 				"xPos": 76.84489615554574,
-				"yPos": 91.91712868398015
+				"yPos": 91.91712868398015,
+				"flipped": true
 			}, {
 				"text": "[18]",
 				"xPos": 75.74016791869201,
@@ -4170,7 +4169,8 @@
 			}, {
 				"text": "[19]",
 				"xPos": 74.37030490499336,
-				"yPos": 88.91158447621827
+				"yPos": 88.91158447621827,
+				"flipped": true
 			}, {
 				"text": "[20]",
 				"xPos": 76.84489615554574,
@@ -4178,7 +4178,8 @@
 			}, {
 				"text": "[21]",
 				"xPos": 79.98232434821034,
-				"yPos": 95.73971403559966
+				"yPos": 95.73971403559966,
+				"flipped": true
 			}]
 		}],
 		"title": "Bones and bony prominences of the hind limb\n"
@@ -4191,7 +4192,8 @@
 			"labels": [{
 				"text": "S1 S2 S3 L7 L6",
 				"xPos": 67.69857433808554,
-				"yPos": 3.3770014556040757
+				"yPos": 3.3770014556040757,
+				"flipped": true
 			}, {
 				"text": "[1]",
 				"xPos": 53.23828920570265,
@@ -4235,7 +4237,8 @@
 			}, {
 				"text": "[11]",
 				"xPos": 50.95723014256619,
-				"yPos": 9.403202328966522
+				"yPos": 9.403202328966522,
+				"flipped": true
 			}, {
 				"text": "[12]",
 				"xPos": 49.979633401221996,
@@ -4268,10 +4271,6 @@
 				"text": "[19]",
 				"xPos": 64.60285132382893,
 				"yPos": 87.59825327510917
-			}, {
-				"text": "REMOVE ME",
-				"xPos": 9.246435845213849,
-				"yPos": 7.307132459970887
 			}]
 		}, {
 			"text": "Green: OBTURATOR NERVE\n\n[1]: Obturator muscles\n\n[2]: Gracilis muscle\n\n[3]: To the adductor\n\n[4]: Within femoral triangle with femoral artery and vein\n\n[5]: To sartorius muscle\n\n[6]: To quadriceps femoris muscle\n\n[7]: SAPHENOUS NERVE:\nSensory nerve supplying the medial aspect of the limb",
@@ -4290,7 +4289,8 @@
 			}, {
 				"text": "[3]",
 				"xPos": 51.28309572301426,
-				"yPos": 23.202328966521108
+				"yPos": 23.202328966521108,
+				"flipped": true
 			}, {
 				"text": "[4]",
 				"xPos": 63.299389002036655,
@@ -4343,7 +4343,8 @@
 			}, {
 				"text": "[7]",
 				"xPos": 50.27450980392156,
-				"yPos": 36.04135893648449
+				"yPos": 36.04135893648449,
+				"flipped": true
 			}, {
 				"text": "[8]",
 				"xPos": 62.117647058823536,
@@ -4396,7 +4397,8 @@
 			}, {
 				"text": "[8]",
 				"xPos": 56.52173913043478,
-				"yPos": 55.820476858345025
+				"yPos": 55.820476858345025,
+				"flipped": true
 			}, {
 				"text": "[9]",
 				"xPos": 64.47908121410993,
@@ -4433,7 +4435,8 @@
 			}, {
 				"text": "[3]",
 				"xPos": 55.75,
-				"yPos": 58.15002820078963
+				"yPos": 58.15002820078963,
+				"flipped": true
 			}, {
 				"text": "[4]",
 				"xPos": 84.35000000000001,

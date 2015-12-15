@@ -2036,6 +2036,2586 @@
 			}]
 		}],
 		"title": "Innervation of the canine forelimb - lateral aspect"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "CRANIAL",
+				"xPos": 2.784116841624829,
+				"yPos": 47.114178168130486
+			}, {
+				"text": "CAUDAL",
+				"xPos": 95.8922866271109,
+				"yPos": 48.21204516938519
+			}]
+		}, {
+			"text": "Red line: MUSCULOCUTANEOUS NERVE",
+			"labels": [{
+				"text": "C6",
+				"xPos": 55.27156549520767,
+				"yPos": 9.441656210790464
+			}, {
+				"text": "C7",
+				"xPos": 61.52441807393883,
+				"yPos": 5.771643663739021
+			}, {
+				"text": "To CORACOBRACHIALIS m",
+				"xPos": 42.49201277955272,
+				"yPos": 23.83939774153074
+			}, {
+				"text": "Branch to BICEPS BRACHII m",
+				"xPos": 46.69100867183934,
+				"yPos": 30.803011292346298
+			}, {
+				"text": "Anastomosis of the MUSCULOCUTANEOUS and MEDIAN m",
+				"xPos": 62.026471930625284,
+				"yPos": 39.08406524466751
+			}, {
+				"text": "Branch to BRACHIALIS m",
+				"xPos": 49.33820173436787,
+				"yPos": 44.54203262233375
+			}, {
+				"text": "CUTANEOUS BRANCH - SENSORY",
+				"xPos": 45.276129621177546,
+				"yPos": 56.46173149309912
+			}]
+		}, {
+			"text": "Blue lines: MEDIAN NERVE\nGreen lines: ULNAR NERVE\n\n[1]: Medial aspect of the BRACHIUM caudal to BICEPS BRACHII\n\n[2]: Lies deep to PRONATOR TERES MUSCLE\n\n[3]: Branch to PRONATOR QUADRATUS \n\n[4]: Branch to FLEXOR CARPI RADIALIS and DIGITAL FLEXOR muscle\n\n[5]: Branch to INTEROSSEI MUSCLE\n\n[6]: PALMAR DIGITAL NERVE:\nSENSORY\n\n[7]: CAUDAL CUTANEOUS ANTEBRACHIAL NERVE\n\n[8]: Deep to ANTEBRACHIAL FASCIA\n\n[9]: To FLEXOR CARPI ULNARIS MUSCLE and DEEP DIGITAL FLEXOR MUSCLE\n\n[10]: Adjacent to ulnar artery:\nSENSORY INNERVATION to DIGIT V",
+			"labels": [{
+				"text": "C8",
+				"xPos": 66.68188041989958,
+				"yPos": 6.869510664993726
+			}, {
+				"text": "Ti",
+				"xPos": 72.93473299863076,
+				"yPos": 4.17189460476788
+			}, {
+				"text": "[1]",
+				"xPos": 64.81058877225011,
+				"yPos": 21.580928481806776
+			}, {
+				"text": "[2]",
+				"xPos": 54.17617526243724,
+				"yPos": 45.29485570890841
+			}, {
+				"text": "[3]",
+				"xPos": 49.52076677316294,
+				"yPos": 52.69761606022585
+			}, {
+				"text": "[4]",
+				"xPos": 47.147421268827024,
+				"yPos": 57.12045169385195
+			}, {
+				"text": "[5]",
+				"xPos": 40.43815609310817,
+				"yPos": 72.67879548306148
+			}, {
+				"text": "[6]",
+				"xPos": 32.31401186672752,
+				"yPos": 84.59849435382685
+			}, {
+				"text": "[7]",
+				"xPos": 67.32085805568234,
+				"yPos": 38.73902132998745
+			}, {
+				"text": "[8]",
+				"xPos": 60.155180282975806,
+				"yPos": 49.90589711417817
+			}, {
+				"text": "[9]",
+				"xPos": 57.14285714285714,
+				"yPos": 60.978670012547056
+			}, {
+				"text": "[10]",
+				"xPos": 44.18073938840712,
+				"yPos": 77.6348808030113
+			}]
+		}],
+		"title": "Innervation of the canine forelimb - medial aspect"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "Green lines: visceral pleura\nRed lines: parietal pleura\n\n[1]: Trachea\n\n[2]: Thoracic inlet\n\n[3]: 1st rib\n\n[4]: Costal pleura\n\n[5]: Pleural cavity:\npotential space (contains a few milliliters of serous fluid)\n\n[6]: Pulmonary pleura\n\n[7]: Mediastinal pleura\n\n[8]: Caudal mediastinum:\npotential space\n\n[9]: Costodiaphragmatic recess\n\n[10]: Diaphragmatic pleura\n\n[11]: Cupula pleura\n\n[12]: Root of lung\n\n[13]: Lung\n\n[14]: Diaphragm",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 12.333864965443912,
+				"yPos": 43.51464435146444
+			}, {
+				"text": "[2]",
+				"xPos": 11.217437533227006,
+				"yPos": 24.745965331739388
+			}, {
+				"text": "[3]",
+				"xPos": 17.49069643806486,
+				"yPos": 21.219366407650927
+			}, {
+				"text": "[4]",
+				"xPos": 29.82456140350877,
+				"yPos": 26.120741183502687
+			}, {
+				"text": "[5]",
+				"xPos": 18.394471026049974,
+				"yPos": 29.109384339509862
+			}, {
+				"text": "[6]",
+				"xPos": 45.13556618819777,
+				"yPos": 30.005977286312014
+			}, {
+				"text": "[7]",
+				"xPos": 56.406166932482726,
+				"yPos": 49.133293484757914
+			}, {
+				"text": "[8]",
+				"xPos": 66.8261562998405,
+				"yPos": 49.85056784219964
+			}, {
+				"text": "[9]",
+				"xPos": 74.64114832535886,
+				"yPos": 24.92528392109982
+			}, {
+				"text": "[10]",
+				"xPos": 81.55236576289208,
+				"yPos": 18.230723251643756
+			}, {
+				"text": "[11]",
+				"xPos": 15.311004784688995,
+				"yPos": 53.55648535564853
+			}, {
+				"text": "[12]",
+				"xPos": 37.16108452950559,
+				"yPos": 46.14465032875075
+			}, {
+				"text": "[13]",
+				"xPos": 46.99627857522594,
+				"yPos": 59.89240884638374
+			}, {
+				"text": "[14]",
+				"xPos": 81.71185539606593,
+				"yPos": 82.00836820083683
+			}]
+		}],
+		"title": "Diagram of the pleural membrane in a dorsal view of the thorax"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "DORSAL",
+				"xPos": 4.979035639412998,
+				"yPos": 5.693581780538302
+			}, {
+				"text": "VENTRAL",
+				"xPos": 94.65408805031447,
+				"yPos": 4.917184265010352
+			}]
+		}, {
+			"text": "Green: visceral serous membrane\nRed: parietal serous membrane\n\n[1]: Right lung\n\n[2]: Left lung\n\n[3]: Heart\n\n[4]: Pleural cavity:\nnegative pressure penetration causes air to rush in - pneumothorax\n\n[5]: Accessory lobe of lung\n\n[6]: Caudal vena cava\n\n[7]: Plica vena cava\n\n[8]: Mediastinal pleura\n\n[9]: Parietal and visceral pericardium\n\n[10]: Mediastinum\n\n[11]: Aorta\n\n[12]: Oesophagus\n\n[13]: Root of lung\n\n[14]: Fibrous pericardium between pericardium and pleura (thick connective tissue)\n\n[15]: Pleuropericardial ligament",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 26.20545073375262,
+				"yPos": 32.971014492753625
+			}, {
+				"text": "[2]",
+				"xPos": 24.056603773584907,
+				"yPos": 67.3913043478261
+			}, {
+				"text": "[3]",
+				"xPos": 69.81132075471697,
+				"yPos": 52.43271221532091
+			}, {
+				"text": "[4]",
+				"xPos": 16.82389937106918,
+				"yPos": 25.414078674948243
+			}, {
+				"text": "[5]",
+				"xPos": 46.855345911949684,
+				"yPos": 37.939958592132506
+			}, {
+				"text": "[6]",
+				"xPos": 51.20545073375262,
+				"yPos": 28.36438923395445
+			}, {
+				"text": "[7]",
+				"xPos": 55.60796645702306,
+				"yPos": 28.36438923395445
+			}, {
+				"text": "[8]",
+				"xPos": 56.079664570230605,
+				"yPos": 49.79296066252588
+			}, {
+				"text": "[9]",
+				"xPos": 74.52830188679245,
+				"yPos": 37.16356107660456
+			}, {
+				"text": "[10]",
+				"xPos": 89.98951781970649,
+				"yPos": 50.569358178053825
+			}, {
+				"text": "[11]",
+				"xPos": 10.272536687631026,
+				"yPos": 51.65631469979296
+			}, {
+				"text": "[12]",
+				"xPos": 22.641509433962266,
+				"yPos": 51.81159420289855
+			}, {
+				"text": "[13]",
+				"xPos": 34.329140461215935,
+				"yPos": 52.27743271221532
+			}, {
+				"text": "[14]",
+				"xPos": 81.23689727463312,
+				"yPos": 67.08074534161491
+			}, {
+				"text": "[15]",
+				"xPos": 92.45283018867924,
+				"yPos": 53.519668737060044
+			}]
+		}],
+		"title": "Diagram of a transverse section through the thorax\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "T12",
+				"xPos": 17.637083097795365,
+				"yPos": 13.594771241830065
+			}, {
+				"text": "T13",
+				"xPos": 17.637083097795365,
+				"yPos": 22.483660130718956
+			}, {
+				"text": "L1",
+				"xPos": 18.541548897682304,
+				"yPos": 29.978213507625274
+			}, {
+				"text": "L2",
+				"xPos": 18.88072357263991,
+				"yPos": 36.949891067538125
+			}, {
+				"text": "L3",
+				"xPos": 19.05031091011871,
+				"yPos": 43.44226579520697
+			}, {
+				"text": "L4",
+				"xPos": 19.672131147540984,
+				"yPos": 49.84749455337691
+			}, {
+				"text": "L5",
+				"xPos": 19.05031091011871,
+				"yPos": 56.81917211328976
+			}, {
+				"text": "L6",
+				"xPos": 22.159412097230074,
+				"yPos": 64.18300653594771
+			}, {
+				"text": "L7",
+				"xPos": 23.12040700960995,
+				"yPos": 69.8474945533769
+			}]
+		}, {
+			"text": "[1]: 1ST LUMBAR\n\n[2]: THORACIC\n\n[3,4]: INTERCOSTAL\n\n[5]: INTERNAL THORACIC\n\n[6]: CRANIAL EPIGASTRIC\n\n[7]: PHRENICO ABDOMINAL\n\n[8]: DEEP CIRCUMFLEX ILIAC\n\n[9]: CRANIAL SUPERFICIAL EPIGASTRIC:\nCRANIAL MAMMARY GLANDS\n\n[10]: CAUDAL SUPERFICIAL EPIGASTRIC:\nCAUDAL MAMMARY GLANDS\n\n[11]: INTERNAL ILIAC\n\n[12]: DEEP FEMORAL\n\n[13]: EXTERNAL PUDENDAL\n\n[14]: CAUDAL EPIGASTRIC",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 27.303561334087057,
+				"yPos": 30.93681917211329
+			}, {
+				"text": "[2]",
+				"xPos": 29.338609383832676,
+				"yPos": 13.594771241830065
+			}, {
+				"text": "[3]",
+				"xPos": 51.38496325607688,
+				"yPos": 14.901960784313726
+			}, {
+				"text": "[4]",
+				"xPos": 46.52345958168457,
+				"yPos": 21.437908496732025
+			}, {
+				"text": "[5]",
+				"xPos": 75.12719050310909,
+				"yPos": 15.642701525054466
+			}, {
+				"text": "[6]",
+				"xPos": 76.99265121537591,
+				"yPos": 28.14814814814815
+			}, {
+				"text": "[7]",
+				"xPos": 37.30921424533635,
+				"yPos": 38.77995642701525
+			}, {
+				"text": "[8]",
+				"xPos": 42.34030525720746,
+				"yPos": 69.10675381263617
+			}, {
+				"text": "[9]",
+				"xPos": 76.82306387789711,
+				"yPos": 43.83442265795207
+			}, {
+				"text": "[10]",
+				"xPos": 71.22668174109667,
+				"yPos": 58.25708061002178
+			}, {
+				"text": "[11]",
+				"xPos": 43.0751837196156,
+				"yPos": 73.33333333333333
+			}, {
+				"text": "[12]",
+				"xPos": 59.80780101752402,
+				"yPos": 82.8322440087146
+			}, {
+				"text": "[13]",
+				"xPos": 68.73940079140758,
+				"yPos": 85.62091503267973
+			}, {
+				"text": "[14]",
+				"xPos": 64.83889202939514,
+				"yPos": 79.08496732026144
+			}]
+		}],
+		"title": "Diagram showing abdominal aorta in relation to epigastric arteries (lateral view)\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "Thymus:\nwill regress as animal matures\n\n[1,2]: Bronchi (cut)",
+			"labels": [{
+				"text": "Thoracic aorta",
+				"xPos": 19.516044187269856,
+				"yPos": 35.84070796460177
+			}, {
+				"text": "Oesophagus",
+				"xPos": 44.660704892162016,
+				"yPos": 39.66210780370073
+			}, {
+				"text": "Accessory lobe of the lung\n",
+				"xPos": 61.073119410836405,
+				"yPos": 27.473853580048267
+			}, {
+				"text": "1st rib",
+				"xPos": 66.85954760652288,
+				"yPos": 85.15687851971038
+			}, {
+				"text": "Thymus",
+				"xPos": 68.85849552866912,
+				"yPos": 67.73934030571199
+			}, {
+				"text": "[1]",
+				"xPos": 55.60231457127828,
+				"yPos": 48.59211584875302
+			}, {
+				"text": "[2]",
+				"xPos": 52.34087322461862,
+				"yPos": 44.89139179404666
+			}, {
+				"text": "Heart",
+				"xPos": 62.65123619147816,
+				"yPos": 52.292839903459374
+			}, {
+				"text": "Diaphragm",
+				"xPos": 88.11152025249869,
+				"yPos": 13.113435237329044
+			}]
+		}, {
+			"text": "[1]: Left sympathetic trunk\n\n[2]: Left vagus nerve \n\n[3]: Left vagosympathetic trunk",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 28.879537085744346,
+				"yPos": 59.25181013676589
+			}, {
+				"text": "[2]",
+				"xPos": 56.23356128353498,
+				"yPos": 60.78037007240547
+			}, {
+				"text": "[3]",
+				"xPos": 49.34245134139926,
+				"yPos": 77.51407884151247
+			}, {
+				"text": "Tracheobronchial lymph node\n",
+				"xPos": 51.23619147816938,
+				"yPos": 49.43684633950121
+			}, {
+				"text": "Caudal mediastinum\n",
+				"xPos": 85.2709100473435,
+				"yPos": 16.090104585679807
+			}, {
+				"text": "Cranial mediastinum\n",
+				"xPos": 73.69805365597054,
+				"yPos": 82.1802091713596
+			}, {
+				"text": "Cranial vena cava\n",
+				"xPos": 61.70436612309311,
+				"yPos": 67.3773129525342
+			}, {
+				"text": "from C5,6,7 to diaphragm\n\\",
+				"xPos": 56.39137296159916,
+				"yPos": 89.82300884955751
+			}]
+		}],
+		"title": "Diagram of the left lateral view of the thoracic cavity\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "CRANIAL",
+				"xPos": 6.387225548902195,
+				"yPos": 5.324813631522897
+			}, {
+				"text": "CAUDAL",
+				"xPos": 4.640718562874251,
+				"yPos": 94.92367767128151
+			}, {
+				"text": "Diaphragm",
+				"xPos": 86.67664670658682,
+				"yPos": 87.78842740504082
+			}, {
+				"text": "Heart",
+				"xPos": 60.778443113772454,
+				"yPos": 62.22932197373092
+			}, {
+				"text": "TRACHEA",
+				"xPos": 49.35129740518962,
+				"yPos": 9.762158324458644
+			}]
+		}, {
+			"text": "Right phrenic nerve:\nfrom C5,6,7 to diaphragm\n\nThymus:\nin cranial mediastinum\n\nAzygos vein:\nright only\n\nVagus nerve:\ndorsal and ventral branch",
+			"labels": [{
+				"text": "Right phrenic nerve\n",
+				"xPos": 52.9441117764471,
+				"yPos": 6.53177138800142
+			}, {
+				"text": "Cranial vena cava",
+				"xPos": 60.578842315369265,
+				"yPos": 13.6670216542421
+			}, {
+				"text": "Thymus",
+				"xPos": 68.562874251497,
+				"yPos": 35.56975505857295
+			}, {
+				"text": "Oesophagus",
+				"xPos": 43.712574850299404,
+				"yPos": 43.98296059637913
+			}, {
+				"text": "Azygos vein",
+				"xPos": 20.90818363273453,
+				"yPos": 74.79588214412496
+			}, {
+				"text": "Thoracic duct",
+				"xPos": 21.856287425149702,
+				"yPos": 79.44621938232162
+			}, {
+				"text": "Thoracic aorta",
+				"xPos": 29.491017964071858,
+				"yPos": 84.80653177138801
+			}, {
+				"text": "Vagus nerve",
+				"xPos": 43.862275449101794,
+				"yPos": 65.35321263755769
+			}, {
+				"text": "Caudal vena cava\n",
+				"xPos": 49.1497005988024,
+				"yPos": 74.12140575079871
+			}]
+		}],
+		"title": "Diagram of the right lateral view of thoracic cavity\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: Right recurrent laryngeal wraps around right subclavian artery\n\n[2]: Left recurrent laryngeal nerve wraps around aorta",
+			"labels": [{
+				"text": "Oesophagus",
+				"xPos": 51.08514190317195,
+				"yPos": 4.358812381554012
+			}, {
+				"text": "Dorsal branch\n",
+				"xPos": 36.64440734557596,
+				"yPos": 15.666456096020214
+			}, {
+				"text": "Ventral branch\n",
+				"xPos": 67.02838063439064,
+				"yPos": 24.06822488945041
+			}, {
+				"text": "[1]",
+				"xPos": 36.060100166944906,
+				"yPos": 56.72773215413771
+			}, {
+				"text": "Aorta",
+				"xPos": 78.54757929883138,
+				"yPos": 58.37018319646241
+			}, {
+				"text": "[2]",
+				"xPos": 60.76794657762938,
+				"yPos": 50.347441566645614
+			}, {
+				"text": "Subclavian artery\n",
+				"xPos": 19.36560934891486,
+				"yPos": 65.95072646873025
+			}, {
+				"text": "Right vagus\n",
+				"xPos": 55.425709515859765,
+				"yPos": 75.86860391661402
+			}, {
+				"text": "Left vagus",
+				"xPos": 59.766277128547586,
+				"yPos": 84.64939987365761
+			}]
+		}],
+		"title": "The vagus nerve"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "Subclavian artery\n",
+				"xPos": 37.005303957568344,
+				"yPos": 55.44933078393881
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "Vagosympathetic trunk\n",
+				"xPos": 26.397388820889432,
+				"yPos": 19.359464627151052
+			}, {
+				"text": "Cervicothoracic (stellate) ganglion\n",
+				"xPos": 31.53814769481844,
+				"yPos": 36.95028680688336
+			}, {
+				"text": "Ansa subclavia \n",
+				"xPos": 40.59567523459812,
+				"yPos": 47.37093690248566
+			}, {
+				"text": "vagus ",
+				"xPos": 50.30599755201959,
+				"yPos": 55.06692160611855
+			}, {
+				"text": "Middle cervical ganglion\n",
+				"xPos": 48.42921256629947,
+				"yPos": 66.25239005736138
+			}, {
+				"text": "Vagosympathetic trunk\n",
+				"xPos": 49.53080375356998,
+				"yPos": 78.68068833652008
+			}]
+		}],
+		"title": "The ansa subclavia\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "HEART",
+				"xPos": 49.05737704918033,
+				"yPos": 66.72777268560954
+			}]
+		}, {
+			"text": "[1]: Left subclavian artery\n\n[2]: Aortic arch\n\n[3]: Descending thoracic aorta\n\n[4]: Intercostal arteries (9 pairs)\n\n[5]: Ascending aorta:\nGoes off coronary arteries which wraps around and supplies the heart\n\n[6]: Brachiocephalic trunk\n\n[7]: Right subclavian artery\n\n[8, 9]: Right and left common carotid artery",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 29.18032786885246,
+				"yPos": 16.406966086159485
+			}, {
+				"text": "[2]",
+				"xPos": 52.17213114754098,
+				"yPos": 12.923923006416132
+			}, {
+				"text": "[3]",
+				"xPos": 76.39344262295083,
+				"yPos": 14.940421631530706
+			}, {
+				"text": "[4]",
+				"xPos": 93.40163934426229,
+				"yPos": 6.966086159486709
+			}, {
+				"text": "[5]",
+				"xPos": 45.614754098360656,
+				"yPos": 37.67186067827681
+			}, {
+				"text": "[6]",
+				"xPos": 33.40163934426229,
+				"yPos": 44.72960586617782
+			}, {
+				"text": "[7]",
+				"xPos": 17.62295081967213,
+				"yPos": 35.28872593950504
+			}, {
+				"text": "[8]",
+				"xPos": 12.336065573770492,
+				"yPos": 42.896425297891845
+			}, {
+				"text": "[9]",
+				"xPos": 18.278688524590166,
+				"yPos": 52.06232813932172
+			}]
+		}],
+		"title": "Diagram of the main branches of the aorta"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "HEART",
+				"xPos": 47.29043183742591,
+				"yPos": 66.88364524003255
+			}]
+		}, {
+			"text": "[1]: Right subclavian vein\n\n[2]: Cranial vena cava\n\n[3]: Right and left internal and external jugular vein\n\n[4]: Right and left brachiocephalic veins\n\n[5]: Left subclavian vein\n\n[6]: AZYGOS VEIN\n\n[7]: Intercostal veins (9 pairs)\n\n[8]: Caudal vena cava",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 15.749364944961897,
+				"yPos": 55.49227013832384
+			}, {
+				"text": "[2]",
+				"xPos": 29.212531752751904,
+				"yPos": 60.53702196908055
+			}, {
+				"text": "[3]",
+				"xPos": 5.4191363251481794,
+				"yPos": 60.86248982912937
+			}, {
+				"text": "[4]",
+				"xPos": 20.364098221845893,
+				"yPos": 60.53702196908055
+			}, {
+				"text": "[5]",
+				"xPos": 16.3844199830652,
+				"yPos": 66.2327095199349
+			}, {
+				"text": "[6]",
+				"xPos": 50.55038103302286,
+				"yPos": 23.596419853539462
+			}, {
+				"text": "[7]",
+				"xPos": 82.7688399661304,
+				"yPos": 14.157851912123679
+			}, {
+				"text": "[8]",
+				"xPos": 73.58171041490263,
+				"yPos": 65.33767290480064
+			}]
+		}],
+		"title": "Diagram of the main veins in the thorax"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "Thoracic duct moves to the left-hand-side and enters the left brachiocephalic vein\nThoracic duct passes through the AORTIC HIATUS of the diaphragm with the AORTAS AZYGOS VEIN on the right-hand-side",
+			"labels": [{
+				"text": "Oesophagus",
+				"xPos": 22.292545710267227,
+				"yPos": 45.13677811550152
+			}, {
+				"text": "Diaphragm",
+				"xPos": 89.52180028129395,
+				"yPos": 15.045592705167174
+			}]
+		}],
+		"title": "Thoracic duct\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "1st rib\n",
+				"xPos": 30.93681917211329,
+				"yPos": 73.11627906976744
+			}]
+		}, {
+			"text": "[1]: Vertebral artery\n\n[2]: Costocervical artery\n\n[3]: Internal thoracic artery\n\n[4]: Superficial cervical artery\n\nSubclavian artery:\nto aorta\n\nAxillary artery:\ngoing to lungs",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 48.8562091503268,
+				"yPos": 13.023255813953488
+			}, {
+				"text": "[2]",
+				"xPos": 69.0087145969499,
+				"yPos": 20.46511627906977
+			}, {
+				"text": "[3]",
+				"xPos": 44.172113289760354,
+				"yPos": 54.13953488372093
+			}, {
+				"text": "[4]",
+				"xPos": 23.420479302832245,
+				"yPos": 53.860465116279066
+			}, {
+				"text": "Subclavian artery",
+				"xPos": 79.95642701525054,
+				"yPos": 51.44186046511627
+			}, {
+				"text": "Axillary artery",
+				"xPos": 12.636165577342048,
+				"yPos": 72.55813953488372
+			}]
+		}],
+		"title": "The branches of the subclavian artery\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "Crura:\ntendons attach to L3-4",
+			"labels": [{
+				"text": "D",
+				"xPos": 44.37412095639944,
+				"yPos": 6.623931623931624
+			}, {
+				"text": "V",
+				"xPos": 46.06188466947961,
+				"yPos": 92.23076923076923
+			}, {
+				"text": "THORAX",
+				"xPos": 22.0112517580872,
+				"yPos": 51.49572649572649
+			}, {
+				"text": "ABDOMEN",
+				"xPos": 78.05907172995781,
+				"yPos": 77.13675213675214
+			}, {
+				"text": "Crura",
+				"xPos": 67.29957805907173,
+				"yPos": 18.91025641025641
+			}, {
+				"text": "Skeletal muscle\n",
+				"xPos": 54.500703234880454,
+				"yPos": 35.04273504273504
+			}, {
+				"text": "TENDINOUS CENTRE",
+				"xPos": 53.37552742616034,
+				"yPos": 47.43589743589743
+			}]
+		}],
+		"title": "The diaphragm - Lateral view\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "RIGHT",
+				"xPos": 5.143853530950305,
+				"yPos": 5.05050505050505
+			}, {
+				"text": "LEFT",
+				"xPos": 95.1176983435048,
+				"yPos": 4.461279461279461
+			}]
+		}, {
+			"text": "STERNUM:\nSternal part\n\nRIBS:\nCostal part\n\nRIGHT CRURA:\nLumbar part\n\nLEFT CRURA:\nLumbar part\n\nOesophageal hiatus:\nOesophagus and vagus nerve\n\nAortic hiatus:\nAorta, azygous, thoracic duct",
+			"labels": [{
+				"text": "STERNUM",
+				"xPos": 40.88927637314734,
+				"yPos": 11.11111111111111
+			}, {
+				"text": "RIBS",
+				"xPos": 25.108979947689626,
+				"yPos": 46.2962962962963
+			}, {
+				"text": "RIGHT CRURA",
+				"xPos": 27.898866608544026,
+				"yPos": 70.37037037037037
+			}, {
+				"text": "LEFT CRURA",
+				"xPos": 64.77768090671316,
+				"yPos": 75.67340067340066
+			}, {
+				"text": "Caval foramen vena cava\n",
+				"xPos": 39.14559721011334,
+				"yPos": 33.92255892255892
+			}, {
+				"text": "Tendinous centre\n",
+				"xPos": 64.34176111595467,
+				"yPos": 40.572390572390574
+			}, {
+				"text": "Oesophageal hiatus",
+				"xPos": 49.17175239755885,
+				"yPos": 60.26936026936027
+			}, {
+				"text": "Aortic hiatus",
+				"xPos": 47.77680906713165,
+				"yPos": 82.15488215488216
+			}, {
+				"text": "Right and left crura",
+				"xPos": 44.81255448997384,
+				"yPos": 94.36026936026936
+			}]
+		}],
+		"title": "The diaphragm - Abdominal (caudal view)\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "RIGHT",
+				"xPos": 4.67479674796748,
+				"yPos": 4.502046384720328
+			}, {
+				"text": "LEFT",
+				"xPos": 94.3089430894309,
+				"yPos": 4.1609822646657575
+			}]
+		}, {
+			"text": "The deep intestinal tract is 3-4 times the length of the body\n\nSPLEEN:\nalways on the left - can be very large\n\n[1]: CAUDAL FLEXURE\n\n[2]: BLADDER",
+			"labels": [{
+				"text": "DIAPHRAGM",
+				"xPos": 37.90650406504065,
+				"yPos": 14.870395634379264
+			}, {
+				"text": "[1]",
+				"xPos": 33.739837398373986,
+				"yPos": 83.90177353342429
+			}, {
+				"text": "LIVER",
+				"xPos": 79.77642276422763,
+				"yPos": 34.85675306957708
+			}, {
+				"text": "STOMACH",
+				"xPos": 78.55691056910568,
+				"yPos": 43.24693042291951
+			}, {
+				"text": "Greater curvature of stomach",
+				"xPos": 59.04471544715447,
+				"yPos": 50.81855388813097
+			}, {
+				"text": "ASCENDING DUODENUM\n",
+				"xPos": 39.43089430894309,
+				"yPos": 79.53615279672579
+			}, {
+				"text": "SPLEEN",
+				"xPos": 73.8821138211382,
+				"yPos": 56.070941336971345
+			}, {
+				"text": "JEJUNUM",
+				"xPos": 33.23170731707317,
+				"yPos": 65.00682128240109
+			}, {
+				"text": "[2]",
+				"xPos": 43.08943089430895,
+				"yPos": 86.08458390177354
+			}, {
+				"text": "DESCENDING DUODENUM\n",
+				"xPos": 24.1869918699187,
+				"yPos": 71.14597544338336
+			}]
+		}],
+		"title": "Ventral view of abdominal organs - no omentum\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "STOMACH",
+				"xPos": 11.523809523809524,
+				"yPos": 39.54060705496308
+			}, {
+				"text": "STOMACH",
+				"xPos": 64.66666666666666,
+				"yPos": 78.5890073831009
+			}]
+		}, {
+			"text": "[1]: PANCREAS\n\n[2]: DORSAL MESOGASTRIUM\n\n[3]: SPLEEN\n\n[4]: Stomach rotates during embryonic development\n\n[5]: LIVER\n\n[6]: VENTRAL MESOGASTRIUM\n\n[7]: Potential space\n\n[8]: PANCREAS\n\n[9]: OMENTAL BURSA\n\n[10]: GREATER OMENTUM\n\n[11]: SPLEEN\n\n[12]: LESSER OMENTUM\n\n[13]: LIVER\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nW",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 16.523809523809526,
+				"yPos": 8.039376538146021
+			}, {
+				"text": "[2]",
+				"xPos": 16.380952380952383,
+				"yPos": 14.766201804757998
+			}, {
+				"text": "[3]",
+				"xPos": 17.142857142857142,
+				"yPos": 20.91878589007383
+			}, {
+				"text": "[4]",
+				"xPos": 3.571428571428571,
+				"yPos": 39.29450369155045
+			}, {
+				"text": "[5]",
+				"xPos": 16.523809523809526,
+				"yPos": 58.90073831009024
+			}, {
+				"text": "[6]",
+				"xPos": 17.0,
+				"yPos": 68.82690730106646
+			}, {
+				"text": "[7]",
+				"xPos": 63.57142857142857,
+				"yPos": 29.860541427399507
+			}, {
+				"text": "[8]",
+				"xPos": 76.04761904761905,
+				"yPos": 43.31419196062346
+			}, {
+				"text": "[9]",
+				"xPos": 85.14285714285714,
+				"yPos": 69.4011484823626
+			}, {
+				"text": "[10]",
+				"xPos": 92.0,
+				"yPos": 87.20262510254307
+			}, {
+				"text": "[11]",
+				"xPos": 80.76190476190476,
+				"yPos": 87.44872846595571
+			}, {
+				"text": "[12]",
+				"xPos": 58.71428571428572,
+				"yPos": 72.60049220672683
+			}, {
+				"text": "[13]",
+				"xPos": 52.33333333333333,
+				"yPos": 66.44790812141099
+			}]
+		}],
+		"title": "Development of omentum - abdominal immature form"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1,2,3,4]: JEJUNUM\n\n[5,6,7,8]: GREAT MESENTERY:\nMesojejunum",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 62.811565304087736,
+				"yPos": 22.296015180265655
+			}, {
+				"text": "[2]",
+				"xPos": 76.07178464606181,
+				"yPos": 24.952561669829223
+			}, {
+				"text": "[3]",
+				"xPos": 72.48255234297109,
+				"yPos": 36.385199240986715
+			}, {
+				"text": "[4]",
+				"xPos": 74.97507477567298,
+				"yPos": 47.24857685009488
+			}, {
+				"text": "VERTEBRA",
+				"xPos": 21.086739780658025,
+				"yPos": 48.57685009487666
+			}, {
+				"text": "SPLEEN",
+				"xPos": 62.16350947158524,
+				"yPos": 81.73624288425047
+			}, {
+				"text": "LEFT KIDNEY\n",
+				"xPos": 39.980059820538386,
+				"yPos": 66.12903225806451
+			}, {
+				"text": "BLOOD VESSELS\n",
+				"xPos": 40.42871385842473,
+				"yPos": 43.833017077798864
+			}, {
+				"text": "MUSCLE",
+				"xPos": 22.781655034895316,
+				"yPos": 36.717267552182165
+			}, {
+				"text": "RIGHT KIDNEY\n",
+				"xPos": 36.241276171485545,
+				"yPos": 29.69639468690702
+			}, {
+				"text": "MESODUODENUM",
+				"xPos": 28.564307078763708,
+				"yPos": 12.760910815939278
+			}, {
+				"text": "DESCENDING DUODENUM\n",
+				"xPos": 41.67497507477567,
+				"yPos": 16.93548387096774
+			}, {
+				"text": "ROOT OF MESENTERY\n",
+				"xPos": 49.50149551345962,
+				"yPos": 52.32447817836812
+			}]
+		}],
+		"title": "Transverse section through the abdomen of the dog to show the peritoneum\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: CARDIA\n\n[2]: FUNDUS\n\n[3]: LESSER CURVATURE\n\n[4]: PYLORIC PART\n\n[5]: BODY\n\n[6]: GREATER CURVATURE\n\nGREATER MESENTERY:\nMESOJEJUNUM",
+			"labels": [{
+				"text": "RECTUM",
+				"xPos": 15.90394200271862,
+				"yPos": 79.87321711568937
+			}, {
+				"text": "ASCENDING COLON\n",
+				"xPos": 32.30629814227458,
+				"yPos": 63.264659270998415
+			}, {
+				"text": "[1]",
+				"xPos": 39.37471681014952,
+				"yPos": 37.591125198098254
+			}, {
+				"text": "[2]",
+				"xPos": 44.17761667421839,
+				"yPos": 28.938193343898572
+			}, {
+				"text": "[3]",
+				"xPos": 49.66017217942909,
+				"yPos": 34.64342313787639
+			}, {
+				"text": "[4]",
+				"xPos": 52.0163117353874,
+				"yPos": 42.72583201267829
+			}, {
+				"text": "[5]",
+				"xPos": 59.49252378794744,
+				"yPos": 30.491283676703645
+			}, {
+				"text": "[6]",
+				"xPos": 65.1110104213865,
+				"yPos": 33.53407290015848
+			}, {
+				"text": "STOMACH",
+				"xPos": 49.20706841866787,
+				"yPos": 3.5816164817749603
+			}, {
+				"text": "JEJUNUM",
+				"xPos": 87.94743996375169,
+				"yPos": 56.925515055467514
+			}, {
+				"text": "GREATER MESENTERY",
+				"xPos": 80.42591753511554,
+				"yPos": 73.53407290015848
+			}]
+		}, {
+			"text": "[1]: ROOT OF MESENTERY\n\n[2]: TRANSVERSE COLON\n\n[3]: DESCENDING COLON\n\n[4]: ASCENDING DUODENUM\n\n[5]: CAECUM\n\n[6]: DESCENDING DUODENUM\n\n[7,8]: MESENTERIC LYMPH NODES\n\n[9]: DUODENOCOLIC FOLD\n\n[10]: ILEOCAECAL FOLD\n \n[11]: ILEAM",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 16.402356139555955,
+				"yPos": 51.9175911251981
+			}, {
+				"text": "[2]",
+				"xPos": 23.244222927050295,
+				"yPos": 57.46434231378764
+			}, {
+				"text": "[3]",
+				"xPos": 14.997734481196193,
+				"yPos": 64.5958795562599
+			}, {
+				"text": "[4]",
+				"xPos": 23.74263706388763,
+				"yPos": 66.3391442155309
+			}, {
+				"text": "[5]",
+				"xPos": 34.84367920253738,
+				"yPos": 71.25198098256735
+			}, {
+				"text": "[6]",
+				"xPos": 50.61169007702764,
+				"yPos": 59.239302694136285
+			}, {
+				"text": "[7]",
+				"xPos": 52.46941549614862,
+				"yPos": 68.74801901743265
+			}, {
+				"text": "[8]",
+				"xPos": 49.524241051200725,
+				"yPos": 72.45641838351823
+			}, {
+				"text": "[9]",
+				"xPos": 21.069324875396468,
+				"yPos": 71.03011093502377
+			}, {
+				"text": "[10]",
+				"xPos": 37.788853647485276,
+				"yPos": 76.83042789223454
+			}, {
+				"text": "[11]",
+				"xPos": 45.89941096511101,
+				"yPos": 77.05229793977813
+			}]
+		}],
+		"title": "Diagram of the gastrointestinal tract of the dog\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: AORTA\n\n[2]: OESOPHAGUS\n\n[3]: CAUDAL VENA CAVA\n\n[4]: DIAPHRAGM",
+			"labels": [{
+				"text": "CRURA OF DIAPHRAGM\n",
+				"xPos": 20.109780439121757,
+				"yPos": 40.41013268998794
+			}, {
+				"text": "TRANSVERSE COLON\n",
+				"xPos": 34.5309381237525,
+				"yPos": 48.09006835544833
+			}, {
+				"text": "PANCREAS",
+				"xPos": 34.830339321357286,
+				"yPos": 55.77000402090873
+			}, {
+				"text": "EPIPLOIC FORAMEN\n",
+				"xPos": 43.862275449101794,
+				"yPos": 62.28387615601125
+			}, {
+				"text": "[1]",
+				"xPos": 19.510978043912175,
+				"yPos": 71.61238439887414
+			}, {
+				"text": "[2]",
+				"xPos": 27.944111776447105,
+				"yPos": 76.27663852030558
+			}, {
+				"text": "[3]",
+				"xPos": 41.06786427145709,
+				"yPos": 80.29754724567752
+			}, {
+				"text": "[4]",
+				"xPos": 57.48502994011976,
+				"yPos": 80.69963811821471
+			}, {
+				"text": "LIVER",
+				"xPos": 64.67065868263472,
+				"yPos": 72.49698431845597
+			}, {
+				"text": "STERNUM",
+				"xPos": 81.98602794411177,
+				"yPos": 82.71009248090068
+			}]
+		}, {
+			"text": "[1]: ROOT OF THE MESENTERY\n\n[2,3]: MESENTERY\n\n[4,5,6,7]: SMALL INTESTINE\n\n[8]: DEEP WALL OF GREATER OMENTUM\n\n[9]: SUPERFICIAL WALL OF GREATER OMENTUM\n\n[10]: OMENTAL BURSA\n\n[11]: STOMACH\n\n[12]: LESSER OMENTUM",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 23.10379241516966,
+				"yPos": 42.139123441897866
+			}, {
+				"text": "[2]",
+				"xPos": 36.07784431137724,
+				"yPos": 39.525532770406116
+			}, {
+				"text": "[3]",
+				"xPos": 38.572854291417165,
+				"yPos": 31.322878970647366
+			}, {
+				"text": "[4]",
+				"xPos": 39.37125748502994,
+				"yPos": 22.275834338560514
+			}, {
+				"text": "[5]",
+				"xPos": 52.9441117764471,
+				"yPos": 20.62726176115802
+			}, {
+				"text": "[6]",
+				"xPos": 57.63473053892215,
+				"yPos": 26.417370325693607
+			}, {
+				"text": "[7]",
+				"xPos": 60.12974051896207,
+				"yPos": 35.343787696019305
+			}, {
+				"text": "[8]",
+				"xPos": 63.123752495009974,
+				"yPos": 15.359871330920788
+			}, {
+				"text": "[9]",
+				"xPos": 71.20758483033931,
+				"yPos": 17.61158021712907
+			}, {
+				"text": "[10]",
+				"xPos": 71.05788423153693,
+				"yPos": 34.86127864897467
+			}, {
+				"text": "[11]",
+				"xPos": 59.181636726546905,
+				"yPos": 48.813831926015276
+			}, {
+				"text": "[12]",
+				"xPos": 49.650698602794414,
+				"yPos": 60.03216726980297
+			}]
+		}],
+		"title": "Paramedian section of the abdominal cavity of the dog to show the peritoneum"
+	}, {
+		"slides": [{
+			"text": "Cranial to caudal view, dog in dorsal recumbency",
+			"labels": []
+		}, {
+			"text": "[1]: QUADRATE LOBE\n\n[2]: GALL BLADDER\n\n[3]: HEPATIC VEINS:\nVariable in number, empty into caudal vena cava\n\n[4]: CAUDAL VENA CAVA\n\n[5]: PAPILLARY PROCESS OF CAUDATE LOBE\n\n[6]: CAUDAL PROCESS OF CAUDATE LOBE\n\n[7]: LEFT LATERAL LOBE\n",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 53.40670859538784,
+				"yPos": 7.422402159244265
+			}, {
+				"text": "[2]",
+				"xPos": 58.54297693920335,
+				"yPos": 9.851551956815115
+			}, {
+				"text": "LEFT MEDIAL LOBE\n",
+				"xPos": 34.80083857442348,
+				"yPos": 21.3225371120108
+			}, {
+				"text": "[7]",
+				"xPos": 21.069182389937108,
+				"yPos": 54.8582995951417
+			}, {
+				"text": "RIGHT MEDIAL LOBE\n",
+				"xPos": 66.24737945492663,
+				"yPos": 31.983805668016196
+			}, {
+				"text": "RIGHT LATERAL LOBE\n",
+				"xPos": 70.59748427672956,
+				"yPos": 65.11470985155195
+			}, {
+				"text": "[3]\n",
+				"xPos": 44.0251572327044,
+				"yPos": 45.209176788124154
+			}, {
+				"text": "[4]",
+				"xPos": 53.721174004192875,
+				"yPos": 49.662618083670715
+			}, {
+				"text": "[5]",
+				"xPos": 41.090146750524106,
+				"yPos": 55.465587044534416
+			}, {
+				"text": "[6]",
+				"xPos": 81.86582809224319,
+				"yPos": 79.41970310391363
+			}]
+		}],
+		"title": "Diagrammatic aspect of the liver\n"
+	}, {
+		"slides": [{
+			"text": "Caudal to cranial view, dog in dorsal recumbency",
+			"labels": []
+		}, {
+			"text": "[1]: QUADRATE LOBE\n\n[2]: RIGHT MEDIAL LOBE\n\n[3]: GALL BLADDER\n\n[4]: RIGHT LATERAL LOBE\n\n[5]: HEPATIC PORTAL VEIN\n\n[6]: CAUDATE PROCESS OF CAUDATE LOBE\n\n[7]: RENAL FOSSA:\nIn contact with right kidney\n\n[8]: CAUDAL VENA CAVA\n\n[9]: HEPATIC ARTERY\n\n[10]: PAPILLARY PROCESS OF CAUDATE LOBE\n\n[11]: LESSER OMENTUM \n\n[12]: LEFT LATERAL LOBE",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 45.91885441527446,
+				"yPos": 21.76696542893726
+			}, {
+				"text": "[2]",
+				"xPos": 32.315035799522676,
+				"yPos": 24.71190781049936
+			}, {
+				"text": "[3]",
+				"xPos": 42.004773269689736,
+				"yPos": 45.45454545454545
+			}, {
+				"text": "[4]",
+				"xPos": 17.947494033412887,
+				"yPos": 48.78361075544174
+			}, {
+				"text": "[5]",
+				"xPos": 37.80429594272076,
+				"yPos": 62.61203585147247
+			}, {
+				"text": "[6]",
+				"xPos": 21.05011933174224,
+				"yPos": 67.8617157490397
+			}, {
+				"text": "[7]",
+				"xPos": 23.43675417661098,
+				"yPos": 88.4122919334187
+			}, {
+				"text": "[8]",
+				"xPos": 31.07398568019093,
+				"yPos": 74.77592829705506
+			}, {
+				"text": "[9]",
+				"xPos": 42.33890214797136,
+				"yPos": 68.69398207426376
+			}, {
+				"text": "[10]",
+				"xPos": 62.14797136038186,
+				"yPos": 59.92317541613317
+			}, {
+				"text": "[11]",
+				"xPos": 73.41288782816228,
+				"yPos": 56.14596670934699
+			}, {
+				"text": "[12]",
+				"xPos": 74.3675417661098,
+				"yPos": 15.044814340588989
+			}]
+		}],
+		"title": "Visceral aspect of the liver\n"
+	}, {
+		"slides": [{
+			"text": "[1]: Liver, spleen, stomach, pancreas\n\n[2]: Small intestine, mesentery, duodenum\n\n\n\n\n\n\n\n\n\n\n\n\n[3]: KIDNEYS\n\n[4]: Caudal part of wall\n\n[5]: Hindlimb, abdominal wall\n\n[6]: Muscles over ilium",
+			"labels": [{
+				"text": "DIAPHRAGM",
+				"xPos": 33.57778941854374,
+				"yPos": 6.016316284907436
+			}, {
+				"text": "[1]",
+				"xPos": 49.502357255107384,
+				"yPos": 6.338249137119548
+			}, {
+				"text": "[2]",
+				"xPos": 49.65950759559979,
+				"yPos": 11.766551615939754
+			}, {
+				"text": "[3]",
+				"xPos": 49.9738082765846,
+				"yPos": 31.15782867900847
+			}, {
+				"text": "[4]",
+				"xPos": 48.87375589313777,
+				"yPos": 58.111076247254466
+			}, {
+				"text": "[5]",
+				"xPos": 48.402304871660554,
+				"yPos": 79.2594916849702
+			}, {
+				"text": "[6]",
+				"xPos": 31.849135673127293,
+				"yPos": 90.68089112017572
+			}, {
+				"text": "",
+				"xPos": 34.99214248297538,
+				"yPos": 90.39849388139316
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "CELIAC a",
+				"xPos": 53.90256678889471,
+				"yPos": 7.561970505177283
+			}, {
+				"text": "CRANIAL MESENTERIC a\n",
+				"xPos": 52.01676270298585,
+				"yPos": 13.272670222780045
+			}, {
+				"text": "PHRENICO ABDOMINAL aa\n",
+				"xPos": 34.52069146149817,
+				"yPos": 20.395356134295575
+			}, {
+				"text": "RENAL aa\n",
+				"xPos": 51.23101100052383,
+				"yPos": 29.934107310950736
+			}, {
+				"text": "OVARIAN/TESTICULAR aa\n",
+				"xPos": 49.9738082765846,
+				"yPos": 43.33228741763414
+			}, {
+				"text": "CAUDAL MESENTERIC a\n",
+				"xPos": 48.559455212152955,
+				"yPos": 61.09193598995921
+			}, {
+				"text": "DEEP CIRCUMFLEX ILIAC aa\n",
+				"xPos": 26.08695652173913,
+				"yPos": 68.87354879196737
+			}, {
+				"text": "EXTERNAL ILIAC aa\n",
+				"xPos": 28.5489785227868,
+				"yPos": 79.63602133668026
+			}, {
+				"text": "INTERNAL ILIAC aa\n",
+				"xPos": 30.591932949188056,
+				"yPos": 88.32758079698776
+			}, {
+				"text": "MEDIAN SACRAL a\n",
+				"xPos": 47.93085385018334,
+				"yPos": 93.09695638531534
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "HEPATIC vv\n",
+				"xPos": 33.57778941854374,
+				"yPos": 7.844367743959838
+			}, {
+				"text": "PHRENICOABDOMINAL vv\n",
+				"xPos": 61.39339968569932,
+				"yPos": 20.86601819893317
+			}, {
+				"text": "RENAL vv\n",
+				"xPos": 30.120481927710845,
+				"yPos": 33.10323187951052
+			}, {
+				"text": "OVARIAN/TESTICULAR vv\n",
+				"xPos": 29.334730225248823,
+				"yPos": 43.33228741763414
+			}, {
+				"text": "DEEP CIRCUMFLEX ILIAC vv\n",
+				"xPos": 60.13619696176008,
+				"yPos": 68.40288672732979
+			}, {
+				"text": "EXTERNAL ILIAC vv\n",
+				"xPos": 54.950235725510744,
+				"yPos": 77.28271101349232
+			}, {
+				"text": "INTERNAL ILIAC vv\n",
+				"xPos": 57.307490832896804,
+				"yPos": 83.36994038280514
+			}, {
+				"text": "MEDIAN SACRAL vv\n",
+				"xPos": 47.93085385018334,
+				"yPos": 93.37935362409789
+			}]
+		}],
+		"title": "Diagram to show vascular system in the Dog\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "LIVER",
+				"xPos": 37.455830388692576,
+				"yPos": 26.004228329809724
+			}]
+		}, {
+			"text": "Pink lines: anastomoses communication",
+			"labels": [{
+				"text": "CAUDAL VENA CAVA\n",
+				"xPos": 31.37809187279152,
+				"yPos": 11.346018322762509
+			}, {
+				"text": "GASTRODUODENAL",
+				"xPos": 11.519434628975265,
+				"yPos": 37.2093023255814
+			}, {
+				"text": "HEPATIC PORTAL VEIN\n",
+				"xPos": 44.522968197879855,
+				"yPos": 40.662438336856944
+			}, {
+				"text": "SPLENIR VEIN\n",
+				"xPos": 82.3321554770318,
+				"yPos": 55.743481324876676
+			}, {
+				"text": "CAUDAL MESENTERIC VEIN\n",
+				"xPos": 77.17314487632508,
+				"yPos": 73.50246652572234
+			}, {
+				"text": "CRANIAL MESENTERIC VEIN\n",
+				"xPos": 65.08833922261485,
+				"yPos": 87.66737138830162
+			}, {
+				"text": "Hepatic veins",
+				"xPos": 67.63250883392227,
+				"yPos": 18.181818181818183
+			}]
+		}],
+		"title": "Tributaries of hepatic portal vein\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "AORTA",
+				"xPos": 15.421455938697317,
+				"yPos": 11.434370771312583
+			}, {
+				"text": "DEEP CIRCUMIL\n",
+				"xPos": 26.38888888888889,
+				"yPos": 21.78619756427605
+			}, {
+				"text": "EXTERNAL",
+				"xPos": 64.51149425287356,
+				"yPos": 30.446549391069013
+			}, {
+				"text": "INTERNAL",
+				"xPos": 75.14367816091954,
+				"yPos": 18.064952638700948
+			}]
+		}, {
+			"text": "[1]: All sitting within broad ligament of uterus",
+			"labels": [{
+				"text": "OVARIAN a\n",
+				"xPos": 4.21455938697318,
+				"yPos": 42.760487144790254
+			}, {
+				"text": "[1]",
+				"xPos": 30.747126436781606,
+				"yPos": 87.8213802435724
+			}, {
+				"text": "Uterine a\n",
+				"xPos": 65.61302681992338,
+				"yPos": 76.31935047361299
+			}, {
+				"text": "Vaginal a\n",
+				"xPos": 82.61494252873564,
+				"yPos": 90.93369418132612
+			}, {
+				"text": "internal pudendal a\n",
+				"xPos": 72.65325670498083,
+				"yPos": 46.34641407307172
+			}]
+		}],
+		"title": "Diagram to show blood supply to ovaries and uterus\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "Shaft of tibia:\nsubcutaneous\n\n[1]: Medial malleolus of tibia\n\n[2]: Talus\n\n[3]: Central tarsal bone\n\n[4]: 3rd, 2nd, 4th tarsal\n\n[5]: Calcaneus\n\n[6]: Sulcus:\nGroove for passage of deep digital flexor tendons\n\n[7]: Metatarsal\n\n[8]: Dorsal sesamoid\n\n[9]: Plantar/proximal sesamoid\n\n[10]: PI\n\n[11]: PII\n\n[12]: PIII\n\n[13]: Distal sesamoid",
+			"labels": [{
+				"text": "Tibial crest\n",
+				"xPos": 22.640562248995984,
+				"yPos": 39.639373337274606
+			}, {
+				"text": "FIBIA",
+				"xPos": 39.50803212851406,
+				"yPos": 44.16198640260124
+			}, {
+				"text": "Shaft of tibia",
+				"xPos": 32.329317269076306,
+				"yPos": 49.305350280815844
+			}, {
+				"text": "[1]",
+				"xPos": 46.234939759036145,
+				"yPos": 65.59266922849541
+			}, {
+				"text": "[2]",
+				"xPos": 44.829317269076306,
+				"yPos": 69.55365060597103
+			}, {
+				"text": "[3]",
+				"xPos": 41.365461847389554,
+				"yPos": 74.0467041087792
+			}, {
+				"text": "[4]",
+				"xPos": 40.76305220883534,
+				"yPos": 78.27372154892107
+			}, {
+				"text": "[5]",
+				"xPos": 58.23293172690763,
+				"yPos": 64.46940585279339
+			}, {
+				"text": "[6]",
+				"xPos": 53.56425702811245,
+				"yPos": 69.90836535619273
+			}, {
+				"text": "[7]",
+				"xPos": 36.04417670682731,
+				"yPos": 83.06237067691397
+			}, {
+				"text": "[8]",
+				"xPos": 27.00803212851406,
+				"yPos": 89.32899793083062
+			}, {
+				"text": "[9]",
+				"xPos": 33.8855421686747,
+				"yPos": 91.72332249482707
+			}, {
+				"text": "[10]",
+				"xPos": 24.799196787148595,
+				"yPos": 92.90570499556607
+			}, {
+				"text": "[11]",
+				"xPos": 21.686746987951807,
+				"yPos": 95.77298255985811
+			}, {
+				"text": "[12]",
+				"xPos": 17.724899598393574,
+				"yPos": 98.16730712385457
+			}, {
+				"text": "[13]",
+				"xPos": 22.640562248995984,
+				"yPos": 98.34466449896541
+			}]
+		}, {
+			"text": "[1]: Sacroiliac joint\n\n[2]: Wing of the ilium\n\n[3]: Obturator foramen\n\n[4]: ILIOPECTINEAL EMINENCE\n\n[5]: Ischial fiber\n\n[6]: Lesser trochanter of the femur\n\n[7]: Pelvic tubercle\n\n[8]: Pelvic symphysis\n\n[9]: Shaft of the femur\n\n[10]: Patella\n\n[11]: Medial epicondyle\n\n[12]: Medial fabella:\nwithin tendon of origin of muscle of GASTROCNEMIUS\n\n[13]: STIFLE JOINT",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 38.90562248995984,
+				"yPos": 4.759089565474431
+			}, {
+				"text": "[2]",
+				"xPos": 48.393574297188756,
+				"yPos": 7.981081879988176
+			}, {
+				"text": "[3]",
+				"xPos": 73.39357429718876,
+				"yPos": 12.681052320425657
+			}, {
+				"text": "[4]",
+				"xPos": 45.73293172690763,
+				"yPos": 12.94708838309193
+			}, {
+				"text": "[5]",
+				"xPos": 90.76305220883533,
+				"yPos": 13.420041383387527
+			}, {
+				"text": "[6]",
+				"xPos": 46.98795180722892,
+				"yPos": 16.81939107301212
+			}, {
+				"text": "[7]",
+				"xPos": 54.01606425702812,
+				"yPos": 15.548329884717708
+			}, {
+				"text": "[8]",
+				"xPos": 76.20481927710844,
+				"yPos": 16.908069760567543
+			}, {
+				"text": "[9]",
+				"xPos": 35.592369477911646,
+				"yPos": 25.27342595329589
+			}, {
+				"text": "[10]",
+				"xPos": 23.393574297188753,
+				"yPos": 33.10671002069169
+			}, {
+				"text": "[11]",
+				"xPos": 30.271084337349397,
+				"yPos": 34.67336683417086
+			}, {
+				"text": "[12]",
+				"xPos": 36.847389558232926,
+				"yPos": 33.37274608335797
+			}, {
+				"text": "[13]",
+				"xPos": 30.77309236947791,
+				"yPos": 37.422406148389
+			}]
+		}],
+		"title": "Rear leg of the dog\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "TIBIA",
+				"xPos": 41.01960784313726,
+				"yPos": 29.9601593625498
+			}]
+		}, {
+			"text": "[1]: Lateral caudal meniscus\n\n[2]: Medial meniscus",
+			"labels": [{
+				"text": "Cranial cruciate ligament\n",
+				"xPos": 49.96078431372549,
+				"yPos": 52.031872509960166
+			}, {
+				"text": "[2]",
+				"xPos": 64.62745098039215,
+				"yPos": 61.67330677290836
+			}, {
+				"text": "[1]",
+				"xPos": 33.25490196078431,
+				"yPos": 62.62948207171315
+			}, {
+				"text": "Caudal cruciate ligament\n",
+				"xPos": 45.09803921568628,
+				"yPos": 77.60956175298804
+			}]
+		}, {
+			"text": "[1]: Cranial tibial ligament of lateral meniscus\n\n[2]: Cranial tibial ligament of medial meniscus\n\n[3]: Caudal tibial ligament of medial meniscus",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 53.254901960784316,
+				"yPos": 38.88446215139442
+			}, {
+				"text": "[2]",
+				"xPos": 48.23529411764706,
+				"yPos": 51.39442231075697
+			}, {
+				"text": "[3]",
+				"xPos": 52.78431372549019,
+				"yPos": 62.47011952191235
+			}]
+		}, {
+			"text": "[1]: Patella ligament\n\n[2]: Transverse meniscal ligament\n\n[3]: Medial collateral ligament\n\n[4]: Femoromeniscal ligament",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 49.64705882352941,
+				"yPos": 7.091633466135458
+			}, {
+				"text": "[2]",
+				"xPos": 50.117647058823536,
+				"yPos": 44.223107569721115
+			}, {
+				"text": "[3]",
+				"xPos": 84.0,
+				"yPos": 62.78884462151394
+			}, {
+				"text": "[4]",
+				"xPos": 46.509803921568626,
+				"yPos": 74.7410358565737
+			}]
+		}],
+		"title": "Menisci of the stifle joint of the dog\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "FEMUR",
+				"xPos": 26.325088339222614,
+				"yPos": 10.852713178294573
+			}, {
+				"text": "Lateral fabella",
+				"xPos": 28.975265017667844,
+				"yPos": 34.64519976147883
+			}, {
+				"text": "Patella",
+				"xPos": 76.9434628975265,
+				"yPos": 43.29159212880143
+			}, {
+				"text": "TIBIA",
+				"xPos": 40.54770318021201,
+				"yPos": 56.41025641025641
+			}, {
+				"text": "FIBULA",
+				"xPos": 33.56890459363957,
+				"yPos": 70.18485390578414
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "Quadriceps femoris m\n",
+				"xPos": 81.36042402826855,
+				"yPos": 22.838401908169352
+			}, {
+				"text": "Lateral meniscus\n",
+				"xPos": 35.86572438162544,
+				"yPos": 51.52057245080501
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "Lateral femoropatellar ligament\n",
+				"xPos": 32.59717314487632,
+				"yPos": 35.062611806797854
+			}, {
+				"text": "Lateral collateral ligament\n",
+				"xPos": 39.92932862190813,
+				"yPos": 48.36016696481813
+			}, {
+				"text": "Tendon of origin of the long digital extensor muscle\n",
+				"xPos": 56.80212014134276,
+				"yPos": 57.12581991651759
+			}]
+		}],
+		"title": "Lateral view of right stifle joint\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "FEMUR",
+				"xPos": 41.199999999999996,
+				"yPos": 9.67741935483871
+			}, {
+				"text": "PATELLA",
+				"xPos": 52.300000000000004,
+				"yPos": 22.322580645161292
+			}, {
+				"text": "TIBIA",
+				"xPos": 45.300000000000004,
+				"yPos": 58.25806451612904
+			}, {
+				"text": "FIBULA",
+				"xPos": 27.1,
+				"yPos": 70.70967741935485
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "Cranial cruciate ligament\n",
+				"xPos": 39.6,
+				"yPos": 45.16129032258064
+			}, {
+				"text": "Caudal cruciate ligament\n",
+				"xPos": 61.8,
+				"yPos": 35.35483870967742
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "Medial collateral\n",
+				"xPos": 80.7,
+				"yPos": 40.38709677419355
+			}, {
+				"text": "Lateral collateral\n",
+				"xPos": 18.4,
+				"yPos": 56.12903225806451
+			}]
+		}],
+		"title": "Cranial view of right stifle joint\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "ILIUM",
+				"xPos": 26.394628099173556,
+				"yPos": 28.068592057761734
+			}]
+		}, {
+			"text": "[1]: Tubercoxae\n\n[2]: Ventral iliac spine\n\n[3]: Tubersacrale\n\n[4]: Greater sciatic notch over which sciatic nerve runs to limb\n\n[5]: ACETABULUM\n\n[6]: Ischial spine\n\n[7]: ISCHIARY\n\n[8]: PUBIS\n\n[9]: Obturator foramen",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 15.599173553719009,
+				"yPos": 29.693140794223826
+			}, {
+				"text": "[2]",
+				"xPos": 21.84917355371901,
+				"yPos": 36.28158844765343
+			}, {
+				"text": "[3]",
+				"xPos": 30.57851239669421,
+				"yPos": 9.747292418772563
+			}, {
+				"text": "[4]",
+				"xPos": 40.909090909090914,
+				"yPos": 23.465703971119133
+			}, {
+				"text": "[5]",
+				"xPos": 48.553719008264466,
+				"yPos": 54.24187725631769
+			}, {
+				"text": "[6]",
+				"xPos": 65.9090909090909,
+				"yPos": 46.66064981949459
+			}, {
+				"text": "[7]",
+				"xPos": 81.04338842975206,
+				"yPos": 62.72563176895307
+			}, {
+				"text": "[8]",
+				"xPos": 36.67355371900827,
+				"yPos": 75.0
+			}, {
+				"text": "[9]",
+				"xPos": 57.33471074380165,
+				"yPos": 68.7725631768953
+			}]
+		}, {
+			"text": "[1]: Acetabular bone (only in carnivore)\n\n[2]: Pubic part\n\n[3]: Posteum of the pelvic symphysis\n\n[4]: Isohal part\n\n[5]: Represent straps of cartilage present in young animal - disappear with age",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 49.17355371900827,
+				"yPos": 57.5812274368231
+			}, {
+				"text": "[2]",
+				"xPos": 31.714876033057855,
+				"yPos": 76.71480144404332
+			}, {
+				"text": "[3]",
+				"xPos": 45.2995867768595,
+				"yPos": 78.33935018050542
+			}, {
+				"text": "[4]",
+				"xPos": 58.10950413223141,
+				"yPos": 79.69314079422382
+			}, {
+				"text": "[5]",
+				"xPos": 57.17975206611571,
+				"yPos": 71.75090252707581
+			}]
+		}],
+		"title": "Bones of the pelvis\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "Sacroiliac joint\n",
+				"xPos": 32.021709633649934,
+				"yPos": 28.57142857142857
+			}, {
+				"text": "Acetabulum",
+				"xPos": 50.10040705563093,
+				"yPos": 56.82405165456013
+			}, {
+				"text": "Ischial tuberosity\n",
+				"xPos": 80.12211668928086,
+				"yPos": 63.19612590799032
+			}]
+		}, {
+			"text": "Sacrotuberous ligament:\n-cordlike\n-Caudal edge is palpable in dog, absent in cat",
+			"labels": [{
+				"text": "Sacrotuberous ligament",
+				"xPos": 67.77476255088195,
+				"yPos": 35.27037933817595
+			}, {
+				"text": "Ilium",
+				"xPos": 44.776119402985074,
+				"yPos": 49.556093623890234
+			}, {
+				"text": "Pubis",
+				"xPos": 30.46132971506106,
+				"yPos": 82.32445520581115
+			}, {
+				"text": "Ischium",
+				"xPos": 75.78018995929445,
+				"yPos": 79.1767554479419
+			}, {
+				"text": "Obturator foramen\n",
+				"xPos": 64.51831750339213,
+				"yPos": 67.2316384180791
+			}]
+		}],
+		"title": "Sacrotuberous ligament\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: Head of femur\n\n[2]: Greater trochanter\n\n[3]: Neck of femur\n\n[4]: Acetabulum",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 36.82008368200837,
+				"yPos": 41.49305555555556
+			}, {
+				"text": "[2]",
+				"xPos": 21.338912133891213,
+				"yPos": 37.15277777777778
+			}, {
+				"text": "[3]",
+				"xPos": 24.372384937238493,
+				"yPos": 46.61458333333333
+			}, {
+				"text": "[4]",
+				"xPos": 43.41004184100418,
+				"yPos": 45.22569444444444
+			}, {
+				"text": "Shaft of femur\n",
+				"xPos": 21.234309623430963,
+				"yPos": 76.5625
+			}]
+		}, {
+			"text": "Ligament of head of femur:\nstrong, does not rupture if joint dislocates/luxates\nLuxation of the head of the femur moves cranially and dorsally\n\n[1]: Transverse acetabular ligament:\ncloses the acetabular notch\n\n[2]: Ligament of head of femur/round ligament\n\n[3]: Articular labrum of lipBones and bony prominences of the hind limb",
+			"labels": [{
+				"text": "Joint capsule is large\n",
+				"xPos": 41.63179916317992,
+				"yPos": 25.78125
+			}, {
+				"text": "[1]",
+				"xPos": 45.92050209205021,
+				"yPos": 37.93402777777778
+			}, {
+				"text": "[2]",
+				"xPos": 44.6652719665272,
+				"yPos": 44.18402777777778
+			}, {
+				"text": "[3]",
+				"xPos": 42.25941422594142,
+				"yPos": 50.954861111111114
+			}]
+		}],
+		"title": "Hip joint\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: Greater sciatic notch\n\n[2]: Body of ilium\n\n[3]: Pelvis\n\n[4]: Head of femur\n\n[5]: 3rd trochanter of the femur\n\n[6]: Obturator foramen\n\n[7]: Acetabulum\n\n[8]: Shaft of the femur\n\n[9]: Lateral fabella (sesamoid)\n\n[10]: Condyle\n\n[11]: Popliteal sesamoid\n\n[12]: Tibial plateau:\ntibial condyles\n\n[13]: Fibula\n\n[14]: Talus\n\n[15]: Central tarsal bone\n\n[16]: 4th tarsal bone\n\n[17]: 3rd tarsal bone\n\n[18]: single dorsal sesamoid\n\n[19]: 2 proximal sesamoid per joint\n\n[20]: Distal sesamoid bone",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 52.80600972160848,
+				"yPos": 13.918879486431281
+			}, {
+				"text": "[2]",
+				"xPos": 66.68139637649139,
+				"yPos": 10.82579515611322
+			}, {
+				"text": "[3]",
+				"xPos": 71.67476800707026,
+				"yPos": 13.51035891450248
+			}, {
+				"text": "[4]",
+				"xPos": 54.83870967741935,
+				"yPos": 17.741464838050774
+			}, {
+				"text": "[5]",
+				"xPos": 52.31992929739284,
+				"yPos": 22.99387219142107
+			}, {
+				"text": "[6]",
+				"xPos": 38.88643393725143,
+				"yPos": 18.441785818500144
+			}, {
+				"text": "[7]",
+				"xPos": 55.899248784798935,
+				"yPos": 20.630288882404436
+			}, {
+				"text": "[8]",
+				"xPos": 63.10207688908529,
+				"yPos": 32.18558505981908
+			}, {
+				"text": "[9]",
+				"xPos": 62.483429076447194,
+				"yPos": 38.050773271082576
+			}, {
+				"text": "[10]",
+				"xPos": 67.16747680070702,
+				"yPos": 42.1943390720747
+			}, {
+				"text": "[11]",
+				"xPos": 61.24613345117101,
+				"yPos": 41.05631747884447
+			}, {
+				"text": "[12]",
+				"xPos": 65.6208572691118,
+				"yPos": 43.94514152319813
+			}, {
+				"text": "[13]",
+				"xPos": 56.562085726911185,
+				"yPos": 49.197548876568426
+			}, {
+				"text": "[14]",
+				"xPos": 54.17587273530712,
+				"yPos": 70.9658593522031
+			}, {
+				"text": "[15]",
+				"xPos": 59.21343349536015,
+				"yPos": 73.85468339655675
+			}, {
+				"text": "[16]",
+				"xPos": 50.90587715422006,
+				"yPos": 75.72220601108842
+			}, {
+				"text": "[17]",
+				"xPos": 60.93680954485197,
+				"yPos": 76.45170703238985
+			}, {
+				"text": "[18]",
+				"xPos": 71.05612019443217,
+				"yPos": 85.0014590020426
+			}, {
+				"text": "[19]",
+				"xPos": 67.96288113124172,
+				"yPos": 89.14502480303472
+			}, {
+				"text": "[20]",
+				"xPos": 77.15422006186479,
+				"yPos": 96.03151444412022
+			}]
+		}, {
+			"text": "* - can palpate\n\n[1]: Greater trochanter of the femur*\n\n[2]: Ischial tuberosity*\n\n[3]: Tuber sacrale*\n\n[4]: Tuber coxae*\n\n[5]: HIP JOINT\n\n[6]: Patella (sesamoid)*\n\n[7]: Lateral epicondyle*\n\n[8]: STIFLE JOINT\n\n[9]: Tibial crest*\n\n[10]: Tibial tuberosity*\n\n[11]: Tibia*\n\n[12]: Tuber calcis*\n\n[13]: Lateral malleolus of the fibula*\n\n[14]: Calcareous *\n\n[15]: Metatarsal (I-IV)*\n\n[16]: METATARSALINTERPHARYNGEAL JOINT\n\n[17]: PROXIMAL INTERPHARYNGEAL JOINT\n\n[18]: DISTAL IP JOINT\n\n[19]: PI* \n\n[20]: PII*\n\n[21]: PIII*\n\n(a): HIP REGION\n\n(b): THIGH\n\n(c): CRUS/LEG\n\n(d): TARSUS/HOCK",
+			"labels": [{
+				"text": "(a)",
+				"xPos": 6.230667255855059,
+				"yPos": 14.444120221768312
+			}, {
+				"text": "(b)",
+				"xPos": 6.7167476800707036,
+				"yPos": 33.002626203676684
+			}, {
+				"text": "(c)",
+				"xPos": 4.993371630578878,
+				"yPos": 54.245695943974326
+			}, {
+				"text": "(d)",
+				"xPos": 5.125939019001326,
+				"yPos": 84.06769769477678
+			}, {
+				"text": "[1]",
+				"xPos": 49.04993371630579,
+				"yPos": 19.967026553837172
+			}, {
+				"text": "[2]",
+				"xPos": 41.22845779938135,
+				"yPos": 14.735920630288883
+			}, {
+				"text": "[3]",
+				"xPos": 71.23287671232876,
+				"yPos": 8.024511234315728
+			}, {
+				"text": "[4]",
+				"xPos": 72.77949624392399,
+				"yPos": 14.123139772395682
+			}, {
+				"text": "[5]",
+				"xPos": 55.07600530269554,
+				"yPos": 17.441785818500144,
+				"flipped": true
+			}, {
+				"text": "[6]",
+				"xPos": 73.26557666813964,
+				"yPos": 36.82521155529618
+			}, {
+				"text": "[7]",
+				"xPos": 67.65355722492266,
+				"yPos": 40.32681645754304
+			}, {
+				"text": "[8]",
+				"xPos": 62.792752982766245,
+				"yPos": 41.9900787861103
+			}, {
+				"text": "[9]",
+				"xPos": 71.05612019443217,
+				"yPos": 43.94514152319813
+			}, {
+				"text": "[10]",
+				"xPos": 67.27220503756077,
+				"yPos": 47.221184709658594
+			}, {
+				"text": "[11]",
+				"xPos": 59.96464869642069,
+				"yPos": 54.158155821418156
+			}, {
+				"text": "[12]",
+				"xPos": 40.74237737516571,
+				"yPos": 62.91216807703531
+			}, {
+				"text": "[13]",
+				"xPos": 54.66195315952276,
+				"yPos": 66.03443244820542,
+				"flipped": true
+			}, {
+				"text": "[14]",
+				"xPos": 43.26115775519222,
+				"yPos": 68.07703530784943
+			}, {
+				"text": "[15]",
+				"xPos": 61.55545735749006,
+				"yPos": 79.22381091333529
+			}, {
+				"text": "[16]",
+				"xPos": 68.58152894387982,
+				"yPos": 87.16078202509485
+			}, {
+				"text": "[17]",
+				"xPos": 76.84489615554574,
+				"yPos": 91.91712868398015,
+				"flipped": true
+			}, {
+				"text": "[18]",
+				"xPos": 75.74016791869201,
+				"yPos": 95.73971403559966
+			}, {
+				"text": "[19]",
+				"xPos": 74.37030490499336,
+				"yPos": 88.91158447621827,
+				"flipped": true
+			}, {
+				"text": "[20]",
+				"xPos": 76.84489615554574,
+				"yPos": 93.66793113510359
+			}, {
+				"text": "[21]",
+				"xPos": 79.98232434821034,
+				"yPos": 95.73971403559966,
+				"flipped": true
+			}]
+		}],
+		"title": "Bones and bony prominences of the hind limb\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: Cranial gluteal nerve\n\n[2]: Caudal gluteal nerve\n\n[3]: SCIATIC NERVE\n\n[4]: Muscular branches to the semi membranous muscle and semitendinous muscle\n\n[5]: TIBIAL NERVE\n\n[6]: Caudal cutaneous sural nerve\n\n[7]: Gastrocnemius muscle\n\n[8]: Digital flexors\n\n[9]: Lateral plantar nerve (branches to each digit)\n\n[10]: Medial plantar nerve  (branches to each digit)\n\n[11]: LUMBAR SCIATIC TRUNK:\n-Crosses the sciatic notch and goes between the superficial gluteal muscle and gemellus muscle\n\n[12]: Common peroneal nerve\n\n[13]: Deep peroneal nerve\n\n[14]: Superficial peroneal nerve\n\n[15]: Extensor muscle\n\n[16]: Tibialis cranialis muscle\n\n[17]: Adjacent to the tibia and long digital extensor muscle\n\n[18]: Superficial dorsal metatarsal nerve (branches to  each digit)\n\n[19]: Deep dorsal metatarsal nerve (branches to each digit)",
+			"labels": [{
+				"text": "S1 S2 S3 L7 L6",
+				"xPos": 67.69857433808554,
+				"yPos": 3.3770014556040757,
+				"flipped": true
+			}, {
+				"text": "[1]",
+				"xPos": 53.23828920570265,
+				"yPos": 5.705967976710335
+			}, {
+				"text": "[2]",
+				"xPos": 41.54786150712831,
+				"yPos": 9.75254730713246
+			}, {
+				"text": "[3]",
+				"xPos": 47.41344195519348,
+				"yPos": 13.682678311499272
+			}, {
+				"text": "[4]",
+				"xPos": 26.313645621181266,
+				"yPos": 20.087336244541483
+			}, {
+				"text": "[5]",
+				"xPos": 40.73319755600815,
+				"yPos": 34.93449781659388
+			}, {
+				"text": "[6]",
+				"xPos": 36.04887983706721,
+				"yPos": 42.590975254730715
+			}, {
+				"text": "[7]",
+				"xPos": 39.59266802443992,
+				"yPos": 51.96506550218341
+			}, {
+				"text": "[8]",
+				"xPos": 40.407331975560076,
+				"yPos": 60.08733624454149
+			}, {
+				"text": "[9]",
+				"xPos": 47.739307535641544,
+				"yPos": 79.47598253275109
+			}, {
+				"text": "[10]",
+				"xPos": 56.496945010183296,
+				"yPos": 84.1048034934498
+			}, {
+				"text": "[11]",
+				"xPos": 50.95723014256619,
+				"yPos": 9.403202328966522,
+				"flipped": true
+			}, {
+				"text": "[12]",
+				"xPos": 49.979633401221996,
+				"yPos": 37.933042212518195
+			}, {
+				"text": "[13]",
+				"xPos": 59.389002036659875,
+				"yPos": 42.82387190684134
+			}, {
+				"text": "[14]",
+				"xPos": 56.33401221995926,
+				"yPos": 46.17176128093159
+			}, {
+				"text": "[15]",
+				"xPos": 64.60285132382893,
+				"yPos": 49.43231441048035
+			}, {
+				"text": "[16]",
+				"xPos": 62.32179226069247,
+				"yPos": 56.27365356622999
+			}, {
+				"text": "[17]",
+				"xPos": 50.14256619144602,
+				"yPos": 66.11353711790393
+			}, {
+				"text": "[18]",
+				"xPos": 57.31160896130346,
+				"yPos": 74.70160116448325
+			}, {
+				"text": "[19]",
+				"xPos": 64.60285132382893,
+				"yPos": 87.59825327510917
+			}]
+		}, {
+			"text": "Green: OBTURATOR NERVE\n\n[1]: Obturator muscles\n\n[2]: Gracilis muscle\n\n[3]: To the adductor\n\n[4]: Within femoral triangle with femoral artery and vein\n\n[5]: To sartorius muscle\n\n[6]: To quadriceps femoris muscle\n\n[7]: SAPHENOUS NERVE:\nSensory nerve supplying the medial aspect of the limb",
+			"labels": [{
+				"text": "S3, S2, S1, L8, L7\n",
+				"xPos": 61.34419551934827,
+				"yPos": 4.774381368267831
+			}, {
+				"text": "[1]",
+				"xPos": 37.35234215885947,
+				"yPos": 23.085880640465795
+			}, {
+				"text": "[2]",
+				"xPos": 43.9918533604888,
+				"yPos": 22.62008733624454
+			}, {
+				"text": "[3]",
+				"xPos": 51.28309572301426,
+				"yPos": 23.202328966521108,
+				"flipped": true
+			}, {
+				"text": "[4]",
+				"xPos": 63.299389002036655,
+				"yPos": 14.148471615720522
+			}, {
+				"text": "[5]",
+				"xPos": 61.34419551934827,
+				"yPos": 23.551673944687046
+			}, {
+				"text": "[6]",
+				"xPos": 54.378818737270876,
+				"yPos": 29.927219796215432
+			}, {
+				"text": "[7]",
+				"xPos": 49.979633401221996,
+				"yPos": 67.39446870451238
+			}]
+		}],
+		"title": "Sciatic nerve course and distribution\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: 1st coccygeal vertebra\n\n[2]: Mesorectum\n\n[3]: Rectum\n\n[4]: Uterus\n\n[5]: Ureter\n\n[6]: Ilium\n\n[7]: Right and left lateral ligament of bladder\n\n[8]: Bladder\n\n[9]: Median ligament of bladder\n\n[10]: Broad ligament of uterus",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 19.372549019607842,
+				"yPos": 46.011816838995564
+			}, {
+				"text": "[2]",
+				"xPos": 26.823529411764707,
+				"yPos": 45.420974889217135
+			}, {
+				"text": "[3]",
+				"xPos": 34.03921568627451,
+				"yPos": 44.387001477104874
+			}, {
+				"text": "[4]",
+				"xPos": 44.78431372549019,
+				"yPos": 47.34121122599705
+			}, {
+				"text": "[5]",
+				"xPos": 44.31372549019608,
+				"yPos": 39.06942392909897
+			}, {
+				"text": "[6]",
+				"xPos": 45.568627450980394,
+				"yPos": 25.258493353028065
+			}, {
+				"text": "[7]",
+				"xPos": 50.27450980392156,
+				"yPos": 36.04135893648449,
+				"flipped": true
+			}, {
+				"text": "[8]",
+				"xPos": 62.117647058823536,
+				"yPos": 46.15952732644018
+			}, {
+				"text": "[9]",
+				"xPos": 77.01960784313725,
+				"yPos": 46.30723781388479
+			}, {
+				"text": "[10]",
+				"xPos": 43.05882352941177,
+				"yPos": 58.19793205317577
+			}]
+		}],
+		"title": "Diagram of TS through canine pelvis - female"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "[1]: Ductus deferens\n\n[2]: Genital fold\n\n[3]: 1st coccygeal vertebra\n\n[4]: Mesorectum\n\n[5]: Rectum\n\n[6]: Ureter\n\n[7]: Ilium\n\n[8]: Right and left lateral ligament of bladder\n\n[9]: Bladder\n\n[10]: Median ligament of bladder",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 50.45118949958983,
+				"yPos": 40.46283309957924
+			}, {
+				"text": "[2]",
+				"xPos": 49.46677604593929,
+				"yPos": 45.65217391304348
+			}, {
+				"text": "[3]",
+				"xPos": 18.04757998359311,
+				"yPos": 43.61851332398317
+			}, {
+				"text": "[4]",
+				"xPos": 27.891714520098443,
+				"yPos": 44.74053295932679
+			}, {
+				"text": "[5]",
+				"xPos": 37.32567678424938,
+				"yPos": 45.37166900420757
+			}, {
+				"text": "[6]",
+				"xPos": 48.89253486464315,
+				"yPos": 54.97896213183731
+			}, {
+				"text": "[7]",
+				"xPos": 49.794913863822806,
+				"yPos": 66.90042075736325
+			}, {
+				"text": "[8]",
+				"xPos": 56.52173913043478,
+				"yPos": 55.820476858345025,
+				"flipped": true
+			}, {
+				"text": "[9]",
+				"xPos": 64.47908121410993,
+				"yPos": 44.460028050490884
+			}, {
+				"text": "[10]",
+				"xPos": 80.88597210828547,
+				"yPos": 45.93267882187938
+			}]
+		}],
+		"title": "Diagram of TS through canine pelvis - male\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "BLADDER",
+				"xPos": 65.60000000000001,
+				"yPos": 68.35871404399323
+			}, {
+				"text": "RECTUM",
+				"xPos": 33.1,
+				"yPos": 84.94077834179356
+			}]
+		}, {
+			"text": "Blue hatching: retroperitoneal part of pelvis\n\n[1]: Mesorectum with pararectal fossa on either side\n\n[2]: Rectogenital pouch\n\n[3]: Vescogenital pouch\n\n[4]: Median ligament of bladder with pubovesical pouch on either side\n\n[5]: Sacrum\n\n[6]: 2nd coccygeal vertebra\n\n[7]: Uterus\n\n[8]: Cervix\n\n[9]: Anus\n\n[10]: Anal sac\n\n[11]: Urethra\n\n[12]: Vagina\n\n[13]: Vulva\n\n[14]: Ribs\n\n[15]: Pelvic symphysis",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 30.0,
+				"yPos": 86.52002256063169
+			}, {
+				"text": "[2]",
+				"xPos": 39.5,
+				"yPos": 84.20755781161873
+			}, {
+				"text": "[3]",
+				"xPos": 55.75,
+				"yPos": 58.15002820078963,
+				"flipped": true
+			}, {
+				"text": "[4]",
+				"xPos": 84.35000000000001,
+				"yPos": 72.7580372250423
+			}, {
+				"text": "[5]",
+				"xPos": 21.55,
+				"yPos": 62.21094190637337
+			}, {
+				"text": "[6]",
+				"xPos": 31.25,
+				"yPos": 44.895657078398195
+			}, {
+				"text": "[7]",
+				"xPos": 44.35,
+				"yPos": 79.639029892837
+			}, {
+				"text": "[8]",
+				"xPos": 49.05,
+				"yPos": 53.91990975747321
+			}, {
+				"text": "[9]",
+				"xPos": 51.24999999999999,
+				"yPos": 6.655386350817823
+			}, {
+				"text": "[10]",
+				"xPos": 54.05,
+				"yPos": 14.438804286520025
+			}, {
+				"text": "[11]",
+				"xPos": 72.8,
+				"yPos": 24.478285391990976
+			}, {
+				"text": "[12]",
+				"xPos": 81.55,
+				"yPos": 17.93570219966159
+			}, {
+				"text": "[13]",
+				"xPos": 88.1,
+				"yPos": 27.298364354201915
+			}, {
+				"text": "[14]",
+				"xPos": 73.4,
+				"yPos": 50.36661026508742
+			}, {
+				"text": "[15]",
+				"xPos": 75.44999999999999,
+				"yPos": 38.917089678511
+			}]
+		}],
+		"title": "Median section through pelvis of the bitch\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "SACRUM",
+				"xPos": 35.87412587412587,
+				"yPos": 41.69675090252707
+			}, {
+				"text": "Wing of ilium\n",
+				"xPos": 81.81818181818183,
+				"yPos": 23.104693140794225
+			}, {
+				"text": "Body of ilium\n",
+				"xPos": 29.37062937062937,
+				"yPos": 63.898916967509024
+			}, {
+				"text": "Pubis",
+				"xPos": 49.510489510489506,
+				"yPos": 85.64981949458483
+			}, {
+				"text": "Pelvic symphysis\n",
+				"xPos": 49.790209790209786,
+				"yPos": 73.19494584837545
+			}]
+		}],
+		"title": "Boundaries of canine pelvic cavity\n"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": []
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "Wing of ilium \n",
+				"xPos": 18.435321456235478,
+				"yPos": 14.794520547945206
+			}, {
+				"text": "SACRUM",
+				"xPos": 63.05189775367932,
+				"yPos": 19.78082191780822
+			}, {
+				"text": "Body of ilium\n",
+				"xPos": 29.202168861347793,
+				"yPos": 28.383561643835613
+			}, {
+				"text": "Acetabulum\n",
+				"xPos": 16.498838109992253,
+				"yPos": 52.821917808219176
+			}, {
+				"text": "1st coccygeal vertebrae\n",
+				"xPos": 54.841208365608054,
+				"yPos": 44.054794520547944
+			}, {
+				"text": "Ischial tuberosity\n",
+				"xPos": 18.048024786986833,
+				"yPos": 79.45205479452055
+			}, {
+				"text": "Ischial arch\n",
+				"xPos": 49.03175832687839,
+				"yPos": 84.21917808219177
+			}, {
+				"text": "Sacrotuberous ligament\n",
+				"xPos": 76.21998450813324,
+				"yPos": 66.95890410958904
+			}]
+		}],
+		"title": "Boundaries of canine pelvic cavity \n(cranial view)"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "1",
+				"xPos": 49.18032786885246,
+				"yPos": 35.42494042891183
+			}, {
+				"text": "7",
+				"xPos": 49.795081967213115,
+				"yPos": 86.8943606036537
+			}]
+		}, {
+			"text": "",
+			"labels": [{
+				"text": "SACRUM",
+				"xPos": 42.41803278688525,
+				"yPos": 22.875297855440827
+			}, {
+				"text": "Coccygeus muscle\n",
+				"xPos": 29.303278688524593,
+				"yPos": 53.85226370135028
+			}, {
+				"text": "Levator muscle\n",
+				"xPos": 63.729508196721305,
+				"yPos": 81.01667990468626
+			}]
+		}],
+		"title": "Pelvic diaphragm"
+	}, {
+		"slides": [{
+			"text": "",
+			"labels": [{
+				"text": "Root of tail\n",
+				"xPos": 41.82754182754182,
+				"yPos": 20.0
+			}, {
+				"text": "Anus\n",
+				"xPos": 43.11454311454311,
+				"yPos": 39.30501930501931
+			}, {
+				"text": "Vulva",
+				"xPos": 42.599742599742605,
+				"yPos": 61.23552123552124
+			}]
+		}, {
+			"text": "[1]: Deep to cutaneous bridge is muscle and fibrous tissue (also included in perineum)\n\nPERINEUM:\nBetween and surrounding anus and vulva (or scrotum)",
+			"labels": [{
+				"text": "[1]",
+				"xPos": 42.92149292149292,
+				"yPos": 44.78764478764479
+			}, {
+				"text": "PERINEUM",
+				"xPos": 89.63963963963964,
+				"yPos": 53.97683397683398
+			}]
+		}],
+		"title": "Perineum in the bitch\n"
 	}],
 	"package": "test"
 }
