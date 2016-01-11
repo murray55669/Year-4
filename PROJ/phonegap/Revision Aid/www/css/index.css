@@ -124,6 +124,7 @@ body {
 .images_wrapper {
     position: relative;
     width: 100%;
+	padding-bottom: 50px;
 }
 .control_pad {
 	position: relative;

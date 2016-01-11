@@ -186,7 +186,7 @@
 		}, {
 			"text": "ARTICULAR LABRUM:\nFIBROCARTILAGINOUS LIP\nextends joint but allows for greater flexibility",
 			"labels": [{
-				"text": "ARTICULAR LABRUM:",
+				"text": "ARTICULAR LABRUM",
 				"xPos": 30.983733539891556,
 				"yPos": 39.436619718309856
 			}]
@@ -3600,7 +3600,8 @@
 			}, {
 				"text": "[12]",
 				"xPos": 17.724899598393574,
-				"yPos": 98.16730712385457
+				"yPos": 98.16730712385457,
+				"flipped": true
 			}, {
 				"text": "[13]",
 				"xPos": 22.640562248995984,

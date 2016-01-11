@@ -1,6 +1,8 @@
 var currentSlide = 0;
 var currentPage = 0;
 
+var loading = false;
+
 var slideImages = [];
 
 var data = {};
@@ -42,6 +44,28 @@ function pageClickFunction(pageId) {
 		event.stopPropagation();
         goToPage(pageId);
     };
+}
+function saveState() {
+	localStorage.setItem("currentPage", currentPage);
+	localStorage.setItem("currentSlide", currentSlide);
+}
+function loadState() {
+	loading = true;
+	var cp = localStorage.getItem("currentPage");
+	if (cp !== undefined) {
+		goToPage(parseInt(cp));
+	}
+	else {
+		goToPage(0);
+	}
+	
+	var cs = localStorage.getItem("currentSlide");
+	if (cs !== undefined) {
+		goToSlide(parseInt(cs));
+	}
+	else {
+		goToSlide(0);
+	}
 }
 function goToPage(id) {
     //takes the id of a page and refreshes the app view to match
@@ -106,7 +130,11 @@ function goToPage(id) {
     clearDiv.className = 'clear'
     imgRoot.appendChild(clearDiv)
 	
-	goToSlide(0);
+	if (loading) {
+		loading = false;
+	} else {
+		goToSlide(0);
+	}
 }
 function nextSlide() {
     goToSlide(currentSlide+1);
@@ -115,8 +143,6 @@ function previousSlide() {
     goToSlide(currentSlide-1);
 }
 function goToSlide(value) {	
-    cleanScreen();
-	window.scrollTo(0, 0);
 	
     if (value < 0) {
         value = 0;
@@ -124,60 +150,86 @@ function goToSlide(value) {
         value = slides.length-1;
     }
 	
-    currentSlide = value;
-    for (var i = 0; i < slides.length; i++) {
-        if (i <= currentSlide) {
-            slideImages[i].style.display = '';
-        } else {
-            slideImages[i].style.display = 'none';
-        }
-        if (i == currentSlide) {
-            //Display labels
-            for (var j = 0; j < slides[i].labels.length; j++) {
-				
-                addLabel(slides[i].labels[j]);
-            }
-        }
-    }
-    var navButton = document.getElementById('nav_button');
-    var textButton = document.getElementById('text_button');
-    
-    var enabled = 'button noselect bold';
-    var disabled = 'button noselect bold disabled';
-    
-    if (slides.len == 1) {
-        navButton.className = disabled;
-    }
-    
-    if (slides[currentSlide].text == '') {
-        textButton.className = disabled; 
-    } else {
-        textButton.className = enabled;
-    }
-	
-	navButton.innerHTML = "Layers<br>("+(currentSlide+1)+"/"+slides.length+")"
-	
-	resizeWidth();
-	localStorage.setItem("currentSlide", currentSlide);
+	if (currentSlide != value) {
+		cleanScreen();
+		window.scrollTo(0, 0);
+		currentSlide = value;
+		saveState();
+		
+		for (var i = 0; i < slides.length; i++) {
+			if (i <= currentSlide) {
+				slideImages[i].style.display = '';
+			} else {
+				slideImages[i].style.display = 'none';
+			}
+			if (i == currentSlide) {
+				//Display labels
+				for (var j = 0; j < slides[i].labels.length; j++) {
+					
+					addLabel(slides[i].labels[j]);
+				}
+			}
+		}
+		var navButton = document.getElementById('nav_button');
+		var textButton = document.getElementById('text_button');
+		
+		var enabled = 'button noselect bold';
+		var disabled = 'button noselect bold disabled';
+		
+		if (slides.len == 1) {
+			navButton.className = disabled;
+		}
+		
+		if (slides[currentSlide].text == '') {
+			textButton.className = disabled; 
+		} else {
+			textButton.className = enabled;
+		}
+		
+		navButton.innerHTML = "Layers<br>("+(currentSlide+1)+"/"+slides.length+")"
+		
+		resizeWidth();
+	}
 }
+
+var navList;
+var pageList;
+var textWrap;
+
+function toggleDisplay(element) {
+	if (element.style.display == '') {
+		element.style.display = 'none';
+	} else {
+		element.style.display = '';
+	}
+}
+function hideDisplay(element) {
+	element.style.display = 'none';
+}
+function showDisplay(element) {
+	element.style.display = '';
+}
+
 function toggleSlidesList() {
-    if (document.getElementById('nav_list').style.display == '') {
-        document.getElementById('nav_list').style.display = 'none'
-    } else {
-		entries = document.getElementsByClassName('slide_list_entry');
+	toggleDisplay(navList);
+	hideDisplay(pageList);
+	hideDisplay(textWrap);
+	
+	if (navList.style.display == '') {
+		var entries = document.getElementsByClassName('slide_list_entry');
 		for (var i = 0; i < entries.length; i++) {
 			entries[i].className = 'slide_list_entry noselect';
 		}
 		entries[(slides.length-1)-currentSlide].className = 'slide_list_entry noselect slide_list_entry_selected';
-        document.getElementById('nav_list').style.display = ''
-    }
+	}
 }
-function togglePagesList() {
-    if (document.getElementById('page_list').style.display == '') {
-        document.getElementById('page_list').style.display = 'none'
-    } else {
-		entries = document.getElementsByClassName('page_list_entry');
-		entries = document.getElementsByClassName('page_list_entry');
+function togglePagesList() {	
+	toggleDisplay(pageList);
+	hideDisplay(navList);
+	hideDisplay(textWrap);
+	
+	if (pageList.style.display == '') {
+		var entries = document.getElementsByClassName('page_list_entry');
 		for (var i = 0; i < entries.length; i++) {
 			if (entries[i].id == currentPage) {
 				entries[i].className = 'page_list_entry noselect page_list_entry_selected';
@@ -185,21 +237,19 @@ function togglePagesList() {
 				entries[i].className = 'page_list_entry noselect';	
 			}
 		}
-        document.getElementById('page_list').style.display = ''
-    }
+	}
 }
 function toggleText() {
-    //Toggles text box overlay on slide on and off.
-    if (slides[currentSlide].text != "") {
-        if (document.getElementById('text_wrap').style.display == '') {
-            document.getElementById('text_wrap').style.display = 'none'
-        } else {
-			var text_wrap = document.getElementById('text_wrap')
-            text_wrap.style.display = ''
+    if (slides[currentSlide].text != "") {		
+		toggleDisplay(textWrap);
+		hideDisplay(navList);
+		hideDisplay(pageList);
+		
+		if (textWrap.style.display == '') {
 			var text = document.getElementById('text');
 			var breaks = slides[currentSlide].text.replace(/\n/g, "<br>");
             text.innerHTML = breaks;
-        }
+		}
     }
 }
 function selectPackage(input) {
@@ -216,6 +266,8 @@ function selectPackage(input) {
 	-save the contents of the zip file to persistent storage
 	-save a web variable 
 	
+	-reset currentPage // currentSlide variables
+	
 	*/
 	if (input) {
 		alert(input.value);
@@ -231,11 +283,11 @@ function addLabel(labelData) {
 		flipped = true;
 	}
 	
-    //xPos, yPos should be precentages
-    if (xPos < 50 || flipped) {
+    //xPos, yPos should be percentages
+    if ((xPos < 50 && flipped === false) || (xPos >= 50 && flipped === true)) {
         var label = document.createElement("div");
         label.className = "label";
-        label.style.top = yPos+"%";
+        label.style.top = labelTopOffset(yPos)+"%";
         label.style.left = xPos+"%";
         label.style.maxWidth = (100-xPos)+"%";
         
@@ -257,7 +309,7 @@ function addLabel(labelData) {
     } else {
         var label = document.createElement("div");
         label.className = "label";
-        label.style.top = yPos+"%";
+        label.style.top = labelTopOffset(yPos)+"%";
         label.style.right = (100-xPos)+"%";
         label.style.maxWidth = xPos+"%";
         
@@ -277,16 +329,16 @@ function addLabel(labelData) {
         label.appendChild(label_marker);
         label.appendChild(label_text);
     }
-    document.getElementById("images_wrapper").appendChild(label);
+    document.getElementById('images_wrapper').appendChild(label);
 }
-function addLabelClick(clickEvent, text) {
-	//deprecated
-    var xPos = clickEvent.clientX;
-    var yPos = clickEvent.clientY;
-    var height = document.getElementById('images_wrapper').clientHeight;
-    var width = document.getElementById('images_wrapper').clientWidth;
-    
-    //addLabel((xPos/width)*100, ((yPos)/height)*100, text);
+function labelTopOffset(pct) {
+	//alert(pct);
+	var imageWrapper = document.getElementById('images_wrapper');
+	var padSize = 50;
+	var wrapSize = imageWrapper.scrollHeight;
+	var retPct = (pct * (wrapSize - padSize)) / wrapSize;
+	//alert(retPct)
+	return retPct;
 }
 function removeLabels() {
     var activeLabels = document.getElementsByClassName('label');
@@ -299,9 +351,9 @@ function cleanScreen() {
     hideOverlays();
 }
 function hideOverlays() {
-	document.getElementById('text_wrap').style.display = 'none';
-    document.getElementById('nav_list').style.display = 'none';
-    document.getElementById('page_list').style.display = 'none';
+	hideDisplay(textWrap);
+	hideDisplay(navList);
+	hideDisplay(pageList);
 }
 function resizeWidth() {
 	var lMarkers = document.getElementsByClassName('label_marker');
@@ -373,24 +425,9 @@ function pageInit() {
 		}
 	});
 	
-	goToPage(0);
-	
-	/*
-	//TODO: this is related to loading previous packages
-	var cp = localStorage.getItem("currentPage");
-	if (cp) {
-		goToPage(parseInt(cp));
-	}
-	else {
-		goToPage(0);
-	}
-	
-	var cs = localStorage.getItem("currentSlide");
-	if (cs) {
-		goToSlide(parseInt(cs));
-	}
-	else {
-		goToSlide(0);
-	}
-	*/
+	navList = document.getElementById('nav_list');
+	pageList = document.getElementById('page_list');
+	textWrap = document.getElementById('text_wrap');
+
+	loadState();
 }

@@ -63,6 +63,15 @@
 			gestures.on("swiperight", function(e) {
 				previousSlide();
 			});
+			
+			window.onkeyup = function(e) {
+				var key = e.keyCode ? e.keyCode : e.which;
+				if (key == 37) {
+					previousSlide();
+				} else if (key == 39) {
+					nextSlide();
+				}
+			}
         </script>
     </body>
 </html>
