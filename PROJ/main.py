@@ -68,6 +68,37 @@ class Gui(object):
 
         self.page_buttons = []
 
+        # toolbox
+        self.toolbox = Toplevel(self.master)
+        self.toolbox.resizable(width=FALSE, height=FALSE)
+        self.toolbox.wm_title("Toolbox")
+        self.toolbox.protocol("WM_DELETE_WINDOW", self.quit)
+        self.crop_tool = Button(self.toolbox, text="Crop", command=self.crop)
+        self.crop_tool.grid(row=0, column=0)
+        self.erase_tool = Button(self.toolbox, text="Erase", command=self.erase)
+        self.erase_tool.grid(row=0, column=1)
+
+        self.move_layer_tool = Button(self.toolbox, text="Move Layer", command=self.move_layer)
+        self.move_layer_tool.grid(row=1, column=0)
+        self.toggle_layers_tool = Button(self.toolbox, text="Toggle Layer Visibility", command=self.toggle_layers)
+        self.toggle_layers_tool.grid(row=1, column=1)
+
+        self.label_tool = Button(self.toolbox, text="Label", command=self.label)
+        self.label_tool.grid(row=2, column=0)
+
+        self.export_tool = Button(self.toolbox, text="Export", command=self.export)
+        self.export_tool.grid(row=3, column=0)
+        self.open_file_tool = Button(self.toolbox, text="Open File", command=self.open_file)
+        self.open_file_tool.grid(row=3, column=1)
+
+        self.undo_tool = Button(self.toolbox, text="Undo", command=self.undo)
+        self.undo_tool.grid(row=4, column=0)
+        self.redo_tool = Button(self.toolbox, text="Redo", command=self.redo)
+        self.redo_tool.grid(row=4, column=1)
+
+        self.accept_tool = Button(self.toolbox, text="Accept", command=self.accept)
+        self.accept_tool.grid(row=5, column=0)
+
         # editor
         self.root = Toplevel(self.master)
         # pages
@@ -147,7 +178,7 @@ class Gui(object):
         # ----- #
 
         # bind keys to all windows
-        roots = [self.master, self.root]
+        roots = [self.master, self.root, self.toolbox]
         for root in roots:
             root.bind('<Control-C>', lambda e: self.crop())
             root.bind('<Control-E>', lambda e: self.erase())
@@ -682,6 +713,7 @@ class Gui(object):
 
     def run(self):
         try:
+            self.master.after(LOADING_DELAY, self.arrange_windows)
             self.master.mainloop()
         except:
             self.reset_all()
@@ -689,7 +721,15 @@ class Gui(object):
             raise
         finally:
             print "Exiting..."
-            
+
+    def arrange_windows(self):
+        # layout should be page_browser | editor | toolbox
+        # editor_geometry = parse_geometry(self.root.geometry()) # TODO?: broken (+line below)
+        toolbox_geometry = parse_geometry(self.toolbox.geometry())
+
+        # set_geometry(self.root, editor_geometry[0], editor_geometry[1], EDITOR_OFFSET, editor_geometry[3])
+        set_geometry(self.toolbox, toolbox_geometry[0], toolbox_geometry[1], TOOLBOX_OFFSET, toolbox_geometry[3])
+
     def open_file(self):
         name = askopenfilename(**self.file_options)
         if name:
@@ -846,3 +886,5 @@ class Gui(object):
 if __name__ == '__main__':
     master = Gui()
     master.run()
+
+

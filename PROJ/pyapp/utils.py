@@ -1,4 +1,5 @@
 import cv2
+import re
 from PIL import Image, ImageTk
 
 
@@ -42,3 +43,14 @@ def stack_images(images):
             stack = cv2.add(stack, image)
 
         return stack
+
+
+def parse_geometry(geometry):
+    m = re.match("(\d+)x(\d+)([-+]\d+)([-+]\d+)", geometry)
+    if not m:
+        raise ValueError("failed to parse geometry string")
+    return map(int, m.groups())
+
+
+def set_geometry(root, w, h, x, y):
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
