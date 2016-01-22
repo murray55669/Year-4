@@ -7,6 +7,7 @@
 	<script src="js/fastclick.js"></script>
 	<script src="js/hammer.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
+	<script src="http://jsconsole.com/remote.js?C636C5D7-ED21-45A6-AA45-F7889DAB97F7"></script>
 
 	<script>
 	var repo = "http://bliss.dtdns.net/proj/repo/"
@@ -26,6 +27,8 @@
 			entry.onclick = listClickFunction(packages.names[i]);
 			list.appendChild(entry);
 		}
+		
+		
 	}
 	
 	function loadPackage(name) {
@@ -33,8 +36,6 @@
 		var target = repo+name+'/';
 		
 		data = loadJSON(target+'data.json')
-		
-		writeToFile('data.json', data);
 		
 		for (var i = 0; i < data.pages.length; i++) {
 			for (var j = 0; j < data.pages[i].slides.length; j++) {
@@ -64,13 +65,16 @@
 	 }
 	 
 	 function readFromFile(fileName, cb) {
+		console.log('attempting a read');
         var pathToFile = cordova.file.dataDirectory + fileName;
+		console.log(pathToFile);
         window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
             fileEntry.file(function (file) {
                 var reader = new FileReader();
 
                 reader.onloadend = function (e) {
                     cb(JSON.parse(this.result));
+					document.getElementById('message').innerHTML = this.result;
                 };
 
                 reader.readAsText(file);
@@ -79,6 +83,7 @@
     }
 	 
 	function writeToFile(fileName, data) {
+		console.log('attempting a write');
 		data = JSON.stringify(data, null, '\t');
 		window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
 			directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
@@ -98,6 +103,46 @@
 				}, errorHandler.bind(null, fileName));
 			}, errorHandler.bind(null, fileName));
 		}, errorHandler.bind(null, fileName));
+	}
+	
+	function writeToFileTwo(fileName) {
+		console.log('attempting a write');
+		data = JSON.stringify("this some test data right here fam", null, '\t');
+		window.resolveLocalFileSystemURL(cordova.file.dataDirectory, 
+		
+		function (directoryEntry) {
+			directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
+				fileEntry.createWriter(function (fileWriter) {
+					fileWriter.onwriteend = function (e) {
+						// for real-world usage, you might consider passing a success callback
+						console.log('Write of file "' + fileName + '"" completed.');
+					};
+
+					fileWriter.onerror = function (e) {
+						// you could hook this up with our global error handler, or pass in an error callback
+						console.log('Write failed: ' + e.toString());
+					};
+					try {
+						var blob = new Blob([data], { type: 'text/plain' });
+					} catch(err) {
+						try {
+							console.log('Falling back on BlobBuilder: '+err.message);
+							var bBuilder = new BlobBuilder();
+							bBuilder.append(data);
+							var blob = bBuilder.getBlob('text/plain');
+						} catch (err2) {
+							console.log('Falling back on WebKitBlobBuilder: '+err.message);
+							var bBuilder = new WebKitBlobBuilder();
+							bBuilder.append(data);
+							var blob = bBuilder.getBlob('text/plain');
+						}
+					}
+					fileWriter.write(blob);
+				}, errorHandler.bind(null, fileName));
+			}, errorHandler.bind(null, fileName));
+		}, 
+		
+		errorHandler.bind(null, fileName));
 	}
 	
 	var errorHandler = function (fileName, e) {  
@@ -124,16 +169,22 @@
 				break;
 		};
 
-		alert('Error (' + fileName + '): ' + msg);
+		console.log('Error (' + fileName + '): ' + msg);
 	}
 
+	var fileData = "this should be overwritten";
 	function testStuff() {
-		var fileData;
-		readFromFile('data.json', function (data) {
-			fileData = data;
-		});
 		
-		alert(fileData);
+		document.getElementById('message').innerHTML = fileData;
+		readFromFile('example2.json', function (data) {
+			//document.getElementById('message').innerHTML = data;
+		});
+	}
+	
+	document.addEventListener('deviceready', onDeviceReady, false);  
+	function onDeviceReady() {  
+		//writeToFile('example.json', { foo: 'bar' });
+		writeToFileTwo('example2.json');
 	}
 	
 	</script>
@@ -141,6 +192,8 @@
 	html { 
 		height:100%;
 		background: #f0f0f0;
+		
+		font-size: 200%;
 	}
 	body { 
 		min-height:100%;
@@ -153,6 +206,7 @@
 	</style>
 </head>
 <body onload="init()">
+	<div id="message"></div>
 	<button type="button" onclick="testStuff()">Test</button>
 	<div class="package_list" id="package_list"></div>
 </body>

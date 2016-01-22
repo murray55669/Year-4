@@ -362,7 +362,7 @@ function pageInit() {
 	//TODO: use HTML5 storage to store a package to be loaded - if none exists, ask user to select one?
 	//TODO: have tutorial popup
 	
-	data = loadJSON('/package/data.json');
+	data = loadJSON('package/data.json');
 	
 	//setup page list 
 	var pageRoot = document.getElementById('page_list');

@@ -7,10 +7,14 @@
 	<script src="js/fastclick.js"></script>
 	<script src="js/hammer.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
-	<script src="http://jsconsole.com/remote.js?C636C5D7-ED21-45A6-AA45-F7889DAB97F7"></script>
+	<script src="http://jsconsole.com/remote.js?F874FC7F-6AFD-4A7C-AA5A-DADF5FB22851"></script>
 
 	<script>
 	var repo = "http://bliss.dtdns.net/proj/repo/"
+	
+	var storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory
+	
+	
 	function listClickFunction(name) {
 		return function(event) {
 			event.stopPropagation();
@@ -31,22 +35,76 @@
 		
 	}
 	
-	function loadPackage(name) {
+	var fetchedJSON;
+	
+	var pack;
+	var target;
+	var page;
+	var slide;
+	
+	var completed;
+	
+	var imgWritten = document.createEvent('Event');
+	imgWritten.initEvent('image_written', true, true)
+	document.addEventListener('image_written', imageSave, false);
+	var packDownloaded = document.createEvent('Event');
+	packDownloaded.initEvent('package_downloaded', true, true)
+	document.addEventListener('package_downloaded', packDone, false);
+	
+	function loadPackage(name) {	
 		
-		var target = repo+name+'/';
+		pack = name;
+		target = repo+name+'/';
+		slide = 0;
+		page = 0;
 		
-		data = loadJSON(target+'data.json')
+		completed = 0;
 		
-		for (var i = 0; i < data.pages.length; i++) {
-			for (var j = 0; j < data.pages[i].slides.length; j++) {
-				loadImage(target+i+'/'+j+'.png')
+		fetchedJSON = loadJSON(target+'data.json');
+		
+		var total = 0;
+		for (var i = 0; i < fetchedJSON.pages.length; i++) {
+			for (var j = 0; j < fetchedJSON.pages[i].slides.length; j++) {
+				total++;
 			}
 		}
+		
+		document.getElementById('complete').innerHTML = completed;
+		document.getElementById('toComplete').innerHTML = total;
+		
+
+		
+		imageSave();
+		
 	}
 	
-	function loadImage(target) {
-
+	function imageSave() {
+		loadImage(target+page+'/'+slide+'.png', function(data){
+			writeToFileImage(pack+'.image.'+page+'.'+slide, data);
+		});
 	}
+	function packDone() {
+		alert('DONE');
+	}
+
+		
+	function loadImage(url, callback){
+		var img = new Image();
+		img.crossOrigin = 'Anonymous';
+		img.onload = function(){
+			var canvas = document.createElement('CANVAS');
+			var ctx = canvas.getContext('2d');
+			var dataURL;
+			canvas.height = this.height;
+			canvas.width = this.width;
+			ctx.drawImage(this, 0, 0);
+			dataURL = canvas.toDataURL('image/png');
+			callback(dataURL);
+			canvas = null; 
+		};
+		img.src = url;
+	}
+
 		
 	function loadJSON(target) {
 		var data;
@@ -64,9 +122,9 @@
 		return data;
 	 }
 	 
-	 function readFromFile(fileName, cb) {
-		console.log('attempting a read');
-        var pathToFile = cordova.file.dataDirectory + fileName;
+	 function readJSONFromFile(fileName, cb) {
+		console.log('attempting a JSON read');
+        var pathToFile = storageDir + fileName;
 		console.log(pathToFile);
         window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
             fileEntry.file(function (file) {
@@ -81,34 +139,84 @@
             }, errorHandler.bind(null, fileName));
         }, errorHandler.bind(null, fileName));
     }
-	 
-	function writeToFile(fileName, data) {
-		console.log('attempting a write');
-		data = JSON.stringify(data, null, '\t');
-		window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
+	
+
+	function readImageFromFile(fileName) {
+		console.log('attempting an image read');
+        var pathToFile = storageDir + fileName;
+		console.log(pathToFile);
+        window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
+            fileEntry.file(function (file) {
+                var reader = new FileReader();
+
+                reader.onloadend = function (e) {
+					console.log("image read was:"+this.result)
+					document.getElementById('image').src = this.result;
+                };
+
+                reader.readAsText(file);
+            }, errorHandler.bind(null, fileName));
+        }, errorHandler.bind(null, fileName));
+    }
+
+	
+	function writeToFileImage(fileName, data) {
+		console.log('attempting an image write to '+fileName);
+		window.resolveLocalFileSystemURL(storageDir, 
+		
+		function (directoryEntry) {
 			directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
 				fileEntry.createWriter(function (fileWriter) {
 					fileWriter.onwriteend = function (e) {
 						// for real-world usage, you might consider passing a success callback
 						console.log('Write of file "' + fileName + '"" completed.');
+						console.log('slide: '+slide)
+						console.log('page: '+page)
+						if (slide+1 < fetchedJSON.pages[page].slides.length) {
+							slide++;
+							completed++
+							document.getElementById('complete').innerHTML = completed;
+							document.dispatchEvent(imgWritten);
+						} else if (page+1 < fetchedJSON.pages.length) {
+							page++;
+							slide = 0;
+							completed++
+							document.getElementById('complete').innerHTML = completed;
+							document.dispatchEvent(imgWritten);
+						} else {
+							document.dispatchEvent(packDownloaded);
+						}
+						
 					};
 
 					fileWriter.onerror = function (e) {
 						// you could hook this up with our global error handler, or pass in an error callback
 						console.log('Write failed: ' + e.toString());
 					};
+					try {
+						var blob = new Blob([data], { type: 'image/png' });
+					} catch(err) {
+						try {
+							var bBuilder = new BlobBuilder();
+						} catch (err2) {
+							var bBuilder = new WebKitBlobBuilder();
 
-					var blob = new Blob([data], { type: 'text/plain' });
+						}
+						bBuilder.append(data);
+						var blob = bBuilder.getBlob('image/png');
+					}
 					fileWriter.write(blob);
 				}, errorHandler.bind(null, fileName));
 			}, errorHandler.bind(null, fileName));
-		}, errorHandler.bind(null, fileName));
+		}, 
+		
+		errorHandler.bind(null, fileName));
 	}
 	
-	function writeToFileTwo(fileName) {
-		console.log('attempting a write');
-		data = JSON.stringify("this some test data right here fam", null, '\t');
-		window.resolveLocalFileSystemURL(cordova.file.dataDirectory, 
+	function writeToFileJSON(fileName, data) {
+		console.log('attempting a JSON write');
+		data = JSON.stringify(data, null, '\t');
+		window.resolveLocalFileSystemURL(storageDir, 
 		
 		function (directoryEntry) {
 			directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
@@ -171,20 +279,10 @@
 
 		console.log('Error (' + fileName + '): ' + msg);
 	}
-
-	var fileData = "this should be overwritten";
-	function testStuff() {
-		
-		document.getElementById('message').innerHTML = fileData;
-		readFromFile('example2.json', function (data) {
-			//document.getElementById('message').innerHTML = data;
-		});
-	}
 	
 	document.addEventListener('deviceready', onDeviceReady, false);  
 	function onDeviceReady() {  
-		//writeToFile('example.json', { foo: 'bar' });
-		writeToFileTwo('example2.json');
+		init();
 	}
 	
 	</script>
@@ -205,9 +303,9 @@
 	}
 	</style>
 </head>
-<body onload="init()">
-	<div id="message"></div>
-	<button type="button" onclick="testStuff()">Test</button>
+<body>
+	<div id="message">Loading package list. Please ensure you are connected to the internet...</div>
+	<div id="progress"><span id="complete"></span>/<span id="toComplete"></span></div>
 	<div class="package_list" id="package_list"></div>
 </body>
 </html>
