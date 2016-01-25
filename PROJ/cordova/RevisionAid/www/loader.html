@@ -8,6 +8,8 @@
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<meta http-equiv="Content-Security-Policy"/>
 	
+	<link rel="stylesheet" type="text/css" href="css/loader.css" />
+	
 	<title>File Loader</title>
 
 	<script type="text/javascript" src="cordova.js"></script>
@@ -16,27 +18,10 @@
 	<script src="js/hammer.js"></script>
 	<script src="http://jsconsole.com/remote.js?28F9432F-28F9-4296-9A99-E8E9DCE2AE9E"></script>
 	<script src="js/loader.js"></script>
-	
-	<style>
-	html { 
-		height:100%;
-		background: #f0f0f0;
-		
-		font-size: 200%;
-	}
-	body { 
-		min-height:100%;
-	}
-	
-	.package_list {
-		width: 100%;
-		background: #ff00ff;
-	}
-	</style>
 </head>
 <body>
 	<div onclick="window.location = 'index.html'">&lt;- Back</div>
-	<div id="message">Loading package list. Please ensure you are connected to the internet...</div>
+	<div id="message">Could not load package list. Please ensure you are connected to the internet. <a href="loader.html">RETRY</a></div>
 	<div id="progress"><span id="complete"></span><span id="slash"></span><span id="toComplete"></span></div>
 	<div class="package_list" id="package_list"></div>
 	<div onclick="readJSONFromFile('test2.json')">Test Load</div>

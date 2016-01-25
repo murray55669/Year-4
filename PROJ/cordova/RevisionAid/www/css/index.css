@@ -132,6 +132,18 @@ body {
 	height: 120px;
 	background: #f0f0f0;
 }
+.loading_splash {
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	background: #f0f0f0;
+}
+.loading_text {
+	position: relative;
+	margin: auto;
+}
 /***************/
 /* control bar */
 /***************/

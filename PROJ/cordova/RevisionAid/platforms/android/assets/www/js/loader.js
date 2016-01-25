@@ -2,6 +2,8 @@ var repo = "http://bliss.dtdns.net/proj/repo/"
 	
 var storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory;
 
+var message;
+
 var errorHandler = function (fileName, e) {  
 	var msg = '';
 
@@ -35,18 +37,21 @@ function listClickFunction(name) {
 		loadPackage(name);
 	};
 }
+
+
 function init() {
 	var packages = loadJSON(repo+'packages.json');
-	
+
 	var list = document.getElementById('package_list');
 	for (var i = 0; i < packages.names.length; i++) {
 		var entry = document.createElement("div");
+		entry.className = 'package_list_entry';
 		entry.innerHTML = packages.names[i];
 		entry.onclick = listClickFunction(packages.names[i]);
 		list.appendChild(entry);
 	}
 	
-	
+	message.innerHTML = 'Package list fetched.';
 }
 
 var fetchedJSON;
@@ -105,7 +110,7 @@ function packDone() {
 	localStorage.setItem("packageLoaded", 1);
 	localStorage.setItem("currentPage", -1);
 	localStorage.setItem("currentSlide", -1);
-	document.getElementById('message').innerHTML = 'Download complete.';
+	message.innerHTML = 'Download complete.';
 }
 
 	
@@ -135,7 +140,7 @@ function readJSONFromFile(fileName) {
 			var reader = new FileReader();
 
 			reader.onloadend = function (e) {
-				document.getElementById('message').innerHTML = this.result;
+				message.innerHTML = this.result;
 			};
 
 			reader.readAsText(file);
@@ -191,7 +196,7 @@ function writeToFileImage(fileName, data) {
 		directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
 			fileEntry.createWriter(function (fileWriter) {
 				fileWriter.onwriteend = function (e) {
-					console.log('Write of file "' + fileName + '"" completed.');
+					console.log('Write of file ' + fileName + ' completed.');
 					if (slide+1 < fetchedJSON.pages[page].slides.length) {
 						slide++;
 						incCompleted();
@@ -269,6 +274,7 @@ function writeToFileJSON(fileName, data) {
 
 document.addEventListener('deviceready', onDeviceReady, false);  
 function onDeviceReady() {  
+	message = document.getElementById('message');
 	init();
 }
 	

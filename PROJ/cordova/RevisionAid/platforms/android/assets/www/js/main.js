@@ -41,7 +41,7 @@ var errorHandler = function (fileName, e) {
 
 document.addEventListener('deviceready', onDeviceReady, false);  
 function onDeviceReady() { 
-	setTimeout(pageInit, 1000); // TODO: ????
+	setTimeout(pageInit, 500); // TODO: one would think "device ready" would imply it was ready
 }
 
 var data;
@@ -439,6 +439,8 @@ function pageInit() {
 	}
 }
 function generateContent() {
+	document.getElementById('loading_splash').style.display = 'none';
+	
 	//setup page list 
 	var pageRoot = document.getElementById('page_list');
 	
