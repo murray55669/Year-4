@@ -1,30 +1,73 @@
+
 var currentSlide = 0;
 var currentPage = 0;
 
 var slideImages = [];
 
-var data = {};
+var packageName;
+
 var slides = [];
 
 var navList;
 var pageList;
 var textWrap;
 
-function loadJSON(target) {
-	var newdata;
+var errorHandler = function (fileName, e) {  
+		var msg = '';
+		
+		switch (e.code) {
+			case FileError.QUOTA_EXCEEDED_ERR:
+				msg = 'Storage quota exceeded';
+				break;
+			case FileError.NOT_FOUND_ERR:
+				msg = 'File not found';
+				break;
+			case FileError.SECURITY_ERR:
+				msg = 'Security error';
+				break;
+			case FileError.INVALID_MODIFICATION_ERR:
+				msg = 'Invalid modification';
+				break;
+			case FileError.INVALID_STATE_ERR:
+				msg = 'Invalid state';
+				break;
+			default:
+				msg = 'Unknown error';
+				break;
+		};
 
-	var xobj = new XMLHttpRequest();
-		xobj.overrideMimeType("application/json");
-	xobj.open('GET', target, false); 
-	xobj.onreadystatechange = function () {
-		  if (xobj.readyState == 4 && xobj.status == "200") {
-			newdata = JSON.parse(xobj.responseText);
-		  }
-	};
-	xobj.send(null);  
-	
-	return newdata;
- }
+		console.log('Error '+e.code+' (' + fileName + '): ' + msg);
+	}
+
+document.addEventListener('deviceready', onDeviceReady, false);  
+function onDeviceReady() { 
+	setTimeout(pageInit, 1000); // TODO: ????
+}
+
+var data;
+
+var storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory;
+
+var packLoaded = document.createEvent('Event');
+packLoaded.initEvent('pack_loaded', true, true)
+document.addEventListener('pack_loaded', generateContent, false);
+
+function readJSONFromFile(fileName) {
+	console.log('attempting a JSON read');
+	var pathToFile = storageDir + fileName;
+	window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
+		fileEntry.file(function (file) {
+			var reader = new FileReader();
+
+			reader.onloadend = function (e) {
+				data = JSON.parse(this.result);
+				document.dispatchEvent(packLoaded);
+			};
+
+			reader.readAsText(file);
+		}, errorHandler.bind(null, fileName));
+	}, errorHandler.bind(null, fileName));
+}
 
 function navClickFunction(slideId) {
     return function(event) {
@@ -53,14 +96,11 @@ function loadState() {
 	}
 }
 
+var imageLoaded = document.createEvent('Event');
+imageLoaded.initEvent('image_loaded', true, true)
+
 function goToPage(id) {
     //takes the id of a page and refreshes the app view to match
-	
-	//TODO: save/load stuff
-	/*
-	//save state to local storage
-	localStorage.setItem("currentPage", currentPage);
-	*/
 	if (id < 0) {
         id = 0;
     } else if (id >= data.pages.length) {
@@ -82,20 +122,20 @@ function goToPage(id) {
 	while (imgRoot.firstChild) {	
 		imgRoot.removeChild(imgRoot.firstChild);
 	}
+	imgRoot.innerHTML = '';
 	while (navRoot.firstChild) {
 		navRoot.removeChild(navRoot.firstChild);
 	}
+	navRoot.innerHTML = '';
 	
-    var first = true; 
-    
-    var slideImg;
-    var navEntry;
-    
-    for (var i = 0; i < slides.length; i++) {
-        //Images
+	var imageIDTracker = 0;
+	var fileNameTracker = packageName+'.image.'+currentPage+'.0';
+	
+	function readImageFromFile() {
+		console.log('Loading image: '+fileNameTracker);
+		//Images
         slideImg = document.createElement('img');
-		// package/X/Y.png for slide Y of page X
-        slideImg.src = 'package/'+id+'/'+i+'.png';
+		slideImg.id = 'image_'+imageIDTracker;
         if (first) {
             first = false;
             slideImg.className = 'base_layer';
@@ -107,16 +147,46 @@ function goToPage(id) {
         //Nav menu (order reversed, so menu arranged with base layer button closest to control bar)
         navEntry = document.createElement('div');
         navEntry.className = 'slide_list_entry noselect';
-        navEntry.innerHTML = ((slides.length-1)-i)+1;
-        navEntry.onclick = navClickFunction((slides.length-1)-i);
+        navEntry.innerHTML = ((slides.length-1)-imageIDTracker)+1;
+        navEntry.onclick = navClickFunction((slides.length-1)-imageIDTracker);
         navRoot.appendChild(navEntry);
-    }
-    
-    var clearDiv = document.createElement('div')
-    clearDiv.className = 'clear'
-    imgRoot.appendChild(clearDiv)
+		
+		var pathToFile = storageDir + fileNameTracker;
+		window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
+			fileEntry.file(function (file) {
+				var reader = new FileReader();
 
-	goToSlide(0);
+				reader.onloadend = function (e) {
+					document.getElementById('image_'+imageIDTracker).src = this.result;
+					imageIDTracker++;
+					fileNameTracker = packageName+'.image.'+currentPage+'.'+imageIDTracker;
+					
+					if (imageIDTracker < slides.length) {
+						document.dispatchEvent(imageLoaded);
+					} else {
+						document.removeEventListener('image_loaded', readImageFromFile);
+						
+						var clearDiv = document.createElement('div')
+						clearDiv.className = 'clear'
+						imgRoot.appendChild(clearDiv)
+
+						goToSlide(0);
+					}
+				};
+
+				reader.readAsText(file);
+			}, errorHandler.bind(null, fileNameTracker));
+		}, errorHandler.bind(null, fileNameTracker));
+	}
+	
+    var first = true; 
+    
+    var slideImg;
+    var navEntry;
+    
+	document.addEventListener('image_loaded', readImageFromFile, false);
+	
+	readImageFromFile()
 }
 
 function nextSlide() {
@@ -359,11 +429,16 @@ function filterPageList(term) {
 	}
 }
 function pageInit() {
-	//TODO: use HTML5 storage to store a package to be loaded - if none exists, ask user to select one?
-	//TODO: have tutorial popup
-	
-	data = loadJSON('package/data.json');
-	
+	var loaded = parseInt(localStorage.getItem("packageLoaded"))
+	if (loaded === 1) {
+		packageName = localStorage.getItem("currentPackage");
+		readJSONFromFile(packageName+'.json')
+	} else {
+		alert('Please choose a package');
+		window.location = 'loader.html';
+	}
+}
+function generateContent() {
 	//setup page list 
 	var pageRoot = document.getElementById('page_list');
 	
@@ -381,4 +456,6 @@ function pageInit() {
 	textWrap = document.getElementById('text_wrap');
 
 	loadState();
+	
+	//TODO: have tutorial popup
 }

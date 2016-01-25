@@ -4,17 +4,22 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+		<meta http-equiv="Content-Security-Policy"/>
+		
         <link rel="stylesheet" type="text/css" href="css/index.css" />
+		
         <title>Revision Aid</title>
 		
-		<script src="js/main.js"></script>
+		<script type="text/javascript" src="cordova.js"></script>
+		<script src="js/customEvent.js"></script>
 		<script src="js/fastclick.js"></script>
 		<script src="js/hammer.js"></script>
-		<script type="text/javascript" src="cordova.js"></script>
+		<script src="http://jsconsole.com/remote.js?28F9432F-28F9-4296-9A99-E8E9DCE2AE9E"></script>
+		<script src="js/main.js"></script>
+
     </head>
-    <body onload="pageInit()">
+    <body>
 		<div class="container" onclick="hideOverlays();toggleText()">
 			<div class="page_title" id="page_title">
 			</div>
@@ -28,7 +33,7 @@
 				<div class="button noselect bold" id="text_button" onclick="event.stopPropagation();toggleText()">T</div>
 				<div class="button double noselect bold" id="nav_button" onclick="event.stopPropagation();toggleSlidesList()">Layer</div>
 				<div class="button noselect bold" id="page_button" onclick="event.stopPropagation();togglePagesList()">Page</div>
-				<div class="button noselect bold" id="package_button" onclick="event.stopPropagation();//document.getElementById('fileBrowser').click();"><a href="loader.html">Load</a></div>
+				<div class="button noselect bold" id="package_button" onclick="event.stopPropagation();"><a href="loader.html">Load</a></div>
 			</div>
 			
 			<div class="page_list" id="page_list">
@@ -48,14 +53,12 @@
 			
 		</div>
 		<div class="clear"></div>
-		<input id="fileBrowser" type="file" style="visibility: hidden" onchange="selectPackage(this)">
 	
-        <script type="text/javascript">
+        <!--<script type="text/javascript">
 			var attachFastClick = Origami.fastclick;
 			attachFastClick(document.body);
 			
 			//gestures
-			//TODO: have these only run when screen is available or something
 			var gestures = new Hammer(document.body);
 			gestures.on("swipeleft", function(e) {
 				nextSlide();
@@ -72,6 +75,6 @@
 					nextSlide();
 				}
 			}
-        </script>
+        </script>-->
     </body>
 </html>

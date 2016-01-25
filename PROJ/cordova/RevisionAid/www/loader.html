@@ -2,290 +2,21 @@
 <html>
     <head>
 	
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="msapplication-tap-highlight" content="no" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+	<meta http-equiv="Content-Security-Policy"/>
+	
 	<title>File Loader</title>
 
+	<script type="text/javascript" src="cordova.js"></script>
+	<script src="js/customEvent.js"></script>
 	<script src="js/fastclick.js"></script>
 	<script src="js/hammer.js"></script>
-	<script type="text/javascript" src="cordova.js"></script>
-	<script src="http://jsconsole.com/remote.js?F874FC7F-6AFD-4A7C-AA5A-DADF5FB22851"></script>
-
-	<script>
-	var repo = "http://bliss.dtdns.net/proj/repo/"
+	<script src="http://jsconsole.com/remote.js?28F9432F-28F9-4296-9A99-E8E9DCE2AE9E"></script>
+	<script src="js/loader.js"></script>
 	
-	var storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory
-	
-	
-	function listClickFunction(name) {
-		return function(event) {
-			event.stopPropagation();
-			loadPackage(name);
-		};
-	}
-	function init() {
-		var packages = loadJSON(repo+'packages.json');
-		
-		var list = document.getElementById('package_list');
-		for (var i = 0; i < packages.names.length; i++) {
-			var entry = document.createElement("div");
-			entry.innerHTML = packages.names[i];
-			entry.onclick = listClickFunction(packages.names[i]);
-			list.appendChild(entry);
-		}
-		
-		
-	}
-	
-	var fetchedJSON;
-	
-	var pack;
-	var target;
-	var page;
-	var slide;
-	
-	var completed;
-	
-	var imgWritten = document.createEvent('Event');
-	imgWritten.initEvent('image_written', true, true)
-	document.addEventListener('image_written', imageSave, false);
-	var packDownloaded = document.createEvent('Event');
-	packDownloaded.initEvent('package_downloaded', true, true)
-	document.addEventListener('package_downloaded', packDone, false);
-	
-	function loadPackage(name) {	
-		
-		pack = name;
-		target = repo+name+'/';
-		slide = 0;
-		page = 0;
-		
-		completed = 0;
-		
-		fetchedJSON = loadJSON(target+'data.json');
-		
-		var total = 0;
-		for (var i = 0; i < fetchedJSON.pages.length; i++) {
-			for (var j = 0; j < fetchedJSON.pages[i].slides.length; j++) {
-				total++;
-			}
-		}
-		
-		document.getElementById('complete').innerHTML = completed;
-		document.getElementById('toComplete').innerHTML = total;
-		
-
-		
-		imageSave();
-		
-	}
-	
-	function imageSave() {
-		loadImage(target+page+'/'+slide+'.png', function(data){
-			writeToFileImage(pack+'.image.'+page+'.'+slide, data);
-		});
-	}
-	function packDone() {
-		alert('DONE');
-	}
-
-		
-	function loadImage(url, callback){
-		var img = new Image();
-		img.crossOrigin = 'Anonymous';
-		img.onload = function(){
-			var canvas = document.createElement('CANVAS');
-			var ctx = canvas.getContext('2d');
-			var dataURL;
-			canvas.height = this.height;
-			canvas.width = this.width;
-			ctx.drawImage(this, 0, 0);
-			dataURL = canvas.toDataURL('image/png');
-			callback(dataURL);
-			canvas = null; 
-		};
-		img.src = url;
-	}
-
-		
-	function loadJSON(target) {
-		var data;
-	
-		var xobj = new XMLHttpRequest();
-			xobj.overrideMimeType("application/json");
-		xobj.open('GET', target, false); 
-		xobj.onreadystatechange = function () {
-			  if (xobj.readyState == 4 && xobj.status == "200") {
-				data = JSON.parse(xobj.responseText);
-			  }
-		};
-		xobj.send(null);  
-		
-		return data;
-	 }
-	 
-	 function readJSONFromFile(fileName, cb) {
-		console.log('attempting a JSON read');
-        var pathToFile = storageDir + fileName;
-		console.log(pathToFile);
-        window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
-            fileEntry.file(function (file) {
-                var reader = new FileReader();
-
-                reader.onloadend = function (e) {
-                    cb(JSON.parse(this.result));
-					document.getElementById('message').innerHTML = this.result;
-                };
-
-                reader.readAsText(file);
-            }, errorHandler.bind(null, fileName));
-        }, errorHandler.bind(null, fileName));
-    }
-	
-
-	function readImageFromFile(fileName) {
-		console.log('attempting an image read');
-        var pathToFile = storageDir + fileName;
-		console.log(pathToFile);
-        window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
-            fileEntry.file(function (file) {
-                var reader = new FileReader();
-
-                reader.onloadend = function (e) {
-					console.log("image read was:"+this.result)
-					document.getElementById('image').src = this.result;
-                };
-
-                reader.readAsText(file);
-            }, errorHandler.bind(null, fileName));
-        }, errorHandler.bind(null, fileName));
-    }
-
-	
-	function writeToFileImage(fileName, data) {
-		console.log('attempting an image write to '+fileName);
-		window.resolveLocalFileSystemURL(storageDir, 
-		
-		function (directoryEntry) {
-			directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
-				fileEntry.createWriter(function (fileWriter) {
-					fileWriter.onwriteend = function (e) {
-						// for real-world usage, you might consider passing a success callback
-						console.log('Write of file "' + fileName + '"" completed.');
-						console.log('slide: '+slide)
-						console.log('page: '+page)
-						if (slide+1 < fetchedJSON.pages[page].slides.length) {
-							slide++;
-							completed++
-							document.getElementById('complete').innerHTML = completed;
-							document.dispatchEvent(imgWritten);
-						} else if (page+1 < fetchedJSON.pages.length) {
-							page++;
-							slide = 0;
-							completed++
-							document.getElementById('complete').innerHTML = completed;
-							document.dispatchEvent(imgWritten);
-						} else {
-							document.dispatchEvent(packDownloaded);
-						}
-						
-					};
-
-					fileWriter.onerror = function (e) {
-						// you could hook this up with our global error handler, or pass in an error callback
-						console.log('Write failed: ' + e.toString());
-					};
-					try {
-						var blob = new Blob([data], { type: 'image/png' });
-					} catch(err) {
-						try {
-							var bBuilder = new BlobBuilder();
-						} catch (err2) {
-							var bBuilder = new WebKitBlobBuilder();
-
-						}
-						bBuilder.append(data);
-						var blob = bBuilder.getBlob('image/png');
-					}
-					fileWriter.write(blob);
-				}, errorHandler.bind(null, fileName));
-			}, errorHandler.bind(null, fileName));
-		}, 
-		
-		errorHandler.bind(null, fileName));
-	}
-	
-	function writeToFileJSON(fileName, data) {
-		console.log('attempting a JSON write');
-		data = JSON.stringify(data, null, '\t');
-		window.resolveLocalFileSystemURL(storageDir, 
-		
-		function (directoryEntry) {
-			directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
-				fileEntry.createWriter(function (fileWriter) {
-					fileWriter.onwriteend = function (e) {
-						// for real-world usage, you might consider passing a success callback
-						console.log('Write of file "' + fileName + '"" completed.');
-					};
-
-					fileWriter.onerror = function (e) {
-						// you could hook this up with our global error handler, or pass in an error callback
-						console.log('Write failed: ' + e.toString());
-					};
-					try {
-						var blob = new Blob([data], { type: 'text/plain' });
-					} catch(err) {
-						try {
-							console.log('Falling back on BlobBuilder: '+err.message);
-							var bBuilder = new BlobBuilder();
-							bBuilder.append(data);
-							var blob = bBuilder.getBlob('text/plain');
-						} catch (err2) {
-							console.log('Falling back on WebKitBlobBuilder: '+err.message);
-							var bBuilder = new WebKitBlobBuilder();
-							bBuilder.append(data);
-							var blob = bBuilder.getBlob('text/plain');
-						}
-					}
-					fileWriter.write(blob);
-				}, errorHandler.bind(null, fileName));
-			}, errorHandler.bind(null, fileName));
-		}, 
-		
-		errorHandler.bind(null, fileName));
-	}
-	
-	var errorHandler = function (fileName, e) {  
-		var msg = '';
-
-		switch (e.code) {
-			case FileError.QUOTA_EXCEEDED_ERR:
-				msg = 'Storage quota exceeded';
-				break;
-			case FileError.NOT_FOUND_ERR:
-				msg = 'File not found';
-				break;
-			case FileError.SECURITY_ERR:
-				msg = 'Security error';
-				break;
-			case FileError.INVALID_MODIFICATION_ERR:
-				msg = 'Invalid modification';
-				break;
-			case FileError.INVALID_STATE_ERR:
-				msg = 'Invalid state';
-				break;
-			default:
-				msg = 'Unknown error';
-				break;
-		};
-
-		console.log('Error (' + fileName + '): ' + msg);
-	}
-	
-	document.addEventListener('deviceready', onDeviceReady, false);  
-	function onDeviceReady() {  
-		init();
-	}
-	
-	</script>
 	<style>
 	html { 
 		height:100%;
@@ -304,8 +35,10 @@
 	</style>
 </head>
 <body>
+	<div onclick="window.location = 'index.html'">&lt;- Back</div>
 	<div id="message">Loading package list. Please ensure you are connected to the internet...</div>
-	<div id="progress"><span id="complete"></span>/<span id="toComplete"></span></div>
+	<div id="progress"><span id="complete"></span><span id="slash"></span><span id="toComplete"></span></div>
 	<div class="package_list" id="package_list"></div>
+	<div onclick="readJSONFromFile('test2.json')">Test Load</div>
 </body>
 </html>
