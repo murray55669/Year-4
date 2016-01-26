@@ -42,16 +42,17 @@ function listClickFunction(name) {
 function init() {
 	var packages = loadJSON(repo+'packages.json');
 
+	// generate package list
 	var list = document.getElementById('package_list');
 	for (var i = 0; i < packages.names.length; i++) {
 		var entry = document.createElement("div");
+		entry.id = 'package_list_entry_'+i;
 		entry.className = 'package_list_entry';
 		entry.innerHTML = packages.names[i];
 		entry.onclick = listClickFunction(packages.names[i]);
 		list.appendChild(entry);
 	}
-	
-	message.innerHTML = 'Package list fetched.';
+	message.innerHTML = '';
 }
 
 var fetchedJSON;
@@ -90,6 +91,7 @@ function loadPackage(name) {
 		}
 	}
 	
+	message.innerHTML = 'Downloading...';
 	document.getElementById('complete').innerHTML = completed;
 	document.getElementById('slash').innerHTML = '/';
 	document.getElementById('toComplete').innerHTML = total;

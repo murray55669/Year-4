@@ -20,10 +20,20 @@
 	<script src="js/loader.js"></script>
 </head>
 <body>
-	<div onclick="window.location = 'index.html'">&lt;- Back</div>
-	<div id="message">Could not load package list. Please ensure you are connected to the internet. <a href="loader.html">RETRY</a></div>
+	<a href="index.html">
+		<div class="back">Back</div>
+	</a>
+	<br>
+	<div class="message" id="message">Could not load package list. Please ensure you are connected to the internet. <a href="loader.html">Click here to retry.</a></div>
+	<br>
 	<div id="progress"><span id="complete"></span><span id="slash"></span><span id="toComplete"></span></div>
 	<div class="package_list" id="package_list"></div>
-	<div onclick="readJSONFromFile('test2.json')">Test Load</div>
+	<br>
+	<div class="package_list" id="installed_package_list"></div>
+	
+	<script>
+		var attachFastClick = Origami.fastclick;
+		attachFastClick(document.body);
+	</script>
 </body>
 </html>
