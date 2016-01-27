@@ -1,3 +1,29 @@
+var errorHandler = function (fileName, e) {  
+	var msg = '';
+	
+	switch (e.code) {
+		case FileError.QUOTA_EXCEEDED_ERR:
+			msg = 'Storage quota exceeded';
+			break;
+		case FileError.NOT_FOUND_ERR:
+			msg = 'File not found';
+			break;
+		case FileError.SECURITY_ERR:
+			msg = 'Security error';
+			break;
+		case FileError.INVALID_MODIFICATION_ERR:
+			msg = 'Invalid modification';
+			break;
+		case FileError.INVALID_STATE_ERR:
+			msg = 'Invalid state';
+			break;
+		default:
+			msg = 'Unknown error';
+			break;
+	};
+
+	console.log('Error '+e.code+' (' + fileName + '): ' + msg);
+}
 
 var currentSlide = 0;
 var currentPage = 0;
@@ -12,45 +38,24 @@ var navList;
 var pageList;
 var textWrap;
 
-var errorHandler = function (fileName, e) {  
-		var msg = '';
-		
-		switch (e.code) {
-			case FileError.QUOTA_EXCEEDED_ERR:
-				msg = 'Storage quota exceeded';
-				break;
-			case FileError.NOT_FOUND_ERR:
-				msg = 'File not found';
-				break;
-			case FileError.SECURITY_ERR:
-				msg = 'Security error';
-				break;
-			case FileError.INVALID_MODIFICATION_ERR:
-				msg = 'Invalid modification';
-				break;
-			case FileError.INVALID_STATE_ERR:
-				msg = 'Invalid state';
-				break;
-			default:
-				msg = 'Unknown error';
-				break;
-		};
-
-		console.log('Error '+e.code+' (' + fileName + '): ' + msg);
-	}
-
-document.addEventListener('deviceready', onDeviceReady, false);  
-function onDeviceReady() { 
-	setTimeout(pageInit, 500); // TODO: one would think "device ready" would imply it was ready
-}
 
 var data;
 
-var storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory;
+var storageDir; 
 
 var packLoaded = document.createEvent('Event');
 packLoaded.initEvent('pack_loaded', true, true)
 document.addEventListener('pack_loaded', generateContent, false);
+
+var imageLoaded = document.createEvent('Event');
+imageLoaded.initEvent('image_loaded', true, true)
+
+document.addEventListener('deviceready', onDeviceReady, false);  
+function onDeviceReady() { 
+	storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory;
+	
+	pageInit();
+}
 
 function readJSONFromFile(fileName) {
 	console.log('attempting a JSON read');
@@ -95,9 +100,6 @@ function loadState() {
 		goToPage(0);
 	}
 }
-
-var imageLoaded = document.createEvent('Event');
-imageLoaded.initEvent('image_loaded', true, true)
 
 function goToPage(id) {
     //takes the id of a page and refreshes the app view to match
@@ -379,6 +381,10 @@ function hideOverlays() {
 	hideDisplay(navList);
 	hideDisplay(pageList);
 }
+function hideTutorial() {
+	localStorage.setItem("skipTutorial", 1)
+	document.getElementById('tutorial_splash').style.display = 'none';
+}
 function resizeWidth() {
 	var lMarkers = document.getElementsByClassName('label_marker');
 	var lDots = document.getElementsByClassName('label_dot');
@@ -428,14 +434,20 @@ function filterPageList(term) {
 		}
 	}
 }
-function pageInit() {
+function pageInit() {	
+	var skipTutorial = parseInt(localStorage.getItem("skipTutorial"))
+	if (skipTutorial === 1) {
+		hideTutorial();
+	}
 	var loaded = parseInt(localStorage.getItem("packageLoaded"))
+	var downloadSplash = document.getElementById('download_splash');
+	downloadSplash.style.display = 'none';
 	if (loaded === 1) {
 		packageName = localStorage.getItem("currentPackage");
 		readJSONFromFile(packageName+'.json')
 	} else {
-		alert('Please choose a package');
-		window.location = 'loader.html';
+		downloadSplash.style.display = '';
+		document.getElementById('loading_splash').style.display = 'none';
 	}
 }
 function generateContent() {
@@ -458,6 +470,4 @@ function generateContent() {
 	textWrap = document.getElementById('text_wrap');
 
 	loadState();
-	
-	//TODO: have tutorial popup
 }

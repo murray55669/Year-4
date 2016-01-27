@@ -15,7 +15,6 @@
 		<script src="js/customEvent.js"></script>
 		<script src="js/fastclick.js"></script>
 		<script src="js/hammer.js"></script>
-		<script src="http://jsconsole.com/remote.js?28F9432F-28F9-4296-9A99-E8E9DCE2AE9E"></script>
 		<script src="js/main.js"></script>
 
     </head>
@@ -33,7 +32,7 @@
 				<div class="button noselect bold" id="text_button" onclick="event.stopPropagation();toggleText()">T</div>
 				<div class="button double noselect bold" id="nav_button" onclick="event.stopPropagation();toggleSlidesList()">Layer</div>
 				<div class="button noselect bold" id="page_button" onclick="event.stopPropagation();togglePagesList()">Page</div>
-				<div class="button noselect bold" id="package_button" onclick="event.stopPropagation();"><a href="loader.html">Load</a></div>
+				<a href="loader.html"><div class="button noselect bold" id="package_button" onclick="event.stopPropagation();">Pack</div></a>
 			</div>
 			
 			<div class="page_list" id="page_list">
@@ -54,12 +53,49 @@
 		</div>
 		<div class="clear"></div>
 		
-		<div class="loading_splash" id="loading_splash">
+		<div class="loading_splash" id="tutorial_splash" onclick="event.stopPropagation();hideTutorial();">
 			<div class="loading_text_wrapper">
-				<div class="loading_text">Taking too long? <a href="index.html">Click here to retry.</a>
+				<div class="loading_text">
+					Welcome!
+					<br>
+					<br>
+					<br>
+					Swipe left and right to move between layers (or use the 'Layer' button).
+					<br>
+					<br>
+					Tap to show text (or tap the 'T' button).
+					<br>
+					<br>
+					Swipe up and down to scroll (only on large diagrams).
+					<br>
+					<br>
+					<br>
+					Tap anywhere to continue.
 				</div>
 			</div>
 		</div>
+		
+		<div class="loading_splash" id="download_splash" onclick="event.stopPropagation(); setTimeout(function() {window.location='loader.html'}, 300)">
+			<div class="loading_text_wrapper">
+				<div class="loading_text">
+					Hi!
+					<br><br><br>
+					You need to download a pack to view.
+					<br>
+					<br>
+					Tap anywhere to continue to the pack manager (you'll want to be connected to the internet).
+				</div>
+			</div>
+		</div>
+		
+		<a href="index.html">
+			<div class="loading_splash" id="loading_splash">
+				<div class="loading_text_wrapper">
+					<div class="loading_text">Loading...<br><br>Taking too long?<br>Tap to retry.
+					</div>
+				</div>
+			</div>
+		</a>
 	
         <script type="text/javascript">
 			var attachFastClick = Origami.fastclick;

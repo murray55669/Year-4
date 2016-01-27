@@ -16,20 +16,23 @@
 	<script src="js/customEvent.js"></script>
 	<script src="js/fastclick.js"></script>
 	<script src="js/hammer.js"></script>
-	<script src="http://jsconsole.com/remote.js?28F9432F-28F9-4296-9A99-E8E9DCE2AE9E"></script>
+	<script src="js/list.js"></script>
 	<script src="js/loader.js"></script>
 </head>
 <body>
-	<a href="index.html">
-		<div class="back">Back</div>
-	</a>
+	<div class="button" onclick="setTimeout(function() {window.location='index.html'}, 300)">Done</div>
 	<br>
-	<div class="message" id="message">Could not load package list. Please ensure you are connected to the internet. <a href="loader.html">Click here to retry.</a></div>
+	<div class="message" id="message">Could not load package list. Please ensure you are connected to the internet.</div>
+	<a href="loader.html"><div class="button" id="retry_button">Retry</div></a>
 	<br>
-	<div id="progress"><span id="complete"></span><span id="slash"></span><span id="toComplete"></span></div>
-	<div class="package_list" id="package_list"></div>
+	<div class="progress" id="progress"><span id="complete"></span><span id="slash"></span><span id="toComplete"></span></div>
+	<div class="header">Available</div>
+	<div class="package_list" id="package_list">(None)</div>
 	<br>
-	<div class="package_list" id="installed_package_list"></div>
+	<div class="header">Installed</div>
+	<div class="package_list" id="package_list_installed">(None)</div>
+	<div class="clear"></div><br><br>
+	<div class="button" onclick="resetApp()">Reset App</div>
 	
 	<script>
 		var attachFastClick = Origami.fastclick;

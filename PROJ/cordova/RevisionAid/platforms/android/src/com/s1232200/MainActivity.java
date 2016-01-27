@@ -17,7 +17,7 @@
        under the License.
  */
 
-package ma.crichton.proj;
+package com.s1232200;
 
 import android.os.Bundle;
 import org.apache.cordova.*;

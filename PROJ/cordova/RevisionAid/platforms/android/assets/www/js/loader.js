@@ -1,6 +1,6 @@
-var repo = "http://bliss.dtdns.net/proj/repo/"	
+var repo = "http://littleorkneydyeshed.co.uk/repo/"	
 	
-var storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory;
+var storageDir;
 
 var message;
 
@@ -37,13 +37,63 @@ function listClickFunction(name) {
 		loadPackage(name);
 	};
 }
+function installedListClickFunction(name) {
+	return function(event) {
+		event.stopPropagation();
+		//set package variables
+		localStorage.setItem("currentPackage", name);
+		localStorage.setItem("packageLoaded", 1);
+		localStorage.setItem("currentPage", -1);
+		localStorage.setItem("currentSlide", -1);
+		//update colouring
+		listInstalled();
+	};
+}
+function resetApp() {
+	if (confirm("Are you sure?")) {
+		localStorage.removeItem("currentPackage");
+		localStorage.removeItem("packageLoaded");
+		localStorage.removeItem("currentPage");
+		localStorage.removeItem("currentSlide");
+		localStorage.removeItem("skipTutorial");
+		localStorage.removeItem("installedPackages");
+		
+		listInstalled();
+	}
+}
 
+function listInstalled() {	
+	//list pre-installed packages
+	var installed = getInstalled();
+	var installedList = document.getElementById('package_list_installed');
+	if (installed.length > 0) {
+		installedList.innerHTML = '';
+	} else {
+		installedList.innerHTML = '(None)';
+	}
+	for (var i = 0; i < installed.length; i++) {
+		var entry = document.createElement("div");
+		entry.id = 'package_list_installed_entry_'+i;
+		if (localStorage.getItem("currentPackage") == installed[i]) {
+			entry.className = 'package_list_entry selected';
+		} else {
+			entry.className = 'package_list_entry';
+		}
+		entry.innerHTML = installed[i];
+		entry.onclick = installedListClickFunction(installed[i]);
+		installedList.appendChild(entry);
+	}
+}
 
 function init() {
+	listInstalled();
+	
+	//get list of packages available in repo
 	var packages = loadJSON(repo+'packages.json');
 
 	// generate package list
 	var list = document.getElementById('package_list');
+	list.innerHTML = '';
 	for (var i = 0; i < packages.names.length; i++) {
 		var entry = document.createElement("div");
 		entry.id = 'package_list_entry_'+i;
@@ -53,6 +103,7 @@ function init() {
 		list.appendChild(entry);
 	}
 	message.innerHTML = '';
+	document.getElementById('retry_button').style.display = 'none';
 }
 
 var fetchedJSON;
@@ -108,12 +159,16 @@ function imageSave() {
 	});
 }
 function packDone() {
+	checkAndAddPack(pack)
 	localStorage.setItem("currentPackage", pack);
 	localStorage.setItem("packageLoaded", 1);
-	localStorage.setItem(pack, 1);
 	localStorage.setItem("currentPage", -1);
 	localStorage.setItem("currentSlide", -1);
 	message.innerHTML = 'Download complete.';
+	document.getElementById('complete').innerHTML = '';
+	document.getElementById('slash').innerHTML = '';
+	document.getElementById('toComplete').innerHTML = '';
+	listInstalled();
 }
 
 	
@@ -151,13 +206,15 @@ function readJSONFromFile(fileName) {
 	}, errorHandler.bind(null, fileName));
 }
 
-	
+function noCache() {
+	return Math.floor((Math.random() * 100) + 1);
+}
 function loadJSON(target) {
 	var data;
 
 	var xobj = new XMLHttpRequest();
 		xobj.overrideMimeType("application/json");
-	xobj.open('GET', target, false); 
+	xobj.open('GET', (target+'?'+noCache()), false); 
 	xobj.onreadystatechange = function () {
 		  if (xobj.readyState == 4 && xobj.status == "200") {
 			data = JSON.parse(xobj.responseText);
@@ -278,6 +335,7 @@ function writeToFileJSON(fileName, data) {
 document.addEventListener('deviceready', onDeviceReady, false);  
 function onDeviceReady() {  
 	message = document.getElementById('message');
+	storageDir = cordova.file.externalApplicationStorageDirectory || cordova.file.dataDirectory;
 	init();
 }
 	

@@ -84,17 +84,20 @@ html {
 body {
     height: 100%;
 }
+a {
+	text-decoration: none;
+}
 a:link {
-    color: #595959;
+    color: #000000;
 }
 a:visited {
-    color: #595959;
+    color: #000000;
 }
 a:hover {
-    color: #737373;
+    color: #000000;
 }
 a:active {
-    color: #737373;
+    color: #000000;
 }
 .noselect {
     -webkit-touch-callout: none;
@@ -158,10 +161,11 @@ a:active {
 	display: table;
 }
 .loading_text {
+	padding: 20px;
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
-	font-size: 300%;
+	font-size: 210%;
 }
 /***************/
 /* control bar */
@@ -183,6 +187,9 @@ a:active {
     line-height: 120px;
     float: left;
     font-size: 170%;
+}
+.button:active, .button:hover {
+	background: #d0d0d0;
 }
 .button.double {
 	padding: 20px 0;
@@ -234,8 +241,7 @@ a:active {
 	float: left;
 	width: 100%;
 	font-size: 120%;
-	height: 60px;
-	line-height: 60px;
+	padding: 20px 0;
     text-align: center;
     background: #d0d0d0;
     box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,1);

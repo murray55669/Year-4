@@ -14,9 +14,17 @@ function getString(array) {
 }
 
 function getArray(string) {
-	var ret = string.split(';');
-	ret.pop()
-	return ret;
+	try {
+		var ret = string.split(';');
+		ret.pop()
+		return ret;
+	} catch (e) {
+		return [];
+	}
+}
+
+function getInstalled() {
+	return getArray(localStorage.getItem("installedPackages"));
 }
 
 function checkAndAddPack(name) {
