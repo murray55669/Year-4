@@ -1,3 +1,9 @@
+To run: cd ns/ns-3.18
+./waf --run scratch/scriptname
+OR
+./waf --run "scratch/scriptname --argument=value"
+for arguments
+
 Placing stations in disc: https://www.nsnam.org/doxygen/classns3_1_1_random_disc_position_allocator.html
 
 TODO:
