@@ -1,0 +1,21 @@
+Placing stations in disc: https://www.nsnam.org/doxygen/classns3_1_1_random_disc_position_allocator.html
+
+TODO:
+create command line arguments for:
+-number of simulations per test (and have the seed re-select each time) - need to average 5 for final results
+-each question:
+    q1:
+        -AARF || CARA
+        -no fading || Rayleigh fading
+        -5m || 10m || ... || 100m seperation
+    q2:
+        -1 || 5 || 10 || ... || 50 nodes
+        -nodes randomly placed on circumference of 10m radius circle
+        -randomize sender/receiver roles
+        -AARF || CARA
+    q3:
+        -nodes randomly places within 25m radius circle
+        -Rayleigh fading
+        -1 || 5 || 10 || ... || 50 nodes
+        -randomize sender/receiver roles
+        -AARF || CARA
