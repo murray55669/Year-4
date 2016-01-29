@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="ma.crichton.proj" version="testing" xmlns="none" xmlns:cdv="none">
+    <name>Vet Revision Aid</name>
+    <description>
+        PROJ
+    </description>
+    <author>
+		Murray Crichton, s1232200
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-navigation href="http://*/*" />
+</widget>
