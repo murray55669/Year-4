@@ -1,4 +1,6 @@
 >>>>>>>>>>>>>>>> [['void', 'ns3::Ptr<ns3::Packet>', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty']]
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/bindings/python/ns3modulegen_core_customizations.py:69: DeprecationWarning: Typo: set_tranformation -> set_transformation
+  handler.set_tranformation(self, orig_ctype)
 ***** registering callback handler: 'ns3::Callback< void, ns3::Ptr< ns3::Packet >, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:311: Warning: exception TypeLookupError(['std::_List_const_iterator< ns3::AttributeConstructionList::Item >'],) in wrapper public: retval? ???::Begin (params?) const;
   is_const=True)
@@ -18,12 +20,14 @@
   [param('uint8_t *', 'buffer'), param('uint32_t', 'size')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:528: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Write (params?);
   [param('uint8_t const *', 'buffer'), param('uint32_t', 'size')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:714: Warning: exception TypeLookupError(['ns3::Ptr< ns3::EventImpl > &'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x12c7550>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:714: Warning: exception TypeLookupError(['ns3::Ptr< ns3::EventImpl > &'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x141db90>
   cls.add_constructor([param('ns3::Ptr< ns3::EventImpl > const &', 'impl'), param('uint64_t', 'ts'), param('uint32_t', 'context'), param('uint32_t', 'uid')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:748: Warning: exception TypeConfigurationError('Either caller_owns_return or self.reference_existing_object must be given',) in wrapper public: retval? ???::PeekEventImpl (params?) const;
   is_const=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:828: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Enable (params?);
   is_static=True)
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/pybindgen-0.16.0.831/pybindgen/settings.py:84: DeprecationWarning: The option pybindgen.settings.deprecated_virtuals has not been set.  I am going to assume the value of False, change it to True if it breaks your APIs. The option will eventually disappear (the deprecated behaviour will eventually disappear).
+  DeprecationWarning)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:941: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper public: retval? ???::Delete (params?);
   is_static=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:1014: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Deserialize (params?);
@@ -42,7 +46,7 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeConfigura
   [param('uint8_t *', 'buffer')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:1226: Warning: exception TypeLookupError(['std::ostream &'],) in wrapper public: virtual retval? ???::Print (params?) const = 0;
   is_pure_virtual=True, is_const=True, is_virtual=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:1238: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x15c5a50>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:1238: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x164a950>
   cls.add_constructor([param('uint8_t *', 'start'), param('uint8_t *', 'end')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:1246: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Read (params?);
   [param('uint8_t *', 'buffer'), param('uint32_t', 'size')])
@@ -76,9 +80,9 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   is_virtual=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2449: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper public: virtual retval? ???::ScheduleWithContext (params?);
   is_virtual=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2631: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x1b28c90>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2631: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x24e4c90>
   cls.add_constructor([param('uint8_t const *', 'buffer'), param('uint32_t', 'size'), param('bool', 'magic')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2633: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x1af7d90>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2633: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x24e4cd0>
   cls.add_constructor([param('uint8_t const *', 'buffer'), param('uint32_t', 'size')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2674: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::CopyData (params?) const;
   is_const=True)
@@ -92,9 +96,3 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   is_const=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2763: Warning: exception TypeLookupError(['std::ostream &'],) in wrapper public: retval? ???::PrintPacketTags (params?) const;
   is_const=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2800: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Serialize (params?) const;
-  is_const=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2928: Warning: exception TypeLookupError(['ns3::Hash::Hash32Function_ptr'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x1c3ae90>
-  cls.add_constructor([param('ns3::Hash::Hash32Function_ptr', 'hp')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/mpi/bindings/modulegen__gcc_LP64.py:2945: Warning: exception TypeLookupError(['ns3::Hash::Hash64Function_ptr'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x1d14f50>
-  cls.add_constructor([param('ns3::Hash::Hash64Function_ptr', 'hp')])

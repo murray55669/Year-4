@@ -1,9 +1,13 @@
 >>>>>>>>>>>>>>>> [['void', 'ns3::Ptr<ns3::Packet const>', 'double', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::Ptr<ns3::Packet>', 'double', 'ns3::WifiMode', 'ns3::WifiPreamble', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['bool', 'ns3::Ptr<ns3::NetDevice>', 'ns3::Ptr<ns3::Packet const>', 'unsigned short', 'ns3::Address const&', 'ns3::Address const&', 'ns3::NetDevice::PacketType', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['bool', 'ns3::Ptr<ns3::NetDevice>', 'ns3::Ptr<ns3::Packet const>', 'unsigned short', 'ns3::Address const&', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::Ptr<ns3::Packet>', 'ns3::WifiMacHeader const*', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::Ptr<ns3::NetDevice>', 'ns3::Ptr<ns3::Packet const>', 'unsigned short', 'ns3::Address const&', 'ns3::Address const&', 'ns3::NetDevice::PacketType', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::WifiMacHeader const&', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::Ptr<ns3::Packet>', 'ns3::Mac48Address', 'ns3::Mac48Address', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::Mac48Address', 'unsigned char', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty'], ['void', 'ns3::Mac48Address', 'unsigned char', 'bool', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty', 'ns3::empty']]
 bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupError(['std::pair< ns3::Ptr< ns3::Packet >, ns3::AmsduSubframeHeader >'],) in wrapper <pybindgen.Container 'std::list< std::pair< ns3::Ptr< ns3::Packet >, ns3::AmsduSubframeHeader > >'>
   warnings.warn("exception %r in wrapper %s" % (exception, wrapper))
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/bindings/python/ns3modulegen_core_customizations.py:69: DeprecationWarning: Typo: set_tranformation -> set_transformation
+  handler.set_tranformation(self, orig_ctype)
 ***** registering callback handler: 'ns3::Callback< void, ns3::Ptr< ns3::Packet const >, double, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
 ***** registering callback handler: 'ns3::Callback< void, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
 ***** registering callback handler: 'ns3::Callback< void, ns3::Ptr< ns3::Packet >, double, ns3::WifiMode, ns3::WifiPreamble, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/pybindgen-0.16.0.831/pybindgen/typehandlers/base.py:1059: DeprecationWarning: is_const is deprecated, put a 'const' in the C type instead.
+  warnings.warn("is_const is deprecated, put a 'const' in the C type instead.", DeprecationWarning)
 ***** registering callback handler: 'ns3::Callback< bool, ns3::Ptr< ns3::NetDevice >, ns3::Ptr< ns3::Packet const >, unsigned short, ns3::Address const &, ns3::Address const &, ns3::NetDevice::PacketType, ns3::empty, ns3::empty, ns3::empty >'
 ***** registering callback handler: 'ns3::Callback< bool, ns3::Ptr< ns3::NetDevice >, ns3::Ptr< ns3::Packet const >, unsigned short, ns3::Address const &, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
 ***** registering callback handler: 'ns3::Callback< void, ns3::Ptr< ns3::Packet >, ns3::WifiMacHeader const *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
@@ -12,7 +16,7 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
 ***** registering callback handler: 'ns3::Callback< void, ns3::Ptr< ns3::Packet >, ns3::Mac48Address, ns3::Mac48Address, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
 ***** registering callback handler: 'ns3::Callback< void, ns3::Mac48Address, unsigned char, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
 ***** registering callback handler: 'ns3::Callback< void, ns3::Mac48Address, unsigned char, bool, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:912: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x1be7610>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:912: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x2a73e50>
   cls.add_constructor([param('uint8_t', 'type'), param('uint8_t const *', 'buffer'), param('uint8_t', 'len')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:923: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::CopyAllFrom (params?);
   [param('uint8_t const *', 'buffer'), param('uint8_t', 'len')])
@@ -48,7 +52,7 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   [param('ns3::DcfState *', 'dcf')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:1866: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper public: retval? ???::RequestAccess (params?);
   [param('ns3::DcfState *', 'state')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2005: Warning: exception TypeLookupError(['ns3::Ptr< ns3::EventImpl > &'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x218f190>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2005: Warning: exception TypeLookupError(['ns3::Ptr< ns3::EventImpl > &'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x2ebb590>
   cls.add_constructor([param('ns3::Ptr< ns3::EventImpl > const &', 'impl'), param('uint64_t', 'ts'), param('uint32_t', 'context'), param('uint32_t', 'uid')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2039: Warning: exception TypeConfigurationError('Either caller_owns_return or self.reference_existing_object must be given',) in wrapper public: retval? ???::PeekEventImpl (params?) const;
   is_const=True)
@@ -64,7 +68,7 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   is_const=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2293: Warning: exception TypeLookupError(['std::ostream &'],) in wrapper public: retval? ???::Print (params?) const;
   is_const=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2310: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x22a2e50>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2310: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x2fc5ed0>
   cls.add_constructor([param('uint8_t *', 'address')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2328: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Deserialize (params?);
   is_static=True)
@@ -84,7 +88,7 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   is_const=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2495: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Set (params?);
   [param('uint8_t *', 'address')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2505: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x22c5610>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2505: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x30b2150>
   cls.add_constructor([param('uint8_t *', 'prefix')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2518: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::GetBytes (params?) const;
   is_const=True)
@@ -94,6 +98,8 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   [param('uint8_t const *', 'buffer')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2585: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::CopyTo (params?) const;
   is_const=True)
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/pybindgen-0.16.0.831/pybindgen/settings.py:84: DeprecationWarning: The option pybindgen.settings.deprecated_virtuals has not been set.  I am going to assume the value of False, change it to True if it breaks your APIs. The option will eventually disappear (the deprecated behaviour will eventually disappear).
+  DeprecationWarning)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2891: Warning: exception TypeLookupError(['__gnu_cxx::__normal_iterator< ns3::Ptr< ns3::NetDevice > const, std::vector< ns3::Ptr< ns3::NetDevice > > >'],) in wrapper public: retval? ???::Begin (params?) const;
   is_const=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:2896: Warning: exception TypeLookupError(['__gnu_cxx::__normal_iterator< ns3::Ptr< ns3::NetDevice > const, std::vector< ns3::Ptr< ns3::NetDevice > > >'],) in wrapper public: retval? ???::End (params?) const;
@@ -104,37 +110,7 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   is_const=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3043: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper public: retval? ???::Delete (params?);
   is_static=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3162: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Deserialize (params?);
-  [param('uint8_t const *', 'buffer'), param('uint32_t', 'size')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3203: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Serialize (params?) const;
-  is_const=True)
-bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupError(['uint8_t [ 20 ]'],) in wrapper None
-  warnings.warn("exception %r in wrapper %s" % (exception, wrapper))
-bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeConfigurationError('Either caller_owns_return or self.reference_existing_object must be given',) in wrapper None
-  warnings.warn("exception %r in wrapper %s" % (exception, wrapper))
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3334: Warning: exception TypeLookupError(['uint32_t &'],) in wrapper public: retval? ???::Diff (params?);
-  is_static=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3388: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Read (params?);
-  [param('uint8_t * const', 'data'), param('uint32_t', 'maxBytes'), param('uint32_t &', 'tsSec'), param('uint32_t &', 'tsUsec'), param('uint32_t &', 'inclLen'), param('uint32_t &', 'origLen'), param('uint32_t &', 'readLen')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3392: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Write (params?);
-  [param('uint32_t', 'tsSec'), param('uint32_t', 'tsUsec'), param('uint8_t const * const', 'data'), param('uint32_t', 'totalLen')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3547: Warning: exception TypeLookupError(['ns3::Ptr< ns3::SimulatorImpl >', 'ns3::SimulatorImpl *'],) in wrapper public: retval? ???::GetImplementation (params?);
-  is_static=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3582: Warning: exception TypeLookupError(['ns3::Ptr< ns3::SimulatorImpl >', 'ns3::SimulatorImpl *'],) in wrapper public: retval? ???::SetImplementation (params?);
-  is_static=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3659: Warning: exception TypeLookupError(['std::ostream &'],) in wrapper public: virtual retval? ???::Print (params?) const = 0;
-  is_pure_virtual=True, is_const=True, is_virtual=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3671: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x160f850>
-  cls.add_constructor([param('uint8_t *', 'start'), param('uint8_t *', 'end')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3679: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Read (params?);
-  [param('uint8_t *', 'buffer'), param('uint32_t', 'size')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3707: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::Write (params?);
-  [param('uint8_t const *', 'buffer'), param('uint32_t', 'size')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3772: Warning: exception TypeLookupError(['ns3::Callback< ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >'],) in wrapper public: retval? ???::GetConstructor (params?) const;
-  is_const=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:3851: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper public: retval? ???::LookupByHashFailSafe (params?);
-  is_static=True)
-bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupError(['short unsigned int'],) in wrapper None
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupError(['short unsigned int'],) in wrapper None
   warnings.warn("exception %r in wrapper %s" % (exception, wrapper))
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:4462: Warning: exception TypeLookupError(['std::ostream &'],) in wrapper public: virtual retval? ???::Print (params?) const = 0;
   is_pure_virtual=True, is_const=True, is_virtual=True)
@@ -364,7 +340,7 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   [param('ns3::DcfManager *', 'manager')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:10062: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper public: retval? ???::GetFragmentPacket (params?);
   [param('ns3::WifiMacHeader *', 'hdr')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:10295: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x4103810>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:10295: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x4d187d0>
   cls.add_constructor([param('ns3::SupportedRates *', 'rates')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:10481: Warning: exception TypeLookupError(['uint8_t *'],) in wrapper public: retval? ???::GetRxMcsBitmask (params?);
   [])
@@ -446,13 +422,13 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   visibility='private', is_virtual=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11917: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper private: virtual retval? ???::DoReportRxOk (params?);
   visibility='private', is_virtual=True)
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11931: Warning: exception TypeLookupError(['std::ostream *'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x483d7d0>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11931: Warning: exception TypeLookupError(['std::ostream *'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x5442850>
   cls.add_constructor([param('std::ostream *', 'os')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11935: Warning: exception TypeLookupError(['std::ostream *'],) in wrapper public: retval? ???::GetStream (params?);
   [])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11947: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x4832550>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11947: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x5446610>
   cls.add_constructor([param('uint8_t const *', 'buffer'), param('uint32_t', 'size'), param('bool', 'magic')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11949: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x4832490>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11949: Warning: exception TypeConfigurationError('direction not given',) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x5446650>
   cls.add_constructor([param('uint8_t const *', 'buffer'), param('uint32_t', 'size')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:11990: Warning: exception TypeConfigurationError('direction not given',) in wrapper public: retval? ???::CopyData (params?) const;
   is_const=True)
@@ -492,9 +468,9 @@ bindings/python/ns3modulegen-modular.py:27: UserWarning: exception TypeLookupErr
   visibility='private', is_virtual=True)
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:13316: Warning: exception TypeConfigurationError('Missing transfer_ownership option',) in wrapper public: retval? ???::SetManager (params?);
   [param('ns3::DcfManager *', 'manager')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:13432: Warning: exception TypeLookupError(['ns3::Hash::Hash32Function_ptr'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x4f41e50>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:13432: Warning: exception TypeLookupError(['ns3::Hash::Hash32Function_ptr'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x5b4f690>
   cls.add_constructor([param('ns3::Hash::Hash32Function_ptr', 'hp')])
-/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:13449: Warning: exception TypeLookupError(['ns3::Hash::Hash64Function_ptr'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x4f44f10>
+/afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/ns-3.18/src/wifi/bindings/modulegen__gcc_LP64.py:13449: Warning: exception TypeLookupError(['ns3::Hash::Hash64Function_ptr'],) in wrapper <pybindgen.cppmethod.CppConstructor object at 0x5b54710>
   cls.add_constructor([param('ns3::Hash::Hash64Function_ptr', 'hp')])
 /afs/inf.ed.ac.uk/user/s12/s1232200/Year-4/CN/cwk1/ns/pybindgen-0.16.0.831/pybindgen/cppclass_typehandlers.py:1098: UserWarning: Returning shared pointers is dangerous!  The C++ API should be redesigned to avoid this situation.
   warnings.warn("Returning shared pointers is dangerous!"

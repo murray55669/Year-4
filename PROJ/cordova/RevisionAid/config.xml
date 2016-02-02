@@ -24,3 +24,4 @@
 <widget id="com.s1232200"
       version="0.1"
       android-versionCode="30">
+<icon src="icon.png" />

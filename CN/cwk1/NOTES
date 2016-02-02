@@ -1,8 +1,13 @@
+cd ns/ns-3.18
+bash run.sh $question $chunk ([1-3] [0-3 for q1; 0-1 for q2 and 3])
+
 To run: cd ns/ns-3.18
 ./waf --run scratch/scriptname
 OR
 ./waf --run "scratch/scriptname --argument=value"
 for arguments
+
+./waf --run scratch/0-test
 
 Placing stations in disc: https://www.nsnam.org/doxygen/classns3_1_1_random_disc_position_allocator.html
 
@@ -11,14 +16,15 @@ create command line arguments for:
 -number of simulations per test (and have the seed re-select each time) - need to average 5 for final results
 -each question:
     q1:
-        -AARF || CARA
-        -no fading || Rayleigh fading
-        -5m || 10m || ... || 100m seperation
+        -AARF || CARA 
+        -no fading || Rayleigh fading 
+        -5m || 10m || ... || 100m separation 
     q2:
         -1 || 5 || 10 || ... || 50 nodes
         -nodes randomly placed on circumference of 10m radius circle
         -randomize sender/receiver roles
         -AARF || CARA
+        -no fading
     q3:
         -nodes randomly places within 25m radius circle
         -Rayleigh fading
