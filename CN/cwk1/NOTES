@@ -1,4 +1,4 @@
-cd ns/ns-3.18
+cd Year-4/CN/cwk1/ns/ns-3.18
 bash run.sh $question $chunk ([1-3] [0-3 for q1; 0-1 for q2 and 3])
 
 To run: cd ns/ns-3.18
