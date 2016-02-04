@@ -1,0 +1,8 @@
+-direct mapped cache // write-back policy
+-number of lines // size of lines parametrized
+
+-need 1 cache per cpu (4 CPUs)
+
+-implement MSI, MESI, MES
+
+-collect stats on: miss rate, number of invalidations, number of updates
