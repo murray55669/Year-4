@@ -214,14 +214,15 @@ function loadJSON(target) {
 
 	var xobj = new XMLHttpRequest();
 		xobj.overrideMimeType("application/json");
-	xobj.open('GET', (target+'?'+noCache()), false); 
+  var randomized = target+'?'+noCache()
+	xobj.open('GET', (randomized), false); 
 	xobj.onreadystatechange = function () {
 		  if (xobj.readyState == 4 && xobj.status == "200") {
-			data = JSON.parse(xobj.responseText);
+        data = JSON.parse(xobj.responseText);
 		  }
 	};
 	xobj.send(null);  
-	
+  
 	return data;
  }
 
