@@ -6,3 +6,6 @@
 -implement MSI, MESI, MES
 
 -collect stats on: miss rate, number of invalidations, number of updates
+
+
+array = [0 for x in range(1000)]
