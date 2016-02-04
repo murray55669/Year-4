@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="30" id="com.s1232200" version="0.1" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="31" id="com.s1232200" version="0.1" xmlns="none" xmlns:cdv="none">
     <preference name="loglevel" value="DEBUG" />
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
@@ -12,4 +12,17 @@
     <feature name="Zip">
         <param name="android-package" value="org.apache.cordova.Zip" />
     </feature>
+    <allow-intent href="market:*" />
+    <icon src="icon.png" />
+    <name>Vet Revision Aid</name>
+    <description>
+        PROJ
+    </description>
+    <author>
+		Murray Crichton, s1232200
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="*" />
+    <allow-navigation href="*" />
 </widget>
