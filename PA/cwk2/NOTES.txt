@@ -1,3 +1,15 @@
+ASSUMPTIONS:
+-16 bit addresses
+-MIS - when in M state, a miss causes a write back and a transition to I state
+-MSI - invalidate by index plus tag: invalidation messages pass both index and tag, only invalidating if both match
+
+MSI: http://www.inf.ed.ac.uk/teaching/courses/pa/Notes/lecture04-multi.pdf p17/18
+MESI: p20/21
+MES: (see appendix A)
+
+
+
+
 -direct mapped cache // write-back policy
 -number of lines // size of lines parametrized
 
