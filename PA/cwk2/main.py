@@ -9,27 +9,29 @@ ADDRESS_LENGTH = 16
 
 EMPTY = '<empty>'
 
-M = 'modified '
+M = 'modified'
 E = 'exclusive'
-S = 'shared   '
-I = 'invalid  '
+S = 'shared'
+I = 'invalid'
 
 READ = 'R'
 WRITE = 'W'
 
 NO_MESSAGE = 'No message'
 
-MESSAGE = 'A {0} by processor {1} to word {2} looked for tag {3} in cache block'
+MESSAGE = 'A {0} by P{1} to word {2} looked for tag {3} in cache block {4}, ' \
+          'was found in state {5} in this cache.'
+MESSAGE_LONG = MESSAGE[:-1] + ' and found in state(s) {6} in the cache(s) of P{7}.'
 
 
-class CacheLine():
+class CacheLine:
     def __init__(self):
         self.state = I
 
         self.tags = {}
 
 
-class Cache():
+class Cache:
     def __init__(self, cache_id, line_size, line_count, mode):
         self.cache_id = cache_id
 
@@ -53,20 +55,29 @@ class Cache():
     def access(self, cpu, instruction, address):
         index, offset, tag = self.split_address(address)
 
-        message = NO_MESSAGE
+        message_chunks = {}
 
         tag_check = False
         if offset in self.storage[index].tags and self.storage[index].tags[offset] == tag:
             tag_check = True
 
-        if self.mode == MSI:
-            if cpu == self.cache_id:
+        if cpu == self.cache_id:
+            if self.mode == MSI:
+                message_chunks = {'cpu': self.cache_id,
+                                  0: instruction,
+                                  1: cpu,
+                                  2: address,
+                                  3: tag,
+                                  4: index,
+                                  5: None}
                 if self.storage[index].state == M:
                     if tag_check:
                         self.msi_m_rw_hit(index, offset, tag)
+                        message_chunks[5] = M
                     else:
                         # eviction - write back
                         self.msi_m_eviction(index, offset, tag)
+                        message_chunks[5] = I
                         if instruction == READ:
                             self.msi_i_r(index, offset, tag)
                         elif instruction == WRITE:
@@ -76,45 +87,63 @@ class Cache():
                     if tag_check and instruction == READ:
                         # read hit
                         self.msi_s_r_hit(index, offset, tag)
+                        message_chunks[5] = S
                     elif tag_check and instruction == WRITE:
                         # write hit
                         self.msi_invalidate_broadcast(index, offset, tag)
                         self.msi_s_w_hit(index, offset, tag)
+                        message_chunks[5] = S
                     else:
                         # eviction - silent drop
                         self.msi_s_eviction(index, offset, tag)
+                        message_chunks[5] = I
                         if instruction == READ:
                             self.msi_i_r(index, offset, tag)
                         elif instruction == WRITE:
                             self.msi_i_w(index, offset, tag)
 
                 elif self.storage[index].state == I:
+                    message_chunks[5] = I
                     if instruction == READ:
                         self.msi_i_r(index, offset, tag)
                     elif instruction == WRITE:
                         self.msi_i_w(index, offset, tag)
                         self.msi_invalidate_broadcast(index, offset, tag)
 
-            elif cpu != self.cache_id:
+            # TODO: MESI/MES
+            elif self.mode == MESI:
+                pass
+            elif self.mode == MES:
+                pass
+
+        elif cpu != self.cache_id:
+            if self.mode == MSI:
+                message_chunks = {'cpu': self.cache_id,
+                                  0: [],
+                                  1: []}
                 if self.storage[index].state == M:
+                    message_chunks[0].append(M)
+                    message_chunks[1].append(cpu)
                     if instruction == READ:
                         self.msi_remote_m_r(index, offset, tag)
                     elif instruction == WRITE:
                         self.msi_remote_m_w(index, offset, tag)
 
                 elif self.storage[index].state == S:
+                    message_chunks[0].append(S)
+                    message_chunks[1].append(cpu)
                     if instruction == READ:
                         self.msi_remote_s_r(index, offset, tag)
                     elif instruction == WRITE:
                         self.msi_remote_s_w(index, offset, tag)
 
-        # TODO: MESI/MES
-        elif self.mode == MESI:
-            pass
-        elif self.mode == MES:
-            pass
+            # TODO: MESI/MES
+            elif self.mode == MESI:
+                pass
+            elif self.mode == MES:
+                pass
 
-        return message
+        return message_chunks
 
     def msi_invalidate_broadcast(self, index, offset, tag):
         self.invalidation_broadcast_count += 1
@@ -166,7 +195,7 @@ class Cache():
         self.print_text('cache contents')
         print 'Index\t\tState\t\t\tData'
         for index, item in enumerate(self.storage):
-            print '{0}\t\t{1}\t\t{2}'.format(index, item.state, item.tags)
+            print '{0}\t\t{1}\t\t{2}'.format(index, item.state.ljust(9), item.tags)
         print '\n\n'
 
     def print_miss_rate(self):
@@ -229,10 +258,21 @@ class Simulator():
                 instruction = chunks[1]
                 address = ('{0:0'+str(ADDRESS_LENGTH)+'b}').format(int(chunks[2]))
 
+                message_chunks = []
                 for cache in self.caches:
-                    message = cache.access(processor, instruction, address)
-                    if self.line_by_line:
-                        print message
+                    message_chunks.append(cache.access(processor, instruction, address))
+                if self.line_by_line:
+                    message_chunks[processor][6] = []
+                    message_chunks[processor][7] = []
+                    for chunk in message_chunks:
+                        if chunk['cpu'] != processor:
+                            message_chunks[processor][6] += chunk[0]
+                            message_chunks[processor][7] += chunk[1]
+                    if not message_chunks[processor][6]:
+                        message = MESSAGE.format(*[v for k, v in message_chunks[processor].items()])
+                    else:
+                        message = MESSAGE_LONG.format(*[v for k, v in message_chunks[processor].items()])
+                    print message + '\n'
 
 
 
