@@ -1,0 +1,10 @@
+# MSI: write to cache block in state modified in another cache
+# MESI: write to cache block in state modified in another cache
+v
+P0 W 0
+p
+P1 W 0
+p
+h
+i
+o

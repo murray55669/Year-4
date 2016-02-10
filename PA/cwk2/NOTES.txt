@@ -4,7 +4,7 @@ ASSUMPTIONS:
 http://wiki.expertiza.ncsu.edu/index.php/CSC/ECE_506_Spring_2013/8a_an
 
 MSI: http://www.inf.ed.ac.uk/teaching/courses/pa/Notes/lecture04-multi.pdf p17/18
-MESI: p20/21
+MESI: http://eecourses.technion.ac.il/044800/lectures/MESI.pdf p7/8, p14
 MES: (see appendix A)
 
 

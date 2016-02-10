@@ -13,9 +13,12 @@ M = 'modified'
 E = 'exclusive'
 S = 'shared'
 I = 'invalid'
+NONE = None
 
 READ = 'R'
+READ_TEXT = 'read'
 WRITE = 'W'
+WRITE_TEXT = 'write'
 
 NO_MESSAGE = 'No message'
 
@@ -23,10 +26,22 @@ MESSAGE = 'A {0} by P{1} to word {2} looked for tag {3} in cache block {4}, ' \
           'was found in state {5} in this cache.'
 MESSAGE_LONG = MESSAGE[:-1] + ' and found in state(s) {6} in the cache(s) of P{7}.'
 
+CPU = 'cpu'
+
+V_FLAG = 'v'
+P_FLAG = 'p'
+H_FLAG = 'h'
+I_FLAG = 'i'
+O_FLAG = 'o'
+COMMENT_FLAG = '#'
+
 
 class CacheLine:
-    def __init__(self):
-        self.state = I
+    def __init__(self, mes):
+        if mes:
+            self.state = NONE
+        else:
+            self.state = I
 
         self.tags = {}
 
@@ -36,6 +51,10 @@ class Cache:
         self.cache_id = cache_id
 
         self.hit_count = 0
+        # TODO: implementerino
+        self.hit_in_M = 0
+        self.hit_in_E = 0
+        self.hit_in_S = 0
         self.miss_count = 0
         self.invalidation_count = 0
         self.invalidation_broadcast_count = 0
@@ -50,7 +69,7 @@ class Cache:
 
         self.caches = None
 
-        self.storage = [CacheLine() for x in range(line_count)]
+        self.storage = [CacheLine(mode == MES) for x in range(line_count)]
 
     def access(self, cpu, instruction, address):
         index, offset, tag = self.split_address(address)
@@ -62,45 +81,47 @@ class Cache:
             tag_check = True
 
         if cpu == self.cache_id:
+            instruction_text = READ_TEXT if instruction == READ else WRITE_TEXT
+            message_chunks = {CPU: self.cache_id,
+                              0: instruction_text,
+                              1: cpu,
+                              2: address,
+                              3: tag,
+                              4: index,
+                              5: None}
+
             if self.mode == MSI:
-                message_chunks = {'cpu': self.cache_id,
-                                  0: instruction,
-                                  1: cpu,
-                                  2: address,
-                                  3: tag,
-                                  4: index,
-                                  5: None}
                 if self.storage[index].state == M:
+                    message_chunks[5] = M
                     if tag_check:
+                        # read/write hit
                         self.msi_m_rw_hit(index, offset, tag)
-                        message_chunks[5] = M
                     else:
                         # eviction - write back
                         self.msi_m_eviction(index, offset, tag)
-                        message_chunks[5] = I
                         if instruction == READ:
                             self.msi_i_r(index, offset, tag)
                         elif instruction == WRITE:
                             self.msi_i_w(index, offset, tag)
+                        message_chunks[5] = I
 
                 elif self.storage[index].state == S:
+                    message_chunks[5] = S
                     if tag_check and instruction == READ:
                         # read hit
                         self.msi_s_r_hit(index, offset, tag)
-                        message_chunks[5] = S
                     elif tag_check and instruction == WRITE:
                         # write hit
                         self.msi_invalidate_broadcast(index, offset, tag)
                         self.msi_s_w_hit(index, offset, tag)
-                        message_chunks[5] = S
                     else:
                         # eviction - silent drop
                         self.msi_s_eviction(index, offset, tag)
-                        message_chunks[5] = I
                         if instruction == READ:
                             self.msi_i_r(index, offset, tag)
                         elif instruction == WRITE:
                             self.msi_i_w(index, offset, tag)
+                        message_chunks[5] = I
 
                 elif self.storage[index].state == I:
                     message_chunks[5] = I
@@ -110,46 +131,179 @@ class Cache:
                         self.msi_i_w(index, offset, tag)
                         self.msi_invalidate_broadcast(index, offset, tag)
 
-            # TODO: MESI/MES
+
             elif self.mode == MESI:
-                pass
+                if self.storage[index].state == M:
+                    message_chunks[5] = M
+                    if tag_check:
+                        # r/w hit
+                        self.mesi_m_rw_hit(index, offset, tag)
+                    else:
+                        # eviction - write back
+                        self.mesi_m_eviction(index, offset, tag)
+                        if instruction == READ:
+                            self.mesi_i_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mesi_i_w(index, offset, tag)
+                        message_chunks[5] = I
+
+                elif self.storage[index].state == E:
+                    message_chunks[5] = E
+                    if tag_check and instruction == READ:
+                        # read hit
+                        self.mesi_e_r_hit(index, offset, tag)
+                    elif tag_check and instruction == WRITE:
+                        # write hit
+                        self.mesi_e_w_hit(index, offset, tag)
+                    else:
+                        # eviction - silent drop
+                        self.mesi_e_eviction(index, offset, tag)
+                        if instruction == READ:
+                            self.mesi_i_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mesi_i_w(index, offset, tag)
+                        message_chunks[5] = I
+
+                elif self.storage[index].state == S:
+                    message_chunks[5] = S
+                    if tag_check and instruction == READ:
+                        # read hit
+                        self.mesi_s_r_hit(index, offset, tag)
+                    elif tag_check and instruction == WRITE:
+                        # write hit
+                        self.mesi_invalidate_broadcast(index, offset, tag)
+                        self.mesi_s_w_hit(index, offset, tag)
+                    else:
+                        # eviction - silent drop
+                        self.mesi_s_eviction(index, offset, tag)
+                        if instruction == READ:
+                            self.mesi_i_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mesi_i_w(index, offset, tag)
+                        message_chunks[5] = I
+
+                elif self.storage[index].state == I:
+                    message_chunks[5] = I
+                    if instruction == READ:
+                        self.mesi_i_r(index, offset, tag)
+                    elif instruction == WRITE:
+                        self.mesi_invalidate_broadcast(index, offset, tag)
+                        self.mesi_i_w(index, offset, tag)
+
+
             elif self.mode == MES:
-                pass
+                if self.storage[index].state == M:
+                    if tag_check:
+                        message_chunks[5] = M
+                        self.mes_m_rw_hit(index, offset, tag)
+                    else:
+                        message_chunks[5] = NONE
+
+                elif self.storage[index].state == E:
+                    if tag_check:
+                        message_chunks[5] = E
+                        if instruction == READ:
+                            self.mes_e_r_hit(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mes_e_w_hit(index, offset, tag)
+                    else:
+                        message_chunks[5] = NONE
+
+                elif self.storage[index].state == S:
+                    if tag_check:
+                        message_chunks[5] = S
+                        if instruction == READ:
+                            self.mes_s_r_hit(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mes_s_w_hit(index, offset, tag)
+                    else:
+                        message_chunks[5] = NONE
+                        if instruction == WRITE:
+                            self.mes_s_w_miss(index, offset, tag)
+
+                elif self.storage[index].state == NONE:
+                    message_chunks[5] = NONE
+                    if tag_check:
+                        pass
+                    else:
+                        if instruction == READ:
+                            self.mes_none_r_miss(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mes_none_w_miss(index, offset, tag)
+
 
         elif cpu != self.cache_id:
+            message_chunks = {CPU: self.cache_id,
+                              0: None}
+
             if self.mode == MSI:
-                message_chunks = {'cpu': self.cache_id,
-                                  0: [],
-                                  1: []}
-                if self.storage[index].state == M:
-                    message_chunks[0].append(M)
-                    message_chunks[1].append(cpu)
+                if self.storage[index].state == M and tag_check:
                     if instruction == READ:
                         self.msi_remote_m_r(index, offset, tag)
                     elif instruction == WRITE:
                         self.msi_remote_m_w(index, offset, tag)
+                    message_chunks[0] = M
 
-                elif self.storage[index].state == S:
-                    message_chunks[0].append(S)
-                    message_chunks[1].append(cpu)
+                elif self.storage[index].state == S and tag_check:
                     if instruction == READ:
                         self.msi_remote_s_r(index, offset, tag)
                     elif instruction == WRITE:
                         self.msi_remote_s_w(index, offset, tag)
+                    message_chunks[0] = S
 
-            # TODO: MESI/MES
+
             elif self.mode == MESI:
-                pass
+                if self.storage[index].state == M and tag_check:
+                    if instruction == READ:
+                        self.mesi_remote_m_r(index, offset, tag)
+                    elif instruction == WRITE:
+                        self.mesi_remote_m_w(index, offset, tag)
+                    message_chunks[0] = M
+
+                elif self.storage[index].state == E and tag_check:
+                    if instruction == READ:
+                        self.mesi_remote_e_r(index, offset, tag)
+                    elif instruction == WRITE:
+                        self.mesi_remote_e_w(index, offset, tag)
+                    message_chunks[0] = E
+
+                elif self.storage[index].state == S and tag_check:
+                    if instruction == READ:
+                        self.mesi_remote_s_r(index, offset, tag)
+                    elif instruction == WRITE:
+                        self.mesi_remote_s_w(index, offset, tag)
+                    message_chunks[0] = S
+
+
             elif self.mode == MES:
-                pass
+                if offset in self.caches[cpu].storage[index].tags and self.caches[cpu].storage[index].tags[offset] == tag:
+                    # remote cache hit
+                    pass
+                else:
+                    # remote cache miss
+                    self.storage[index].state = S
+                if self.storage[index].state == M:
+                    pass
+                elif self.storage[index].state == E:
+                    pass
+                elif self.storage[index].state == S:
+                    # this simulates every other CPU having to do a write update
+                    # triggers on hit OR miss in shared state at prime CPU
+                    self.update_count += 1
+                    self.storage[index].tags[offset] = tag
+                if tag_check:
+                    message_chunks[0] = self.storage[index].state
+                else:
+                    message_chunks[0] = NONE
+
 
         return message_chunks
 
     def msi_invalidate_broadcast(self, index, offset, tag):
         self.invalidation_broadcast_count += 1
-        for cache in self.caches:
-            if cache.cache_id != self.cache_id:
-                cache.msi_invalidate(index, offset, tag)
+
+    def mesi_invalidate_broadcast(self, index, offset, tag):
+        self.invalidation_broadcast_count += 1
 
     def msi_invalidate(self, index, offset, tag):
         if offset in self.storage[index].tags and self.storage[index].tags[offset] == tag:
@@ -157,17 +311,27 @@ class Cache:
             self.storage[index].state = I
             self.storage[index].tags = {}
 
+    def mesi_invalidate(self, index, offset, tag):
+        if offset in self.storage[index].tags and self.storage[index].tags[offset] == tag:
+            self.invalidation_count += 1
+            self.storage[index].state = I
+            self.storage[index].tags = {}
+
     # MSI transitions
+    # M
     def msi_m_rw_hit(self, index, offset, tag):
         self.hit_count += 1
     def msi_m_eviction(self, index, offset, tag):
         self.msi_invalidate(index, offset, tag)
+    # S
     def msi_s_r_hit(self, index, offset, tag):
         self.hit_count += 1
     def msi_s_w_hit(self, index, offset, tag):
         self.hit_count += 1
+        self.storage[index].state = M
     def msi_s_eviction(self, index, offset, tag):
         self.msi_invalidate(index, offset, tag)
+    # I
     def msi_i_r(self, index, offset, tag):
         self.miss_count += 1
         self.storage[index].state = S
@@ -177,16 +341,106 @@ class Cache:
         self.storage[index].state = M
         self.storage[index].tags[offset] = tag
 
+    # M remote
     def msi_remote_m_r(self, index, offset, tag):
         self.write_back_message_count += 1
         self.storage[index].state = S
     def msi_remote_m_w(self, index, offset, tag):
         self.write_back_message_count += 1
         self.msi_invalidate(index, offset, tag)
+    # S remote
     def msi_remote_s_r(self, index, offset, tag):
         pass
     def msi_remote_s_w(self, index, offset, tag):
         self.msi_invalidate(index, offset, tag)
+
+    # MESI transitions
+    # M
+    def mesi_m_rw_hit(self, index, offset, tag):
+        self.hit_count += 1
+    def mesi_m_eviction(self, index, offset, tag):
+        self.msi_invalidate(index, offset, tag)
+    # E
+    def mesi_e_r_hit(self, index, offset, tag):
+        self.hit_count += 1
+    def mesi_e_w_hit(self, index, offset, tag):
+        self.hit_count += 1
+        self.storage[index].state = M
+    def mesi_e_eviction(self, index, offset, tag):
+        self.msi_invalidate(index, offset, tag)
+    # S
+    def mesi_s_r_hit(self, index, offset, tag):
+        self.hit_count += 1
+    def mesi_s_w_hit(self, index, offset, tag):
+        self.hit_count += 1
+        self.storage[index].state = M
+    def mesi_s_eviction(self, index, offset, tag):
+        pass
+    # I
+    def mesi_i_r(self, index, offset, tag):
+        self.miss_count += 1
+        if self.only_copy(index, offset, tag):
+            self.storage[index].state = E
+        else:
+            self.storage[index].state = S
+        self.storage[index].tags[offset] = tag
+    def mesi_i_w(self, index, offset, tag):
+        self.miss_count += 1
+        self.storage[index].state = M
+        self.storage[index].tags[offset] = tag
+
+    # M remote
+    def mesi_remote_m_r(self, index, offset, tag):
+        self.write_back_message_count += 1
+        self.storage[index].state = S
+    def mesi_remote_m_w(self, index, offset, tag):
+        self.write_back_message_count += 1
+        self.mesi_invalidate(index, offset, tag)
+    # E remote
+    def mesi_remote_e_r(self, index, offset, tag):
+        self.storage[index].state = S
+    def mesi_remote_e_w(self, index, offset, tag):
+        self.mesi_invalidate(index, offset, tag)
+    # S remote
+    def mesi_remote_s_r(self, index, offset, tag):
+        pass
+    def mesi_remote_s_w(self, index, offset, tag):
+        self.mesi_invalidate(index, offset, tag)
+
+    # MES transitions
+    # M
+    def mes_m_rw_hit(self, index, offset, tag):
+        self.hit_count += 1
+    # E
+    def mes_e_r_hit(self, index, offset, tag):
+        self.hit_count += 1
+    def mes_e_w_hit(self, index, offset, tag):
+        self.hit_count += 1
+        self.storage[index].state = M
+    # S
+    def mes_s_r_hit(self, index, offset, tag):
+        self.hit_count += 1
+    def mes_s_w_hit(self, index, offset, tag):
+        self.hit_count += 1
+        self.write_update_message_count += 1
+    def mes_s_w_miss(self, index, offset, tag):
+        self.miss_count += 1
+        self.write_update_message_count += 1
+    # none
+    def mes_none_r_miss(self, index, offset, tag):
+        if self.storage[index].state != S:
+            self.storage[index].state = E
+        else:
+            self.storage[index].state = S
+    def mes_none_w_miss(self, index, offset, tag):
+        if self.storage[index].state != S:
+            self.storage[index].state = M
+        else:
+            self.storage[index].state = S
+
+    # remote
+    def mes_remote_rw_miss(self, index, offset, tag):
+        self.storage[index].state = S
 
     def print_text(self, text):
         print "Cache " + str(self.cache_id) + " " + text + ":"
@@ -210,6 +464,18 @@ class Cache:
         self.print_text('number of invalidations')
         print '{0}\n'.format(self.invalidation_count)
 
+    def print_others(self):
+        self.print_text('number of invalidation broadcasts')
+        print '{0}'.format(self.invalidation_broadcast_count)
+        self.print_text('number of write-back messages')
+        print '{0}'.format(self.write_back_message_count)
+        if self.mode == MES:
+            self.print_text('number of write-update message')
+            print '{0}'.format(self.write_update_message_count)
+            self.print_text('number of updates')
+            print '{0}'.format(self.update_count)
+        print ''
+
     def split_address(self, address):
         exp_line_size = get_bin_exponent(self.line_size)
         exp_line_count = get_bin_exponent(self.line_count)
@@ -219,6 +485,14 @@ class Cache:
         tag = address[(exp_line_size + exp_line_count):]
 
         return index, offset, tag
+
+    def only_copy(self, index, offset, tag):
+        only = True
+        for cache in self.caches:
+            if cache.cache_id != self.cache_id:
+                if offset in cache.storage[index].tags and cache.storage[index].tags[offset] == tag:
+                    only = False
+        return only
 
 
 class Simulator():
@@ -238,21 +512,28 @@ class Simulator():
     def run(self):
         for line in self.tfile:
             chunks = line.strip().split(' ')
-            if chunks[0] == 'v':
+            if chunks[0] == V_FLAG:
                 # toggle verbose
                 self.line_by_line = not self.line_by_line
-            elif chunks[0] == 'p':
+            elif chunks[0] == P_FLAG:
                 # print contents
                 for cache in self.caches:
                     cache.print_contents()
-            elif chunks[0] == 'h':
+            elif chunks[0] == H_FLAG:
                 # print hit-rate
                 for cache in self.caches:
                     cache.print_miss_rate()
-            elif chunks[0] == 'i':
+            elif chunks[0] == I_FLAG:
                 # print invalidations
                 for cache in self.caches:
                     cache.print_invalidations()
+            elif chunks[0] == O_FLAG:
+                # print other stats
+                for cache in self.caches:
+                    cache.print_others()
+            elif chunks[0] == COMMENT_FLAG:
+                # a comment
+                pass
             else:
                 processor = int(chunks[0][1])
                 instruction = chunks[1]
@@ -265,9 +546,9 @@ class Simulator():
                     message_chunks[processor][6] = []
                     message_chunks[processor][7] = []
                     for chunk in message_chunks:
-                        if chunk['cpu'] != processor:
-                            message_chunks[processor][6] += chunk[0]
-                            message_chunks[processor][7] += chunk[1]
+                        if chunk[CPU] != processor and chunk[0]:
+                            message_chunks[processor][6].append(chunk[0])
+                            message_chunks[processor][7].append(chunk[CPU])
                     if not message_chunks[processor][6]:
                         message = MESSAGE.format(*[v for k, v in message_chunks[processor].items()])
                     else:

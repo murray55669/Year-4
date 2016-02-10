@@ -1,0 +1,10 @@
+# MSI: read to cache block in state shared in another cache
+# MESI: read to cache block in state exclusive in another cache
+v
+P0 R 0
+p
+P1 R 0
+p
+h
+i
+o
