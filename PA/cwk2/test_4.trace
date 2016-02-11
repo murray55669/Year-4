@@ -1,7 +1,7 @@
 # MESI: read to cache block in state shared in another cache
+# MES: read to cache block in state shared in another cache
 v
 P0 R 0
-p
 P1 R 0
 p
 P2 R 0
