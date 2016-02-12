@@ -231,66 +231,73 @@ class Cache:
                               0: None}
 
             if self.mode == MSI:
-                if self.storage[index].state == M and tag_check:
-                    if instruction == READ:
-                        self.msi_m_remote_r(index, offset, tag)
-                    elif instruction == WRITE:
-                        self.msi_m_remote_w(index, offset, tag)
-                    message_chunks[0] = M
+                if tag_check:
+                    if self.storage[index].state == M:
+                        if instruction == READ:
+                            self.msi_m_remote_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.msi_m_remote_w(index, offset, tag)
+                        message_chunks[0] = M
 
-                elif self.storage[index].state == S and tag_check:
-                    if instruction == READ:
-                        self.msi_s_remote_r(index, offset, tag)
-                    elif instruction == WRITE:
-                        self.msi_s_remote_w(index, offset, tag)
-                    message_chunks[0] = S
+                    elif self.storage[index].state == S:
+                        if instruction == READ:
+                            self.msi_s_remote_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.msi_s_remote_w(index, offset, tag)
+                        message_chunks[0] = S
 
 
             elif self.mode == MESI:
-                if self.storage[index].state == M and tag_check:
-                    if instruction == READ:
-                        self.mesi_remote_m_r(index, offset, tag)
-                    elif instruction == WRITE:
-                        self.mesi_remote_m_w(index, offset, tag)
-                    message_chunks[0] = M
+                if tag_check:
+                    if self.storage[index].state == M:
+                        if instruction == READ:
+                            self.mesi_remote_m_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mesi_remote_m_w(index, offset, tag)
+                        message_chunks[0] = M
 
-                elif self.storage[index].state == E and tag_check:
-                    if instruction == READ:
-                        self.mesi_remote_e_r(index, offset, tag)
-                    elif instruction == WRITE:
-                        self.mesi_remote_e_w(index, offset, tag)
-                    message_chunks[0] = E
+                    elif self.storage[index].state == E:
+                        if instruction == READ:
+                            self.mesi_remote_e_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mesi_remote_e_w(index, offset, tag)
+                        message_chunks[0] = E
 
-                elif self.storage[index].state == S and tag_check:
-                    if instruction == READ:
-                        self.mesi_remote_s_r(index, offset, tag)
-                    elif instruction == WRITE:
-                        self.mesi_remote_s_w(index, offset, tag)
-                    message_chunks[0] = S
+                    elif self.storage[index].state == S:
+                        if instruction == READ:
+                            self.mesi_remote_s_r(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mesi_remote_s_w(index, offset, tag)
+                        message_chunks[0] = S
 
 
             elif self.mode == MES:
                 if tag_check:
                     message_chunks[0] = self.storage[index].state
+
+                    if self.storage[index].state == M:
+                        self.write_back_message_count += 1
+
+                    # this simulates every other CPU having to do a write update
+                    if self.storage[index].state == M or self.storage[index].state == E:
+                        # triggers on miss and write at acting CPU
+                        if instruction == WRITE and not self.tag_check(index, offset, tag, cpu):
+                            self.update_count += 1
+                    elif self.storage[index].state == S:
+                        # triggers on hit OR miss and write at acting CPU
+                        if instruction == WRITE:
+                            self.update_count += 1
+                            self.storage[index].tags[offset] = tag
+
+                    if self.tag_check(index, offset, tag, cpu):
+                        # remote cache hit
+                        pass
+                    else:
+                        # remote cache miss
+                        self.storage[index].state = S
+
                 else:
                     message_chunks[0] = NONE
-
-                if self.storage[index].state == M:
-                    pass
-                elif self.storage[index].state == E:
-                    pass
-                elif self.storage[index].state == S:
-                    # this simulates every other CPU having to do a write update
-                    # triggers on hit OR miss in shared state at prime CPU
-                    self.update_count += 1
-                    self.storage[index].tags[offset] = tag
-
-                if self.tag_check(index, offset, tag, cpu):
-                    # remote cache hit
-                    pass
-                else:
-                    # remote cache miss
-                    self.storage[index].state = S
 
         return message_chunks
 
@@ -468,10 +475,11 @@ class Cache:
         total = self.miss_count + hit_total
         if total > 0:
             print '{0}%'.format((hit_total / float(total))*100)
-            print '{0}% of hits in M'.format((self.hits_in_M / float(hit_total))*100)
-            if self.mode != MSI:
-                print '{0}% of hits in E'.format((self.hits_in_E / float(hit_total))*100)
-            print '{0}% of hits in S'.format((self.hits_in_S / float(hit_total))*100)
+            if hit_total:
+                print '{0}% of hits in M'.format((self.hits_in_M / float(hit_total))*100)
+                if self.mode != MSI:
+                    print '{0}% of hits in E'.format((self.hits_in_E / float(hit_total))*100)
+                print '{0}% of hits in S'.format((self.hits_in_S / float(hit_total))*100)
             print '\n'
         else:
             print 'No data\n'
@@ -483,16 +491,15 @@ class Cache:
 
     def print_others(self):
         if self.mode == MES:
-            self.print_text('number of write-update messages')
-            print '{0}'.format(self.write_update_message_count)
             self.print_text('number of updates')
             print '{0}'.format(self.update_count)
+            self.print_text('number of write-update messages')
+            print '{0}'.format(self.write_update_message_count)
         else:
             self.print_text('number of invalidation broadcasts')
             print '{0}'.format(self.invalidation_broadcast_count)
-            self.print_text('number of write-back messages')
-            print '{0}'.format(self.write_back_message_count)
-        print ''
+        self.print_text('number of write-back messages')
+        print '{0}\n'.format(self.write_back_message_count)
 
     def split_address(self, address):
         exp_line_size = get_bin_exponent(self.line_size)
