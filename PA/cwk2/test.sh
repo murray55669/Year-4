@@ -52,17 +52,20 @@ function mes {
     python main.py test_5.trace MES 2 4
 }
 
-if [ $1 == 'MSI' ] 
+if [ $# -eq 0 ]
 then
     msi
-elif [ $1 == 'MESI' ]
-then
     mesi
-elif [ $1 == 'MES' ]
-then
     mes
 else
-    msi
-    mesi
-    mes
+    if [ $1 == 'MSI' ] 
+    then
+        msi
+    elif [ $1 == 'MESI' ]
+    then
+        mesi
+    elif [ $1 == 'MES' ]
+    then
+        mes
+    fi
 fi

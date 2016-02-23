@@ -191,6 +191,10 @@ class Cache:
                         message_chunks[5] = M
                         self.mes_m_rw_hit(index, offset, tag)
                     else:
+                        if instruction == READ:
+                            self.mes_m_r_miss(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mes_m_w_miss(index, offset, tag)
                         message_chunks[5] = NONE
 
                 elif self.storage[index].state == E:
@@ -201,6 +205,10 @@ class Cache:
                         elif instruction == WRITE:
                             self.mes_e_w_hit(index, offset, tag)
                     else:
+                        if instruction == READ:
+                            self.mes_e_r_miss(index, offset, tag)
+                        elif instruction == WRITE:
+                            self.mes_e_w_miss(index, offset, tag)
                         message_chunks[5] = NONE
 
                 elif self.storage[index].state == S:
@@ -211,9 +219,11 @@ class Cache:
                         elif instruction == WRITE:
                             self.mes_s_w_hit(index, offset, tag)
                     else:
-                        message_chunks[5] = NONE
-                        if instruction == WRITE:
+                        if instruction == READ:
+                            self.mes_s_r_miss(index, offset, tag)
+                        elif instruction == WRITE:
                             self.mes_s_w_miss(index, offset, tag)
+                        message_chunks[5] = NONE
 
                 elif self.storage[index].state == NONE:
                     message_chunks[5] = NONE
@@ -275,19 +285,13 @@ class Cache:
                 if tag_check:
                     message_chunks[0] = self.storage[index].state
 
+                    # on remote hit OR miss
                     if self.storage[index].state == M:
                         self.write_back_message_count += 1
 
-                    # this simulates every other CPU having to do a write update
-                    if self.storage[index].state == M or self.storage[index].state == E:
-                        # triggers on miss and write at acting CPU
-                        if instruction == WRITE and not self.tag_check(index, offset, tag, cpu):
-                            self.update_count += 1
-                    elif self.storage[index].state == S:
-                        # triggers on hit OR miss and write at acting CPU
-                        if instruction == WRITE:
-                            self.update_count += 1
-                            self.storage[index].tags[offset] = tag
+                    # remote write requires us to update
+                    if instruction == WRITE:
+                        self.update_count += 1
 
                     if self.tag_check(index, offset, tag, cpu):
                         # remote cache hit
@@ -420,21 +424,33 @@ class Cache:
     # M
     def mes_m_rw_hit(self, index, offset, tag):
         self.hits_in_M += 1
+    def mes_m_r_miss(self, index, offset, tag):
+        self.write_back_message_count += 1
+        self.mes_none_r_miss(index, offset, tag)
+    def mes_m_w_miss(self, index, offset, tag):
+        self.write_back_message_count += 1
+        self.mes_none_w_miss(index, offset, tag)
     # E
     def mes_e_r_hit(self, index, offset, tag):
         self.hits_in_E += 1
     def mes_e_w_hit(self, index, offset, tag):
         self.hits_in_E += 1
         self.storage[index].state = M
+    def mes_e_r_miss(self, index, offset, tag):
+        self.mes_none_r_miss(index, offset, tag)
+    def mes_e_w_miss(self, index, offset, tag):
+        self.mes_none_w_miss(index, offset, tag)
     # S
     def mes_s_r_hit(self, index, offset, tag):
         self.hits_in_S += 1
     def mes_s_w_hit(self, index, offset, tag):
         self.hits_in_S += 1
         self.write_update_message_count += 1
+    def mes_s_r_miss(self, index, offset, tag):
+        self.mes_none_r_miss(index, offset, tag)
     def mes_s_w_miss(self, index, offset, tag):
-        self.miss_count += 1
         self.write_update_message_count += 1
+        self.mes_none_w_miss(index, offset, tag)
     # none
     def mes_none_r_miss(self, index, offset, tag):
         self.miss_count += 1
@@ -442,7 +458,6 @@ class Cache:
             self.storage[index].state = E
         else:
             self.storage[index].state = S
-        # load address?
         self.storage[index].tags[offset] = tag
     def mes_none_w_miss(self, index, offset, tag):
         self.miss_count += 1
@@ -451,12 +466,7 @@ class Cache:
         else:
             self.write_update_message_count += 1
             self.storage[index].state = S
-        # load address?
         self.storage[index].tags[offset] = tag
-
-    # remote
-    def mes_remote_rw_miss(self, index, offset, tag):
-        self.storage[index].state = S
 
     def print_text(self, text):
         print "Cache " + str(self.cache_id) + " " + text + ":"
@@ -545,6 +555,15 @@ class Simulator():
         self.read_count = 0
         self.write_count = 0
 
+        self.hit_total = 0
+        self.miss_total = 0
+
+        self.invalidation_message_count = 0
+        self.data_message_count = 0
+
+        self.private_accesses = 0
+        self.shared_accesses = 0
+
     def run(self):
         for line in self.tfile:
             chunks = line.strip().split(' ')
@@ -596,9 +615,23 @@ class Simulator():
                         message = MESSAGE_LONG.format(*[v for k, v in message_chunks[processor].items()])
                     print message + '\n'
 
-        print "Run complete.\nTotal reads: {0}\nTotal writes: {1}".format(self.read_count, self.write_count)
+        for cache in self.caches:
+            self.hit_total += cache.hits_in_M + cache.hits_in_E + cache.hits_in_S
+            self.miss_total += cache.miss_count
 
+            self.invalidation_message_count += cache.invalidation_broadcast_count
+            self.data_message_count += cache.write_back_message_count + cache.write_update_message_count
 
+            self.private_accesses += cache.hits_in_M + cache.hits_in_E
+            self.shared_accesses += cache.hits_in_S
+        print "Run complete.\nTotal reads: {0}\nTotal writes: {1}\nOverall hit rate: {2:.2f}%".\
+            format(self.read_count, self.write_count, 100 * self.hit_total / float(self.hit_total + self.miss_total))
+        if self.mode != MES:
+            print "Total invalidation messages: {0}".format(self.invalidation_message_count)
+        print "Total data messages: {0}".format(self.data_message_count)
+        print "Private data accesses: {0:.2f}%\nShared data accesses: {1:.2f}%".format(
+            100 * self.private_accesses / float(self.private_accesses + self.shared_accesses),
+            100 * self.shared_accesses / float(self.private_accesses + self.shared_accesses))
 
 
 def check_args(args):
