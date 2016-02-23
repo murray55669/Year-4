@@ -2,6 +2,7 @@ ASSUMPTIONS:
 -16 bit addresses
 
 -MES: "A data write message is also sent on the bus to update memory and requesting processor on a transition from M -> S." - this happens on a read OR a write
+-MSI/MESI: remote write, causing local CPU to move from state M -> I does not trigger a write-back.
 
 http://wiki.expertiza.ncsu.edu/index.php/CSC/ECE_506_Spring_2013/8a_an
 
