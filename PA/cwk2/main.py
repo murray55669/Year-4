@@ -637,9 +637,16 @@ class Simulator:
         if self.mode != MES:
             print "Total invalidation messages: {0}".format(self.invalidation_message_count)
         print "Total data messages: {0}".format(self.data_message_count)
-        print "Private data accesses: {0:.2f}%\nShared data accesses: {1:.2f}%".format(
-            100 * self.private_accesses / float(self.private_accesses + self.shared_accesses),
-            100 * self.shared_accesses / float(self.private_accesses + self.shared_accesses))
+        divisor_private = float(self.private_accesses + self.shared_accesses)
+        divisor_shared = float(self.private_accesses + self.shared_accesses)
+        if divisor_private != 0:
+            print "Private data accesses: {0:.2f}%".format(100 * self.private_accesses / divisor_private)
+        else:
+            print "Private data accesses: N/A"
+        if divisor_shared != 0:
+            print "Shared data accesses: {0:.2f}%".format(100 * self.shared_accesses / divisor_shared)
+        else:
+            print "Shared data accesses: N/A"
 
 
 def check_args(args):
