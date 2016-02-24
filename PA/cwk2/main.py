@@ -528,8 +528,9 @@ class Cache:
             print 'No data\n'
 
     def print_invalidations(self):
-        self.print_text('number of invalidations')
-        print '{0}\n'.format(self.invalidation_count)
+        if self.mode != MES:
+            self.print_text('number of invalidations')
+            print '{0}\n'.format(self.invalidation_count)
 
     def print_others(self):
         if self.mode == MES:
