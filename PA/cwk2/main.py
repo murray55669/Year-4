@@ -75,6 +75,16 @@ class Cache:
 
         self.storage = [CacheLine(mode == MES) for x in range(line_count)]
 
+    def load_line(self, index, offset, tag, state):
+        base_offset = offset % self.line_size
+
+        for i in range(0, self.line_size):
+            self.storage[index].tags[base_offset + i] = tag
+
+        self.storage[index].state = state
+
+
+
     def access(self, cpu, instruction, address):
         index, offset, tag = self.split_address(address)
 
@@ -308,7 +318,7 @@ class Cache:
         if self.tag_check(index, offset, tag):
             self.invalidation_count += 1
             self.storage[index].state = I
-            self.storage[index].tags = {}
+            self.storage[index].tags.clear()
 
     # MSI transitions
     # M
@@ -338,13 +348,11 @@ class Cache:
     # I
     def msi_i_r(self, index, offset, tag):
         self.miss_count += 1
-        self.storage[index].state = S
-        self.storage[index].tags[offset] = tag
+        self.load_line(index, offset, tag, S)
     def msi_i_w(self, index, offset, tag):
         self.miss_count += 1
         self.invalidation_broadcast_count += 1
-        self.storage[index].state = M
-        self.storage[index].tags[offset] = tag
+        self.load_line(index, offset, tag, M)
 
     # M remote
     def msi_m_remote_r(self, index, offset, tag):
@@ -400,15 +408,14 @@ class Cache:
     def mesi_i_r(self, index, offset, tag):
         self.miss_count += 1
         if self.only_copy(index, offset, tag):
-            self.storage[index].state = E
+            new_state = E
         else:
-            self.storage[index].state = S
-        self.storage[index].tags[offset] = tag
+            new_state = S
+        self.load_line(index, offset, tag, new_state)
     def mesi_i_w(self, index, offset, tag):
         self.miss_count += 1
         self.invalidation_broadcast_count += 1
-        self.storage[index].state = M
-        self.storage[index].tags[offset] = tag
+        self.load_line(index, offset, tag, M)
 
     # M remote
     def mesi_m_remote_r(self, index, offset, tag):
@@ -463,18 +470,18 @@ class Cache:
     def mes_none_r_miss(self, index, offset, tag):
         self.miss_count += 1
         if self.only_copy(index, offset, tag):
-            self.storage[index].state = E
+            new_state = E
         else:
-            self.storage[index].state = S
-        self.storage[index].tags[offset] = tag
+            new_state = S
+        self.load_line(index, offset, tag, new_state)
     def mes_none_w_miss(self, index, offset, tag):
         self.miss_count += 1
         if self.only_copy(index, offset, tag):
-            self.storage[index].state = M
+            new_state = M
         else:
             self.write_update_message_count += 1
-            self.storage[index].state = S
-        self.storage[index].tags[offset] = tag
+            new_state = S
+        self.load_line(index, offset, tag, new_state)
 
     def print_text(self, text):
         print "Cache " + str(self.cache_id) + " " + text + ":"
