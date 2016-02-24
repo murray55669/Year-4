@@ -93,6 +93,11 @@ class Cache:
         tag_check = self.tag_check(index, offset, tag)
 
         if cpu == self.cache_id:
+            if instruction == READ:
+                self.read_count += 1
+            elif instruction == WRITE:
+                self.write_count += 1
+
             instruction_text = READ_TEXT if instruction == READ else WRITE_TEXT
             message_chunks = {CPU: self.cache_id,
                               0: instruction_text,
