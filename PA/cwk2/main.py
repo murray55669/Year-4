@@ -332,6 +332,12 @@ class Cache:
         self.storage[index].state = I
         self.storage[index].tags.clear()
 
+    def invalidate_from_remote(self, index, offset, tag):
+        if self.tag_check(index, offset, tag):
+            self.invalidation_count += 1
+            self.storage[index].state = I
+            self.storage[index].tags.clear()
+
     # MSI transitions
     # M
     def msi_m_rw_hit(self, index, offset, tag):
@@ -372,12 +378,12 @@ class Cache:
         self.storage[index].state = S
     def msi_m_remote_w(self, index, offset, tag):
         # no write-back message, as the remote CPU will now have a newer, modified entry
-        self.invalidate(index, offset, tag)
+        self.invalidate_from_remote(index, offset, tag)
     # S remote
     def msi_s_remote_r(self, index, offset, tag):
         pass
     def msi_s_remote_w(self, index, offset, tag):
-        self.invalidate(index, offset, tag)
+        self.invalidate_from_remote(index, offset, tag)
 
     # MESI transitions
     # M
@@ -435,17 +441,17 @@ class Cache:
         self.storage[index].state = S
     def mesi_m_remote_w(self, index, offset, tag):
         # no write-back message, as the remote CPU will now have a newer, modified entry
-        self.invalidate(index, offset, tag)
+        self.invalidate_from_remote(index, offset, tag)
     # E remote
     def mesi_e_remote_r(self, index, offset, tag):
         self.storage[index].state = S
     def mesi_e_remote_w(self, index, offset, tag):
-        self.invalidate(index, offset, tag)
+        self.invalidate_from_remote(index, offset, tag)
     # S remote
     def mesi_s_remote_r(self, index, offset, tag):
         pass
     def mesi_s_remote_w(self, index, offset, tag):
-        self.invalidate(index, offset, tag)
+        self.invalidate_from_remote(index, offset, tag)
 
     # MES transitions
     # M
