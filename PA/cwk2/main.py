@@ -532,7 +532,11 @@ class Cache:
             self.print_text('number of invalidation broadcasts')
             print '{0}'.format(self.invalidation_broadcast_count)
         self.print_text('number of write-back messages')
-        print '{0}\n'.format(self.write_back_message_count)
+        print '{0}'.format(self.write_back_message_count)
+        self.print_text('number of reads')
+        print '{0}'.format(self.read_count)
+        self.print_text('number of writes')
+        print '{0}'.format(self.write_count)
         self.print_text('number of evictions')
         print '{0}\n'.format(self.eviction_count)
 
