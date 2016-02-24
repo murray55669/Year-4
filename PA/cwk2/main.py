@@ -58,7 +58,7 @@ class Cache:
         self.read_count = 0
         self.write_count = 0
 
-        self.eviction_count = 0
+        self.rw_miss_eviction_count = 0
 
         # MSI/MESI only
         self.invalidation_count = 0
@@ -119,7 +119,7 @@ class Cache:
                             self.msi_m_r_eviction(index, offset, tag)
                         elif instruction == WRITE:
                             self.msi_m_w_eviction(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = I
 
                 elif self.storage[index].state == S:
@@ -136,7 +136,7 @@ class Cache:
                             self.msi_s_r_eviction(index, offset, tag)
                         elif instruction == WRITE:
                             self.msi_s_w_eviction(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = I
 
                 elif self.storage[index].state == I:
@@ -159,7 +159,7 @@ class Cache:
                             self.mesi_m_r_eviction(index, offset, tag)
                         elif instruction == WRITE:
                             self.mesi_m_w_eviction(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = I
 
                 elif self.storage[index].state == E:
@@ -176,7 +176,7 @@ class Cache:
                             self.mesi_e_r_eviction(index, offset, tag)
                         elif instruction == WRITE:
                             self.mesi_e_w_eviction(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = I
 
                 elif self.storage[index].state == S:
@@ -193,7 +193,7 @@ class Cache:
                             self.mesi_s_r_eviction(index, offset, tag)
                         elif instruction == WRITE:
                             self.mesi_s_w_eviction(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = I
 
                 elif self.storage[index].state == I:
@@ -214,7 +214,7 @@ class Cache:
                             self.mes_m_r_miss(index, offset, tag)
                         elif instruction == WRITE:
                             self.mes_m_w_miss(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = NONE
 
                 elif self.storage[index].state == E:
@@ -229,7 +229,7 @@ class Cache:
                             self.mes_e_r_miss(index, offset, tag)
                         elif instruction == WRITE:
                             self.mes_e_w_miss(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = NONE
 
                 elif self.storage[index].state == S:
@@ -244,7 +244,7 @@ class Cache:
                             self.mes_s_r_miss(index, offset, tag)
                         elif instruction == WRITE:
                             self.mes_s_w_miss(index, offset, tag)
-                        self.eviction_count += 1
+                        self.rw_miss_eviction_count += 1
                         message_chunks[5] = NONE
 
                 elif self.storage[index].state == NONE:
@@ -328,10 +328,9 @@ class Cache:
         return message_chunks
 
     def invalidate(self, index, offset, tag):
-        if self.tag_check(index, offset, tag):
-            self.invalidation_count += 1
-            self.storage[index].state = I
-            self.storage[index].tags.clear()
+        self.invalidation_count += 1
+        self.storage[index].state = I
+        self.storage[index].tags.clear()
 
     # MSI transitions
     # M
@@ -543,7 +542,7 @@ class Cache:
         self.print_text('number of writes')
         print '{0}'.format(self.write_count)
         self.print_text('number of evictions')
-        print '{0}\n'.format(self.eviction_count)
+        print '{0}\n'.format(self.rw_miss_eviction_count)
 
     def split_address(self, address):
         exp_line_size = get_bin_exponent(self.line_size)
