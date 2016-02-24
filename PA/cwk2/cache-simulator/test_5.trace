@@ -1,0 +1,13 @@
+# MESI: write to cache block in state shared in another cache
+# MES: write to cache block in state shared in another cache
+v
+P0 R 0
+P1 R 0
+p
+i
+o
+P2 W 0
+p
+i
+o
+h
