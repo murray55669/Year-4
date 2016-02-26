@@ -13,3 +13,7 @@ d0f919944af310923298118c332791eb
 -MD5 will hash with 29 length string
 -memcmp needs \x00\x91\xeb as the last 3 bytes of both 16 length arrays
 -need to find a 29 length string (call it S), with \x00\x91\xeb at pos 13,14,15, which, when hashed, becomes a 16 length string with last 3 bytes \x00\x91\xeb where the other 13 bytes are equal to the first 13 bytes of S
+
+run <<< `perl -e 'print "\0\0\0\0AAAA\0\0\0\0BBBB\0\0\0\0CCCC\0\0\0\0DDDD"'`
+
+echo -e "\x49\x5a\x4e\x52\x48\x49\x41\x56\x5a\x43\x54\x52\x51\x4c\x43\x00\x81\xae\xf3\xdf\xa2\x45\xb1\x57\x19\xb3\xa9\xb8\x7d\x00\x91\xeb" | ./vulnerable

@@ -11,8 +11,9 @@ int main(int argc, char** argv) {
     int count = 0;
     int index;
     char rand_str[16];
+    rand_str[15] = 0x00;
     
-    int str_len = 29;
+    int str_len = 15;
 
     char end0 = 0x00;
     char end1 = 0x91;
@@ -26,7 +27,7 @@ int main(int argc, char** argv) {
     while(1) {
         count++;
 
-        for (index = 0; index < 16; index++) {
+        for (index = 0; index < 15; index++) {
             rand_str[index] = 'A' + (rand() % 26);
         }
 
