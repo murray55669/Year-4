@@ -39,6 +39,7 @@ int main(int argc, char** argv) {
             print_array(hashed);
             printf("Target length: %d\nAttempts: %d\n", str_len, count);
             print_array_c(rand_str);
+            print_array_c(hashed);
             
             break;
         }

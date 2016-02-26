@@ -5,3 +5,11 @@ p [variable] - print as intended
 run <<< `perl -e 'print "[string][digest]"'`
 
 gcc -lcrypto generator.c -o generator
+
+correct hash: 
+0xd0, 0xf9, 0x19, 0x94, 0x4a, 0xf3, 0x10, 0x92, 0x32, 0x98, 0x11, 0x8c, 0x33, 0x27, 0x91, 0xeb
+d0f919944af310923298118c332791eb
+
+-MD5 will hash with 29 length string
+-memcmp needs \x00\x91\xeb as the last 3 bytes of both 16 length arrays
+-need to find a 29 length string (call it S), with \x00\x91\xeb at pos 13,14,15, which, when hashed, becomes a 16 length string with last 3 bytes \x00\x91\xeb where the other 13 bytes are equal to the first 13 bytes of S
