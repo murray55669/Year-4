@@ -1,0 +1,7 @@
+[(gdb) run --or-- ./vulnerable] <<< `perl -e 'print "ABCDABCDABCDEFGHEFGHEFGHEFGH","\x0"'`
+x/4x [variable] - print as hex
+p [variable] - print as intended
+
+run <<< `perl -e 'print "[string][digest]"'`
+
+gcc -lcrypto generator.c -o generator
