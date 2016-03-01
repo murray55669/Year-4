@@ -1,0 +1,24 @@
+*** vulnerable-old.c	2016-02-29 15:52:32.928423653 +0000
+--- vulnerable.c	2016-02-29 15:59:08.725089944 +0000
+***************
+*** 30,40 ****
+      };
+      char password[16];
+  
+-     // Show the relative position of the buffers, should be 16
+-     //printf("%li \n",correct_hash-password);
+- 
+      printf("Insert your password: ");
+!     scanf("%29s", password);
+  
+      MD5(password, strlen(password), password);
+  
+--- 30,37 ----
+      };
+      char password[16];
+  
+      printf("Insert your password: ");
+!     scanf("%15s", password);
+  
+      MD5(password, strlen(password), password);
+  
