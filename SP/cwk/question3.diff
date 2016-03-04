@@ -16,7 +16,7 @@ diff -ur http-old/include/functions.php http/include/functions.php
 -    setcookie("session", md5($username));
 +    $_SESSION["username"] = $username;
 +    $_SESSION["session"] = md5($username);
-+    $_SESSION["csrf_key"] = openssl_random_psuedo_bytes(16);
++    $_SESSION["csrf_key"] = openssl_random_pseudo_bytes(16);
  }
  
  // Check a session token

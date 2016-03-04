@@ -1,0 +1,13 @@
+Communication:
+Blocking:
+-MPI_Send - synchronous, blocking send
+-MPI_Bsend (as above, but programmer has to allocate buffer)
+-MPI_Recv - synchronous, blocking receive
+Non-blocking:
+-MPI_Isend - "immediate" send
+-MPI_Irecv - "immediate" receive
+    -extra parameter used, a "request"
+    
+Check for a message:
+-MPI_Probe
+-MPI_Iprobe
