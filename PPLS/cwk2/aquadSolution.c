@@ -1,3 +1,28 @@
+/*
+Implementation:
+The farmer checks for, and processes, messages from the workers
+Initially, it sets up the A to B interval as the first task in the bag
+It reacts to requests for tasks by attempting to provide new tasks from the bag
+It reacts to tasks being produced by adding the tasks to the bag
+It reacts to workers returning results by adding the results to a running total
+It tracks the number of active workers, incrementing the count when a task is given out, and decrementing it when a result or two tasks are returned.
+When there are no more tasks, and all workers are inactive, it shuts down the workers and returns the final result
+
+The workers check for, and process, messages from the farmer
+If the farmer declares there are no tasks available, the worker polls the farmer until a task becomes available
+If the farmer declares there will be no more tasks, the worker shuts down
+If the farmer produces a task for the worker, the worker computes area, and then either sends a result or two new tasks to the farmer depending on the accuracy of the area computed
+
+Choice of MPI primitives:
+MPI_Send and MPI_Recv used to pass data between processes.
+MPI_Send was used as it is the simplest send to use, from a programming perspective, and accomplishes what it needs to.
+MPI_Recv was used for similar reasons.
+MPI_Probe was used to check for messages to process, to allow the message to be handled properly. Again, the simplest option available.
+Ready-mode versions of send/receive could have been used, but this would potentially have added complexity to the code, making it more difficult to produce/bug-fix. 
+Immediate versions of send/receive/probe could have been used, but this would have required extra code, again, to ensure a correct implementation.
+As speed etc. was not a requirement of the program, using the simplest available method was sufficient, and enabled faster development.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -12,19 +37,15 @@
 #define SLEEPTIME 1
 
 // Messages from the workers
-// WORKER_GET_TASK - request a new task
-#define WORKER_GET_TASK 50
-// WORKER_ADD_TASKS - add two new tasks to the bad
-#define WORKER_ADD_TASKS 51
-// WORKER_RETURN_RESULT - return the result if we meet the criteria
-#define WORKER_RETURN_RESULT 52
+#define WORKER_GET_TASK 50 // request a new task
+#define WORKER_ADD_TASKS 51 // add two new tasks to the bag
+#define WORKER_RETURN_RESULT 52 // return the result if we meet the criteria
 // Messages from the farmer
-// FARMER_TASK - give the worker a task
-#define FARMER_TASK 53
-// FARMER_NO_TASK - inform the worker that there is currently no task
-#define FARMER_NO_TASK 54
-// FARMER_NO_MORE_TASKS - inform the worker that there will be no further tasks
-#define FARMER_NO_MORE_TASKS 55
+#define FARMER_TASK 53 // give the worker a task
+#define FARMER_NO_TASK 54 // inform the worker that there is currently no task
+#define FARMER_NO_MORE_TASKS 55 // inform the worker that there will be no further tasks
+
+double dummy_data[2] = {0, 0};
 
 int *tasks_per_process;
 
@@ -78,19 +99,97 @@ int main(int argc, char **argv ) {
 }
 
 double farmer(int numprocs) {
-  // You must complete this function
-  /*
-    Use stack pre-implemented to store tasks?
-    Store tasks as a stack of LPoint, RPoint pairs
+  stack *stack = new_stack();
+  double range[2] = {A, B};
+  push(range, stack);
+  
+  int active_workers = 0;
+  double final_result = 0;
+  
+  double rec_data[2];
+  double rec_data_tasks[3];
+  double rec_data_result[1];
+  MPI_Status status;
+  
+  while(1) {
+    if (is_empty(stack) && active_workers == 0) { // Computation has completed: cleanup and return result
+      int i;
+      for (i = 1; i < numprocs; ++i) {
+        MPI_Send(dummy_data, 2, MPI_DOUBLE, i, FARMER_NO_MORE_TASKS, MPI_COMM_WORLD);
+      }
+      free_stack(stack);
+      return final_result;
+    }
     
-    Initial: push {A,B} onto the stack
+    MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status); // Wait for a message
     
-    Loop: probe the COMM channel for 
-  */
+    if (status.MPI_TAG == WORKER_GET_TASK) { // Worker looking for a new task
+      MPI_Recv(rec_data, 2, MPI_DOUBLE, MPI_ANY_SOURCE, WORKER_GET_TASK, MPI_COMM_WORLD, &status);
+      
+      if (is_empty(stack)) { // If there are no tasks remaining, inform the worker
+        MPI_Send(dummy_data, 2, MPI_DOUBLE, status.MPI_SOURCE, FARMER_NO_TASK, MPI_COMM_WORLD);
+      } else { // If there are tasks remaining, provide one to the worker
+        double *snd_dat = pop(stack);
+        MPI_Send(snd_dat, 2, MPI_DOUBLE, status.MPI_SOURCE, FARMER_TASK, MPI_COMM_WORLD);
+        ++tasks_per_process[status.MPI_SOURCE]; // count number of tasks given to each worker
+        ++active_workers;
+      }
+    } else if (status.MPI_TAG == WORKER_ADD_TASKS) { // Worker returning a pair of tasks, which get added to the bag
+      MPI_Recv(rec_data_tasks, 3, MPI_DOUBLE, MPI_ANY_SOURCE, WORKER_ADD_TASKS, MPI_COMM_WORLD, &status);
+      int i;
+      for (i = 0; i < 2; ++i) {
+        range[0] = rec_data_tasks[i];
+        range[1] = rec_data_tasks[i+1];
+        push(range, stack);
+      }
+      --active_workers;
+    } else if (status.MPI_TAG == WORKER_RETURN_RESULT) { // Worker returning a result, which gets addes to the total
+      MPI_Recv(rec_data_result, 1, MPI_DOUBLE, MPI_ANY_SOURCE, WORKER_RETURN_RESULT, MPI_COMM_WORLD, &status);
+      final_result += rec_data_result[0];
+      --active_workers;
+    }
+  }
 }
 
 void worker(int mypid) {
-  // You must complete this function
+  double snd_data[3];
+  double snd_data_result[1];
+  double rec_data[2];
+  double mid, fmid, larea, rarea, left, right, fleft, fright, lrarea;
+  MPI_Status status;
   
-  usleep(SLEEPTIME); // Allow multiprocess simulation
+  while(1) {
+    // All sends/receives aimed at process 0, the farmer
+    MPI_Send(dummy_data, 2, MPI_DOUBLE, 0, WORKER_GET_TASK, MPI_COMM_WORLD); // Attempt to get a task
+    MPI_Recv(rec_data, 2, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+
+    usleep(SLEEPTIME); // Allow multiprocess simulation
+    
+		if (status.MPI_TAG == FARMER_NO_TASK) { // No task currently - try again (with a delay/in a multiprocess manner due to 'usleep')
+      continue; 
+    } else if (status.MPI_TAG == FARMER_NO_MORE_TASKS) { // No more tasks - end the worker
+      return; 
+    }
+    
+    // Calculate area
+    left = rec_data[0];
+    right = rec_data[1];
+    mid = (left + right) / 2;
+    fleft = F(left);
+    fmid = F(mid);
+    fright = F(right);
+    larea = (fleft + fmid) * (mid - left) / 2;
+    rarea = (fmid + fright) * (right - mid) / 2;
+    lrarea = (fleft + fright) * ((right - left)/2);
+    
+    if(fabs((larea + rarea) - lrarea) > EPSILON) { // Area not accurate enough - create 2 new tasks
+      snd_data[0] = left;
+      snd_data[1] = mid;
+      snd_data[2] = right;
+      MPI_Send(snd_data, 3, MPI_DOUBLE, 0, WORKER_ADD_TASKS, MPI_COMM_WORLD);
+    } else { // Area accurate enough - send result
+      snd_data_result[0] = larea + rarea;
+      MPI_Send(snd_data_result, 1, MPI_DOUBLE, 0, WORKER_RETURN_RESULT, MPI_COMM_WORLD);
+    }
+  }
 }
