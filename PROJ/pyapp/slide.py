@@ -10,6 +10,7 @@ class Slide(object):
         self.label_rows = 1
         self.label_entries = []
         self.label_buttons = []
+        self.flip_buttons = []
         self.label_id = 0
 
         self.thresh_value = THRESH_DEFAULT
