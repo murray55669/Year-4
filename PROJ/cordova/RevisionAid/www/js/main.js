@@ -38,6 +38,11 @@ var navList;
 var pageList;
 var textWrap;
 
+var textButton;
+var navButton;
+var pageButton;
+
+var labels = [];
 
 var data;
 
@@ -223,8 +228,6 @@ function goToSlide(value) {
 			}
 		}
 	}
-	var navButton = document.getElementById('nav_button');
-	var textButton = document.getElementById('text_button');
 	
 	var enabled = 'button noselect bold';
 	var disabled = 'button noselect bold disabled';
@@ -258,11 +261,28 @@ function hideDisplay(element) {
 function showDisplay(element) {
 	element.style.display = '';
 }
+function toggleHighlightButton(element) {
+    if (element.style.background == '') {
+		element.style.background = '#d0d0d0';
+	} else {
+		element.style.background = '';
+	}
+}
+function highlightButton(element) {
+    element.style.background = '#d0d0d0;'
+}
+function lowlightButton(element) {
+    element.style.background = '';
+}
 
 function toggleSlidesList() {
 	toggleDisplay(navList);
 	hideDisplay(pageList);
 	hideDisplay(textWrap);
+    
+    lowlightButton(textButton);
+    toggleHighlightButton(navButton);
+    lowlightButton(pageButton);
 	
 	if (navList.style.display == '') {
 		var entries = document.getElementsByClassName('slide_list_entry');
@@ -277,6 +297,10 @@ function togglePagesList() {
 	hideDisplay(navList);
 	hideDisplay(textWrap);
 	
+    lowlightButton(textButton);
+    lowlightButton(navButton);
+    toggleHighlightButton(pageButton);
+    
 	if (pageList.style.display == '') {
 		var entries = document.getElementsByClassName('page_list_entry');
 		for (var i = 0; i < entries.length; i++) {
@@ -293,12 +317,26 @@ function toggleText() {
 		toggleDisplay(textWrap);
 		hideDisplay(navList);
 		hideDisplay(pageList);
+        
+        toggleHighlightButton(textButton);
+        lowlightButton(navButton);
+        lowlightButton(pageButton);
 		
 		if (textWrap.style.display == '') {
 			var text = document.getElementById('text');
 			var breaks = slides[currentSlide].text.replace(/\n/g, "<br>");
             text.innerHTML = breaks;
 		}
+    }
+}
+function toggleLabels() {
+    alert("toggling labels");
+    for (var i = 0; i < labels.length; i++) {
+        if (labels[i].style.display == '') {
+            labels[i].style.display = 'none'
+        } else {
+            labels[i].style.display = ''
+        }
     }
 }
 
@@ -357,6 +395,7 @@ function addLabel(labelData) {
         label.appendChild(label_marker);
         label.appendChild(label_text);
     }
+    labels.push(label)
     document.getElementById('images_wrapper').appendChild(label);
 }
 function labelTopOffset(pct) {
@@ -380,6 +419,10 @@ function hideOverlays() {
 	hideDisplay(textWrap);
 	hideDisplay(navList);
 	hideDisplay(pageList);
+    
+    lowlightButton(textButton);
+    lowlightButton(navButton);
+    lowlightButton(pageButton);
 }
 function hideTutorial() {
 	localStorage.setItem("skipTutorial", 1)
@@ -468,6 +511,10 @@ function generateContent() {
 	navList = document.getElementById('nav_list');
 	pageList = document.getElementById('page_list');
 	textWrap = document.getElementById('text_wrap');
+    
+    textButton = document.getElementById('text_button');
+    navButton = document.getElementById('nav_button');
+    pageButton = document.getElementById('page_button');
 
 	loadState();
 }
