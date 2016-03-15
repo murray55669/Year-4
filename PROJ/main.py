@@ -10,21 +10,10 @@ from pyapp.page import *
 from pyapp.constants import *
 from pyapp.utils import *
 
-"""
-TODO:
-EDITOR:
--REFACTOR REFACTOR REFACTOR
-
--delete slide option? delete page option?
-
--some way to pass in/set an offset for "page-index" when exporting to easy chopping stuff together
-"""
-
 
 class Gui(object):
     def __init__(self):
         # check if a temp folder exits, if so wipe it
-        # TODO: load from this folder instead
         if os.path.exists(TEMP_DIR):
             shutil.rmtree(TEMP_DIR)
             time.sleep(1)
@@ -73,30 +62,31 @@ class Gui(object):
         self.toolbox.resizable(width=FALSE, height=FALSE)
         self.toolbox.wm_title("Toolbox")
         self.toolbox.protocol("WM_DELETE_WINDOW", self.quit)
-        self.crop_tool = Button(self.toolbox, text="Crop", command=self.crop)
+        self.crop_tool = Button(self.toolbox, text="[C]rop", command=self.crop, underline=1)
         self.crop_tool.grid(row=0, column=0)
-        self.erase_tool = Button(self.toolbox, text="Erase", command=self.erase)
+        self.erase_tool = Button(self.toolbox, text="[E]rase", command=self.erase, underline=1)
         self.erase_tool.grid(row=0, column=1)
 
-        self.move_layer_tool = Button(self.toolbox, text="Move Layer", command=self.move_layer)
+        self.move_layer_tool = Button(self.toolbox, text="[D] Move Layer", command=self.move_layer, underline=1)
         self.move_layer_tool.grid(row=1, column=0)
-        self.toggle_layers_tool = Button(self.toolbox, text="Toggle Layer Visibility", command=self.toggle_layers)
+        self.toggle_layers_tool = Button(self.toolbox, text="Toggle Layer [V]isibility", command=self.toggle_layers,
+                                         underline=14)
         self.toggle_layers_tool.grid(row=1, column=1)
 
-        self.label_tool = Button(self.toolbox, text="Label", command=self.label)
+        self.label_tool = Button(self.toolbox, text="[T] Label", command=self.label, underline=1)
         self.label_tool.grid(row=2, column=0)
 
-        self.export_tool = Button(self.toolbox, text="Export", command=self.export)
+        self.export_tool = Button(self.toolbox, text="[e] Export", command=self.export, underline=1)
         self.export_tool.grid(row=3, column=0)
-        self.open_file_tool = Button(self.toolbox, text="Open File", command=self.open_file)
+        self.open_file_tool = Button(self.toolbox, text="[o] Open File", command=self.open_file, underline=1)
         self.open_file_tool.grid(row=3, column=1)
 
-        self.undo_tool = Button(self.toolbox, text="Undo", command=self.undo)
+        self.undo_tool = Button(self.toolbox, text="[z] Undo", command=self.undo, underline=1)
         self.undo_tool.grid(row=4, column=0)
-        self.redo_tool = Button(self.toolbox, text="Redo", command=self.redo)
+        self.redo_tool = Button(self.toolbox, text="[y] Redo", command=self.redo, underline=1)
         self.redo_tool.grid(row=4, column=1)
 
-        self.accept_tool = Button(self.toolbox, text="Accept", command=self.accept)
+        self.accept_tool = Button(self.toolbox, text="["+u"\u23CE"+"] Accept", command=self.accept, underline=1)
         self.accept_tool.grid(row=5, column=0)
 
         # editor
@@ -123,7 +113,7 @@ class Gui(object):
         self.slide_label = Label(self.root, text="Slides")
         self.slide_label.grid(row=0, column=cols)
 
-        self.file_options = {'initialdir': '~/Year-4/PROJ'}  # TODO: this should save/reload instead of having default
+        self.file_options = {'initialdir': '~/Year-4/PROJ'}
         self.open_file_button = Button(self.root, text="Add Slide", command=self.open_file)
         self.open_file_button.grid(row=1, column=cols)
 
@@ -241,6 +231,8 @@ class Gui(object):
                 label_entry.grid_forget()
             for label_button in self.slide().label_buttons:
                 label_button.grid_forget()
+            for flip_button in self.slide().flip_buttons:
+                flip_button.grid_forget()
 
         # update current slide
         if self.page().slides:
@@ -257,9 +249,10 @@ class Gui(object):
             for index in range(0, len(self.slide().label_entries)):
                 self.slide().label_entries[index].grid(row=self.slide().label_rows, column=self.label_cols)
                 self.slide().label_buttons[index].grid(row=self.slide().label_rows, column=self.label_cols+1)
+                self.slide().flip_buttons[index].grid(row=self.slide().label_rows, column=self.label_cols+2)
                 self.slide().label_rows += 1
             # set  the threshold slider
-            #self.thresh_slide.set(self.slide().thresh_value)
+            # self.thresh_slide.set(self.slide().thresh_value) # TODO: causes issues
 
         self.no_op()
 
@@ -278,6 +271,8 @@ class Gui(object):
                     label_entry.grid_forget()
                 for label_button in self.slide().label_buttons:
                     label_button.grid_forget()
+                for flip_button in self.slide().flip_buttons:
+                    flip_button.grid_forget()
 
             # update page
             self.page_index.set(max(min(index, (len(self.pages)-1)), 0))
@@ -561,13 +556,18 @@ class Gui(object):
             self.slide().label_buttons.append(button)
             button.grid(row=self.slide().label_rows, column=self.label_cols+1)
 
+            flip_button = Button(self.root, command=lambda: self.label_flip(copy), text="Not Flipped")
+            self.slide().flip_buttons.append(flip_button)
+            flip_button.grid(row=self.slide().label_rows, column=self.label_cols+2)
+
             label_data = {HIST_OP: ADD_LABEL,
                           'id': self.slide().label_id,
                           'label': label,
                           'button': button,
                           'colour': colour,
                           'point': None,
-                          'grid_col': self.label_cols}
+                          'grid_col': self.label_cols,
+                          'flipped': False}
 
             self.slide().labels.append(label_data)
             self.page().op_history_add(label_data)
@@ -611,6 +611,14 @@ class Gui(object):
             self.label()
 
         self.refresh_image()
+
+    def label_flip(self, label_id):
+        label = self.get_label_by_id(label_id)
+        label['flipped'] = not(label['flipped'])
+        button_text = "Not Flipped"
+        if label['flipped']:
+            button_text = "Flipped"
+        self.slide().flip_buttons[label_id].config(text=button_text)
 
     def get_label_by_id(self, label_id):
         for label in self.slide().labels:
@@ -664,9 +672,12 @@ class Gui(object):
                 if slide.image_render is None:
                     slide.image_render = np.load(TEMP_DIR+page.path+IMAGE_RENDER_DUMP+'_'+str(slide_index)+'.npy')
                     loaded = True
+                # scale the image
+                export_scale = calc_scale_ratio(IMAGE_WIDTH_PHONE, slide.image_render.shape)
+                image_render_scaled = cv2.resize(slide.image_render, (0, 0), fx=export_scale, fy=export_scale)
                 # then save image
                 slide_loc = page_dir+'/'+str(slide_index)
-                cv2.imwrite(slide_loc+'.png', cv2.cvtColor(slide.image_render, cv2.COLOR_RGBA2BGRA))
+                cv2.imwrite(slide_loc+'.png', cv2.cvtColor(image_render_scaled, cv2.COLOR_RGBA2BGRA))
                 if loaded:
                     slide.image_render = None
 
@@ -692,9 +703,13 @@ class Gui(object):
                     if label['point']:
                         x_pct = ((label['point'][0] - x1) / float(x2 - x1)) * 100
                         y_pct = ((label['point'][1] - y1) / float(y2 - y1)) * 100
-                        label_list.append({'xPos': x_pct,
+                        label_list_item = {'xPos': x_pct,
                                            'yPos': y_pct,
-                                           'text': label['label'].get()})
+                                           'text': label['label'].get()}
+                        if label['flipped']:
+                            label_list_item['flipped'] = True
+
+                        label_list.append(label_list_item)
                 slide_dump['labels'] = label_list
                 slide_list.append(slide_dump)
 
@@ -708,7 +723,7 @@ class Gui(object):
         print "export complete"
 
     def save(self):
-        # TODO: want to be able to save/reload half-complete edits
+        # TODO: save/reload half-complete edits?
         pass
 
     def run(self):
@@ -810,7 +825,7 @@ class Gui(object):
                     x_offset = x1
                     y_offset = y1
 
-                self.page().scale_ratio = calc_scale_ratio(IMAGE_WIDTH, final_image.shape)
+                self.page().scale_ratio = calc_scale_ratio(IMAGE_WIDTH_EDITOR, final_image.shape)
 
                 # draw anything else on top of the base image
                 # scale to match crop area
@@ -886,5 +901,3 @@ class Gui(object):
 if __name__ == '__main__':
     master = Gui()
     master.run()
-
-

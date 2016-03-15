@@ -1962,7 +1962,7 @@
 				"yPos": 48.54119910227637
 			}]
 		}, {
-			"text": "Continuous red lines: RADIAL NERVE\n\n[1]: Between the long and medial heads of the TRICEPS BRACHII MUSCLE\n\n[2]: Branch to top TRICEPS BRACHII MUSCLE\n\n[3]: Follows the BRACHIAL GROOVE around the HUMERUS\n\n[4]: Branch to SUPINATOR MUSCLE\n\n[5]: To ULNARIS LATERALIS MUSCLE\n\n[6]: Branch to EXTENSOR CARPI RADIALIS MUSCLE\n\n[7,8]: Branches to the EXTENSOR MUSCLE\n\n[9]: SUBCUTANEOUS:\neither side of the CEPHALIC VEIN\n\n[10]: DORSAL DIGITAL nerves",
+			"text": "Continuous red lines: RADIAL NERVE\n\n[1]: Between the long and medial heads of the TRICEPS BRACHII MUSCLE\n\n[2]: Branch to top TRICEPS BRACHII MUSCLE\n\n[3]: Follows the BRACHIAL GROOVE around the HUMERUS\n\n[4]: Branch to SUPINATOR MUSCLE\n\n[5]: To ULNARIS LATERALIS MUSCLE\n\n[6]: Branch to EXTENSOR CARPI RADIALIS MUSCLE\n\n[7]: Branches to the EXTENSOR MUSCLE\n[8]: Branches to the EXTENSOR MUSCLE\n\n[9]: SUBCUTANEOUS:\neither side of the CEPHALIC VEIN\n\n[10]: DORSAL DIGITAL nerves",
 			"labels": [{
 				"text": "T2",
 				"xPos": 27.028714107365793,
@@ -2381,7 +2381,7 @@
 			"text": "",
 			"labels": []
 		}, {
-			"text": "Thymus:\nwill regress as animal matures\n\n[1,2]: Bronchi (cut)",
+			"text": "Thymus:\nwill regress as animal matures\n\n[1]: Bronchi (cut)\n[2]: Bronchi (cut)",
 			"labels": [{
 				"text": "Thoracic aorta",
 				"xPos": 19.516044187269856,
@@ -2612,7 +2612,7 @@
 				"yPos": 66.72777268560954
 			}]
 		}, {
-			"text": "[1]: Left subclavian artery\n\n[2]: Aortic arch\n\n[3]: Descending thoracic aorta\n\n[4]: Intercostal arteries (9 pairs)\n\n[5]: Ascending aorta:\nGoes off coronary arteries which wraps around and supplies the heart\n\n[6]: Brachiocephalic trunk\n\n[7]: Right subclavian artery\n\n[8, 9]: Right and left common carotid artery",
+			"text": "[1]: Left subclavian artery\n\n[2]: Aortic arch\n\n[3]: Descending thoracic aorta\n\n[4]: Intercostal arteries (9 pairs)\n\n[5]: Ascending aorta:\nGoes off coronary arteries which wraps around and supplies the heart\n\n[6]: Brachiocephalic trunk\n\n[7]: Right subclavian artery\n\n[8]: Right and left common carotid artery\n[9]: Right and left common carotid artery",
 			"labels": [{
 				"text": "[1]",
 				"xPos": 29.18032786885246,
@@ -2911,7 +2911,7 @@
 				"yPos": 78.5890073831009
 			}]
 		}, {
-			"text": "[1]: PANCREAS\n\n[2]: DORSAL MESOGASTRIUM\n\n[3]: SPLEEN\n\n[4]: Stomach rotates during embryonic development\n\n[5]: LIVER\n\n[6]: VENTRAL MESOGASTRIUM\n\n[7]: Potential space\n\n[8]: PANCREAS\n\n[9]: OMENTAL BURSA\n\n[10]: GREATER OMENTUM\n\n[11]: SPLEEN\n\n[12]: LESSER OMENTUM\n\n[13]: LIVER\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nW",
+			"text": "[1]: PANCREAS\n\n[2]: DORSAL MESOGASTRIUM\n\n[3]: SPLEEN\n\n[4]: Stomach rotates during embryonic development\n\n[5]: LIVER\n\n[6]: VENTRAL MESOGASTRIUM\n\n[7]: Potential space\n\n[8]: PANCREAS\n\n[9]: OMENTAL BURSA\n\n[10]: GREATER OMENTUM\n\n[11]: SPLEEN\n\n[12]: LESSER OMENTUM\n\n[13]: LIVER",
 			"labels": [{
 				"text": "[1]",
 				"xPos": 16.523809523809526,
@@ -2972,7 +2972,7 @@
 			"text": "",
 			"labels": []
 		}, {
-			"text": "[1,2,3,4]: JEJUNUM\n\n[5,6,7,8]: GREAT MESENTERY:\nMesojejunum",
+			"text": "[1]: JEJUNUM\n[2]: JEJUNUM\n[3]: JEJUNUM\n[4]: JEJUNUM\n\n[5]: GREAT MESENTERY:\n[6]: GREAT MESENTERY:\n[7]: GREAT MESENTERY:\n[8]: GREAT MESENTERY:\nMesojejunum",
 			"labels": [{
 				"text": "[1]",
 				"xPos": 62.811565304087736,
@@ -3080,7 +3080,7 @@
 				"yPos": 73.53407290015848
 			}]
 		}, {
-			"text": "[1]: ROOT OF MESENTERY\n\n[2]: TRANSVERSE COLON\n\n[3]: DESCENDING COLON\n\n[4]: ASCENDING DUODENUM\n\n[5]: CAECUM\n\n[6]: DESCENDING DUODENUM\n\n[7,8]: MESENTERIC LYMPH NODES\n\n[9]: DUODENOCOLIC FOLD\n\n[10]: ILEOCAECAL FOLD\n \n[11]: ILEAM",
+			"text": "[1]: ROOT OF MESENTERY\n\n[2]: TRANSVERSE COLON\n\n[3]: DESCENDING COLON\n\n[4]: ASCENDING DUODENUM\n\n[5]: CAECUM\n\n[6]: DESCENDING DUODENUM\n\n[7]: MESENTERIC LYMPH NODES\n[8]: MESENTERIC LYMPH NODES\n\n[9]: DUODENOCOLIC FOLD\n\n[10]: ILEOCAECAL FOLD\n \n[11]: ILEAM",
 			"labels": [{
 				"text": "[1]",
 				"xPos": 16.402356139555955,
@@ -3176,7 +3176,7 @@
 				"yPos": 82.71009248090068
 			}]
 		}, {
-			"text": "[1]: ROOT OF THE MESENTERY\n\n[2,3]: MESENTERY\n\n[4,5,6,7]: SMALL INTESTINE\n\n[8]: DEEP WALL OF GREATER OMENTUM\n\n[9]: SUPERFICIAL WALL OF GREATER OMENTUM\n\n[10]: OMENTAL BURSA\n\n[11]: STOMACH\n\n[12]: LESSER OMENTUM",
+			"text": "[1]: ROOT OF THE MESENTERY\n\n[2]: MESENTERY\n[3]: MESENTERY\n\n[4]: SMALL INTESTINE\n[5]: SMALL INTESTINE\n[6]: SMALL INTESTINE\n[7]: SMALL INTESTINE\n\n[8]: DEEP WALL OF GREATER OMENTUM\n\n[9]: SUPERFICIAL WALL OF GREATER OMENTUM\n\n[10]: OMENTAL BURSA\n\n[11]: STOMACH\n\n[12]: LESSER OMENTUM",
 			"labels": [{
 				"text": "[1]",
 				"xPos": 23.10379241516966,
@@ -3336,7 +3336,7 @@
 		"title": "Visceral aspect of the liver\n"
 	}, {
 		"slides": [{
-			"text": "[1]: Liver, spleen, stomach, pancreas\n\n[2]: Small intestine, mesentery, duodenum\n\n\n\n\n\n\n\n\n\n\n\n\n[3]: KIDNEYS\n\n[4]: Caudal part of wall\n\n[5]: Hindlimb, abdominal wall\n\n[6]: Muscles over ilium",
+			"text": "[1]: Liver, spleen, stomach, pancreas\n\n[2]: Small intestine, mesentery, duodenum\n\n[3]: KIDNEYS\n\n[4]: Caudal part of wall\n\n[5]: Hindlimb, abdominal wall\n\n[6]: Muscles over ilium",
 			"labels": [{
 				"text": "DIAPHRAGM",
 				"xPos": 33.57778941854374,
