@@ -20,7 +20,7 @@
 
     </head>
     <body>
-		<div class="container" onclick="hideOverlays();toggleText()">
+		<div class="container" id="container" onclick="hideOverlays();toggleText()">
 			<div class="page_title" id="page_title">
 			</div>
 		
@@ -30,7 +30,7 @@
 			<div class="control_pad"></div>
 						
 			<div class="controls" id="controls">
-				<div class="button noselect bold" id="text_button" onclick="event.stopPropagation();toggleText()">T</div>
+				<div class="button noselect bold" id="text_button" onclick="event.stopPropagation();toggleText()">Details</div>
 				<div class="button double noselect bold" id="nav_button" onclick="event.stopPropagation();toggleSlidesList()">Layer</div>
 				<div class="button noselect bold" id="page_button" onclick="event.stopPropagation();togglePagesList()">Page</div>
 				<a href="loader.html"><div class="button noselect bold" id="package_button" onclick="event.stopPropagation();">Pack</div></a>
@@ -45,9 +45,9 @@
 				<!-- generate this with JS -->
 			</div>
 
-			<div class="textbox_wrapper" id="text_wrap" onclick="event.stopPropagation();toggleText();">
-                <div class="textbox_label_toggle_button" onclick="event.stopPropogation();toggleLabels();">Show/Hide Labels</div>
-				<div class="textbox">
+			<div class="textbox_wrapper" id="text_wrap">
+                <div class="textbox_label_toggle_button" id="label_toggle_button" onclick="event.stopPropagation();toggleLabels();">Labels: Visible</div>
+				<div class="textbox" onclick="event.stopPropagation();toggleText();">
 					<div class="textbox_content" id="text"></div>
 				</div>
 			</div>
@@ -65,7 +65,7 @@
 					Swipe left and right to move between layers (or use the 'Layer' button).
 					<br>
 					<br>
-					Tap to show text (or tap the 'T' button).
+					Tap to show and hide details or labels (or use the 'Details'/'Labels' button).
 					<br>
 					<br>
 					Swipe up and down to scroll (only on large diagrams).

@@ -231,16 +231,31 @@ function goToSlide(value) {
 	
 	var enabled = 'button noselect bold';
 	var disabled = 'button noselect bold disabled';
+    
+    var double_enabled = 'button double noselect bold'
+    
+    var container = document.getElementById("container");
 	
 	if (slides.len == 1) {
 		navButton.className = disabled;
 	}
 	
-	if (slides[currentSlide].text == '') {
-		textButton.className = disabled; 
+	if (slides[currentSlide].text == '' && slides[currentSlide].labels.length == 0) {
+        textButton.innerHTML = 'Details';
+		textButton.className = disabled;
+        textButton.setAttribute("onclick", "event.stopPropagation();toggleText()");
+        container.setAttribute("onclick", "hideOverlays();toggleText()");
+	} else if (slides[currentSlide].text == '' && slides[currentSlide].labels.length > 0) {
+        textButton.innerHTML = 'Labels:<br>Visible';
+		textButton.className = double_enabled;
+        textButton.setAttribute("onclick", "event.stopPropagation();toggleLabels()");
+        container.setAttribute("onclick", "hideOverlays();toggleLabels()");
 	} else {
-		textButton.className = enabled;
-	}
+        textButton.innerHTML = 'Details';
+        textButton.className = enabled;
+        textButton.setAttribute("onclick", "event.stopPropagation();toggleText()");
+        container.setAttribute("onclick", "hideOverlays();toggleText()");
+    }
 	
 	navButton.innerHTML = "Layer<br>("+(currentSlide+1)+"/"+slides.length+")"
 	
@@ -330,7 +345,18 @@ function toggleText() {
     }
 }
 function toggleLabels() {
-    alert("toggling labels");
+    if (textButton.innerHTML == 'Labels:<br>Visible') {
+        textButton.innerHTML = 'Labels:<br>Hidden';
+    } else if (textButton.innerHTML == 'Labels:<br>Hidden') {
+        textButton.innerHTML = 'Labels:<br>Visible';
+    }
+    
+    var labelButton = document.getElementById('label_toggle_button');
+    if (labelButton.innerHTML == 'Labels: Visible') {
+        labelButton.innerHTML = 'Labels: Hidden';
+    } else {
+        labelButton.innerHTML = 'Labels: Visible';
+    }
     for (var i = 0; i < labels.length; i++) {
         if (labels[i].style.display == '') {
             labels[i].style.display = 'none'

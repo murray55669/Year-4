@@ -2,7 +2,7 @@ Keystore: "test123" for everything
 To sign:
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore D:\Year-4\PROJ\test123.keystore D:\Year-4\PROJ\cordova\RevisionAid\platforms\android\build\outputs\apk\android-release-unsigned.apk test123
 to align:
-zipalign 4 android-release-unsigned.apk uploaad.apk
+zipalign 4 android-release-unsigned.apk upload.apk
 
 E-learning theories: 
 https://en.wikipedia.org/wiki/E-learning_%28theory%29

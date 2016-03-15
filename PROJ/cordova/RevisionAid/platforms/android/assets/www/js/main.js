@@ -231,16 +231,31 @@ function goToSlide(value) {
 	
 	var enabled = 'button noselect bold';
 	var disabled = 'button noselect bold disabled';
+    
+    var double_enabled = 'button double noselect bold'
+    
+    var container = document.getElementById("container");
 	
 	if (slides.len == 1) {
 		navButton.className = disabled;
 	}
 	
-	if (slides[currentSlide].text == '') {
-		textButton.className = disabled; 
+	if (slides[currentSlide].text == '' && slides[currentSlide].labels.length == 0) {
+        textButton.innerHTML = 'Details';
+		textButton.className = disabled;
+        textButton.setAttribute("onclick", "event.stopPropagation();toggleText()");
+        container.setAttribute("onclick", "hideOverlays();toggleText()");
+	} else if (slides[currentSlide].text == '' && slides[currentSlide].labels.length > 0) {
+        textButton.innerHTML = 'Labels:<br>Visible';
+		textButton.className = double_enabled;
+        textButton.setAttribute("onclick", "event.stopPropagation();toggleLabels()");
+        container.setAttribute("onclick", "hideOverlays();toggleLabels()");
 	} else {
-		textButton.className = enabled;
-	}
+        textButton.innerHTML = 'Details';
+        textButton.className = enabled;
+        textButton.setAttribute("onclick", "event.stopPropagation();toggleText()");
+        container.setAttribute("onclick", "hideOverlays();toggleText()");
+    }
 	
 	navButton.innerHTML = "Layer<br>("+(currentSlide+1)+"/"+slides.length+")"
 	
@@ -261,6 +276,13 @@ function hideDisplay(element) {
 function showDisplay(element) {
 	element.style.display = '';
 }
+function toggleHighlightButton(element) {
+    if (element.style.background == '') {
+		element.style.background = '#d0d0d0';
+	} else {
+		element.style.background = '';
+	}
+}
 function highlightButton(element) {
     element.style.background = '#d0d0d0;'
 }
@@ -274,7 +296,7 @@ function toggleSlidesList() {
 	hideDisplay(textWrap);
     
     lowlightButton(textButton);
-    highlightButton(navButton);
+    toggleHighlightButton(navButton);
     lowlightButton(pageButton);
 	
 	if (navList.style.display == '') {
@@ -292,7 +314,7 @@ function togglePagesList() {
 	
     lowlightButton(textButton);
     lowlightButton(navButton);
-    highlightButton(pageButton);
+    toggleHighlightButton(pageButton);
     
 	if (pageList.style.display == '') {
 		var entries = document.getElementsByClassName('page_list_entry');
@@ -311,7 +333,7 @@ function toggleText() {
 		hideDisplay(navList);
 		hideDisplay(pageList);
         
-        highlightButton(textButton);
+        toggleHighlightButton(textButton);
         lowlightButton(navButton);
         lowlightButton(pageButton);
 		
@@ -323,6 +345,18 @@ function toggleText() {
     }
 }
 function toggleLabels() {
+    if (textButton.innerHTML == 'Labels:<br>Visible') {
+        textButton.innerHTML = 'Labels:<br>Hidden';
+    } else if (textButton.innerHTML == 'Labels:<br>Hidden') {
+        textButton.innerHTML = 'Labels:<br>Visible';
+    }
+    
+    var labelButton = document.getElementById('label_toggle_button');
+    if (labelButton.innerHTML == 'Labels: Visible') {
+        labelButton.innerHTML = 'Labels: Hidden';
+    } else {
+        labelButton.innerHTML = 'Labels: Visible';
+    }
     for (var i = 0; i < labels.length; i++) {
         if (labels[i].style.display == '') {
             labels[i].style.display = 'none'
