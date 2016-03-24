@@ -1,0 +1,43 @@
+1: Was the principal goal of the project met? (“Build a smartphone/tablet app to help veterinary students with revision”) 
+Yes
+2: Was the app a reasonable realization of the original proposal/vision? 
+Yes
+3: Was the app of a satisfactory level of completeness? 
+Yes it was complete and covered all the original documents
+4: What changes to the current features of the app, if any, would you suggest? 
+I think that any individual numbers that come up it would be better if the information was individual and not as a list. Some of the pictures (very few) may have benefited with being done in more layers.
+5: What additional features, if any, would you have liked to see implemented?
+Possibly a self test function could have been added so students could write their own answers and check their understanding
+6: Would you use the app, as currently available? (If not, why not?) 
+Yes
+7: Would you recommend the app, as currently available, to other students? (If not, why not?) 
+Yes definitely
+
+Survey questions:
+8: Was the material/content presented in an easily readable way? 
+Yes
+9: Was the material/content organized in an easily navigable way? 
+Yes, it was very easy
+10: Was the material/content partitioned into sensibly sized chunks? 
+Yes
+11: Was the quality of the diagrams sufficient? 
+Yes, they very closely matched the originals
+12: Was the accuracy of labelling of the diagrams sufficient? 
+Yes
+13: Was the quality of labelling of the diagrams (accuracy aside) sufficient? 
+Yes
+14Was the app aesthetically pleasing? 
+Yes
+15: Was the app intuitive to use? (sensibly organized; easy to learn; actions performed did not have surprising outcomes) 
+Yes very much so
+16: Was the app easy to use? (once familiar) 
+Yes and it did not take long to learn how to use at all.
+17: Was the app pleasant to use? 
+Yes
+18: Was the app forgiving of user error; Did the app made it easy to recover from user error? (e.g. pressing the wrong button did not cause anything disastrous to happen) 
+Yes
+19: Was the performance of the app sufficient? (it did not feel slow or sluggish during use; it did not freeze) 
+I have had no problems whatsoever whilst using the app, it has functioned perfectly every time
+20: Were there any problems (aside from any previously mentioned) experienced when using the app? 
+None at all
+21: Any other comments? 

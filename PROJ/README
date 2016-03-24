@@ -1,0 +1,19 @@
+The app is available on Google Play; named "s1232200 Vet Revision Aid" (link: https://play.google.com/store/apps/details?id=com.s1232200).
+
+The Python application was developed in Python version 2.7.10.
+
+Notable directories and files:
+  "/"
+    "main.py" The entry point for the Python-based image editor/content creation application; usage is "python main.py" (see requirements under "requirements.txt" below).
+    "README" This readme.
+    "requirements.txt" The package requirements to run the editor application (as given by "pip freeze"). NOTE: This does NOT include OpenCV, which must be installed through other means (installation guides: http://docs.opencv.org/3.0.0/da/df6/tutorial_py_table_of_contents_setup.html#gsc.tab=0); the version of OpenCV used during development was version 3.0.0. 
+    "upload.apk" A copy of the app apk file available on the Google Play Store
+  
+  "/cordova/RevisionAid" The Cordova project directory.
+  "/cordova/RevisionAid/www" The directory containing the web code used to build the final app.
+  "/interview/interview.txt" A copy of the questions and responses from the evaluation interview with Livens.
+  "/pyapp" Code used by the Python-based image editor/content creation application.
+  "/raw"  The (relatively) high-resolution scans of Livens' diagram set.
+  "/repo" A copy of the repository available within the app.
+  "/report/PROJ report.pdf" An electronic copy of the report.
+  "/survey" A copy of the feedback data gathered from anonymous testers.
