@@ -41,6 +41,7 @@ var textWrap;
 var textButton;
 var navButton;
 var pageButton;
+var packageButton;
 
 var labels = [];
 
@@ -454,7 +455,11 @@ function hideTutorial() {
 	localStorage.setItem("skipTutorial", 1)
 	document.getElementById('tutorial_splash').style.display = 'none';
 }
+function orientationChange() {
+    resizeWidth();
+}
 function resizeWidth() {
+    // labels
 	var lMarkers = document.getElementsByClassName('label_marker');
 	var lDots = document.getElementsByClassName('label_dot');
 	var lLines = document.getElementsByClassName('label_line');
@@ -489,6 +494,12 @@ function resizeWidth() {
 		var line = lMarkers[i].getElementsByClassName('label_line')[0]
 		line.style.width = (target_width - (dot.offsetWidth*3))+"px";
 	}
+    
+    // buttons
+    textButton.style.fontSize = vw(5);
+    navButton.style.fontSize = vw(5);
+    pageButton.style.fontSize = vw(5);
+    packageButton.style.fontSize = vw(5);
 }
 function vw(val) {
 	return ((window.innerWidth*val)/100)+'px';
@@ -518,6 +529,7 @@ function pageInit() {
 		downloadSplash.style.display = '';
 		document.getElementById('loading_splash').style.display = 'none';
 	}
+    window.addEventListener("resize", orientationChange, true);
 }
 function generateContent() {
 	document.getElementById('loading_splash').style.display = 'none';
@@ -541,6 +553,7 @@ function generateContent() {
     textButton = document.getElementById('text_button');
     navButton = document.getElementById('nav_button');
     pageButton = document.getElementById('page_button');
+    packageButton = document.getElementById('package_button');
 
 	loadState();
 }
